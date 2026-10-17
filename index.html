@@ -57,6 +57,8 @@
       align-items: center;
       padding: 12px;
       overflow-x: hidden;
+      /* Evita el refresco accidental por deslizamiento hacia abajo en teléfonos */
+      overscroll-behavior-y: contain;
     }
 
     .app-container {
@@ -408,7 +410,6 @@
       pointer-events: auto;
     }
 
-    /* El modal de reglas siempre se muestra por encima de cualquier otro modal */
     #rulesModal {
       z-index: 1050;
     }
@@ -440,7 +441,6 @@
       margin-bottom: 20px;
     }
 
-    /* Notificación visual ultra rápida y elegante */
     .toast-banner {
       position: fixed;
       top: 20px;
@@ -473,7 +473,6 @@
       margin-top: 20px;
     }
 
-    /* Estilos del modal de reglas */
     .rule-card {
       background: var(--bg-cream);
       border: 1px solid var(--border-gilded);
@@ -503,7 +502,6 @@
       color: var(--text-dark);
     }
 
-    /* Selector de personajes */
     .character-picker {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -765,7 +763,6 @@
   <div class="app-container">
     <header>
       <div class="brand">
-        <!-- Logo SVG solicitado integrado estéticamente con fallback de texto -->
         <img
           src="turn-logo.svg"
           alt="TURN - Juego de fiesta"
@@ -850,7 +847,7 @@
         <div class="rule-card">
           <div class="rule-card-header">🎲 1. Giro y Dinámica de Turno</div>
           <div class="rule-card-body">
-            En su turno, cada participante presiona <b>Girar Pirinola</b> (o la arrastra directamente con el dedo o ratón). La pirinola 3D desacelerará de forma realista y sorteará un reto, comodín o confesión. Al finalizar, la mesa decide si <b>¡Cumplió!</b> o si <b>Se rajó / Falló</b>.
+            En su turno, cada participante presiona <b>Girar Pirinola</b> (o la arrastra con el dedo o ratón). La pirinola 3D desacelerará de forma realista y sorteará un reto, comodín o confesión. Al finalizar, la mesa decide si <b>¡Cumplió!</b> o si <b>Se rajó / Falló</b>.
           </div>
         </div>
 
@@ -905,7 +902,7 @@
     </div>
   </div>
 
-  <!-- MODAL: REGISTRO INICIAL DE JUGADORES (Con botón de Ver Reglas incorporado) -->
+  <!-- MODAL: REGISTRO INICIAL DE JUGADORES (Con botón de Ver Reglas) -->
   <div class="modal-overlay" id="registerModal">
     <div class="modal-box">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
@@ -1243,6 +1240,7 @@
     let judgmentDecisions = {};
     let currentTripleVictim = null;
     let currentTripleLeader = null;
+    let isGameActive = false; // Control de partida activa para evitar refrescos
 
     /* 4. PIRINOLA 3D */
     let scene, camera, renderer, pirinolaGroup;
@@ -1387,7 +1385,7 @@
       renderer.render(scene, camera);
     }
 
-    /* 5. NOTIFICACIONES VISUALES RÁPIDAS (1.6s) */
+    /* 5. NOTIFICACIONES VISUALES */
     let toastTimeout = null;
     function showVisualNotification(icon, text, duration = 1600) {
       const banner = document.getElementById('toastBanner');
@@ -1640,6 +1638,7 @@
 
     function executeEndGame() {
       closeConfirmEndModal();
+      isGameActive = false; // La partida se da por terminada, ya no se bloquea la salida
 
       const sorted = [...players].sort((a, b) => {
         const scoreA = (a.stars * 10) + a.wins - (a.fails * 0.5);
@@ -1785,6 +1784,7 @@
 
     function resetGameToNewParty() {
       document.getElementById('decreeModal').classList.remove('active');
+      isGameActive = false;
       
       players.forEach(p => {
         p.wins = 0;
@@ -1892,6 +1892,7 @@
       if (players.length < 2) return;
       document.getElementById('registerModal').classList.remove('active');
       currentPlayerIndex = 0;
+      isGameActive = true; // Se activa el candado protector de recarga
       updateTurnUI();
       showVisualNotification('🎲', '¡La partida ha comenzado! Que ruede la pirinola.', 1600);
     }
@@ -1933,10 +1934,35 @@
       });
     }
 
+    /* 14. SISTEMA DE PROTECCIÓN CONTRA REFRESCADO INVOLUNTARIO */
+    function setupRefreshProtection() {
+      // 1. Alerta nativa del navegador al intentar recargar, salir o cerrar pestaña
+      window.addEventListener('beforeunload', (e) => {
+        if (isGameActive) {
+          e.preventDefault();
+          e.returnValue = ''; // Activa el mensaje de advertencia del navegador
+        }
+      });
+
+      // 2. Bloqueo de atajos comunes de teclado (F5, Ctrl+R, Cmd+R)
+      window.addEventListener('keydown', (e) => {
+        if (isGameActive) {
+          const isCtrlR = (e.ctrlKey || e.metaKey) && (e.key === 'r' || e.key === 'R');
+          const isF5 = (e.key === 'F5');
+
+          if (isCtrlR || isF5) {
+            e.preventDefault();
+            showVisualNotification('⚠️', 'Partida en curso: debes terminar la partida antes de recargar.', 2000);
+          }
+        }
+      });
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
       init3D();
       setupCharacterPicker();
       setupOutsideClickModals();
+      setupRefreshProtection();
       document.getElementById('registerModal').classList.add('active');
 
       document.getElementById('inputPlayerName').addEventListener('keypress', (e) => {
