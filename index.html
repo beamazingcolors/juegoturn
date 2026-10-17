@@ -5,10 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Turn — Juego de Fiesta Rococó</title>
   
+  <!-- Favicon oficial con el logo SVG -->
+  <link rel="icon" type="image/svg+xml" href="turn-logo.svg">
+  
+  <!-- Tipografía de época elegante -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   
+  <!-- Three.js para la pirinola 3D y Canvas Confetti -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
@@ -66,16 +71,34 @@
       background: var(--panel-bg);
       border: 2px solid var(--border-gilded);
       border-radius: 18px;
-      padding: 12px 20px;
+      padding: 10px 20px;
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       box-shadow: var(--shadow-subtle);
     }
 
-    .brand-title {
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo {
+      max-height: 46px;
+      width: auto;
+      max-width: 180px;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 4px rgba(197, 160, 89, 0.25));
+      transition: transform 0.2s ease;
+    }
+    .brand-logo:hover {
+      transform: scale(1.02);
+    }
+
+    .brand-title-fallback {
       font-family: 'Cinzel', serif;
       font-weight: 900;
       font-size: 24px;
@@ -385,6 +408,11 @@
       pointer-events: auto;
     }
 
+    /* El modal de reglas siempre se muestra por encima de cualquier otro modal */
+    #rulesModal {
+      z-index: 1050;
+    }
+
     .modal-box {
       background: #FFFFFF;
       border: 2px solid var(--border-gilded);
@@ -412,7 +440,7 @@
       margin-bottom: 20px;
     }
 
-    /* Notificación visual en pantalla */
+    /* Notificación visual ultra rápida y elegante */
     .toast-banner {
       position: fixed;
       top: 20px;
@@ -421,16 +449,16 @@
       background: #FFFFFF;
       border: 2px solid var(--gold-primary);
       border-radius: 30px;
-      padding: 12px 24px;
+      padding: 10px 20px;
       box-shadow: 0 10px 25px rgba(197, 160, 89, 0.4);
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       font-weight: 700;
-      font-size: 14px;
+      font-size: 13.5px;
       color: var(--text-dark);
-      z-index: 1100;
-      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 1200;
+      transition: transform 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       pointer-events: none;
     }
 
@@ -730,14 +758,22 @@
 <body>
 
   <div class="toast-banner" id="toastBanner">
-    <span id="toastIcon" style="font-size: 20px;">👑</span>
+    <span id="toastIcon" style="font-size: 18px;">👑</span>
     <span id="toastText">Mensaje de la corte</span>
   </div>
 
   <div class="app-container">
     <header>
       <div class="brand">
-        <div class="brand-title">Turn</div>
+        <!-- Logo SVG solicitado integrado estéticamente con fallback de texto -->
+        <img
+          src="turn-logo.svg"
+          alt="TURN - Juego de fiesta"
+          class="brand-logo"
+          width="180"
+          onerror="this.style.display='none'; document.getElementById('brandFallback').style.display='block';"
+        >
+        <span id="brandFallback" class="brand-title-fallback" style="display:none;">Turn</span>
       </div>
       <div class="header-actions">
         <button class="btn-secondary" onclick="openScoresModal()">🏆 Marcador</button>
@@ -804,7 +840,7 @@
     </div>
   </div>
 
-  <!-- MODAL: REGLAMENTO COMPLETO (Se cierra al tocar al aire) -->
+  <!-- MODAL: REGLAMENTO COMPLETO (Se cierra al tocar al vacío) -->
   <div class="modal-overlay" id="rulesModal">
     <div class="modal-box">
       <h2 class="modal-title">Reglamento Oficial de Turn</h2>
@@ -814,7 +850,7 @@
         <div class="rule-card">
           <div class="rule-card-header">🎲 1. Giro y Dinámica de Turno</div>
           <div class="rule-card-body">
-            En su turno, cada participante presiona <b>Girar Pirinola</b> (o la arrastra con el dedo). La pirinola 3D desacelerará de forma realista y sorteará un reto, comodín o confesión. Al finalizar, la mesa decide si <b>¡Cumplió!</b> o si <b>Se rajó / Falló</b>.
+            En su turno, cada participante presiona <b>Girar Pirinola</b> (o la arrastra directamente con el dedo o ratón). La pirinola 3D desacelerará de forma realista y sorteará un reto, comodín o confesión. Al finalizar, la mesa decide si <b>¡Cumplió!</b> o si <b>Se rajó / Falló</b>.
           </div>
         </div>
 
@@ -822,7 +858,7 @@
           <div class="rule-card-header">⭐ 2. Rachas y Estrellas (Estilo Mario Kart)</div>
           <div class="rule-card-body">
             • <b>3 Victorias Seguidas (🔥 Racha 3):</b> Ganas 1 Estrella de Oro automáticamente.<br>
-            • <b>5 Victorias Seguidas (🔥 Racha 5):</b> Se activa el <b>Robo de Estrellas</b>. Tienes el derecho imperial de arrebatarle 1 estrella a cualquier compa (si nadie tiene, la corte te regala 1 estrella extra).<br>
+            • <b>5 Victorias Seguidas (🔥 Racha 5):</b> Se activa el <b>Robo de Estrellas</b>. Tienes el derecho imperial de arrebatarle 1 estrella a cualquier contrincante (si nadie tiene, la corte te regala 1 estrella extra).<br>
             • <b>Si te rajas o fallas:</b> Tu racha se reinicia a cero inmediatamente.
           </div>
         </div>
@@ -850,7 +886,7 @@
         <div class="rule-card">
           <div class="rule-card-header">🍷 5. Brindis Responsable</div>
           <div class="rule-card-body">
-            Todos los retos y tragos son bajo consentimiento amistoso. Se puede jugar con cerveza, cócteles o shots. ¡El objetivo principal es reírse y convivir!
+            Todos los retos y tragos son bajo consentimiento amistoso. Se puede jugar con cerveza, cócteles o shots. ¡El objetivo principal es convivir y divertirse!
           </div>
         </div>
       </div>
@@ -859,7 +895,7 @@
     </div>
   </div>
 
-  <!-- MODAL: MARCADOR EN VIVO (Se cierra al tocar al aire) -->
+  <!-- MODAL: MARCADOR EN VIVO (Se cierra al tocar al vacío) -->
   <div class="modal-overlay" id="scoresModal">
     <div class="modal-box">
       <h2 class="modal-title">Marcador de la Corte</h2>
@@ -869,11 +905,16 @@
     </div>
   </div>
 
-  <!-- MODAL: REGISTRO INICIAL DE JUGADORES -->
+  <!-- MODAL: REGISTRO INICIAL DE JUGADORES (Con botón de Ver Reglas incorporado) -->
   <div class="modal-overlay" id="registerModal">
     <div class="modal-box">
-      <h2 class="modal-title">¿Quiénes van a jugar?</h2>
-      <p class="modal-desc">Inscriban a los jugadores, elijan sus personajes y comiencen la ronda.</p>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+        <h2 class="modal-title" style="margin-bottom: 0; text-align: left;">¿Quiénes van a jugar?</h2>
+        <button type="button" class="btn-secondary" style="font-size: 12px; padding: 6px 12px; font-weight: 700;" onclick="openRulesModal()">
+          📜 Ver Reglas
+        </button>
+      </div>
+      <p class="modal-desc" style="text-align: left; margin-bottom: 14px;">Inscriban a los jugadores, elijan sus personajes y comiencen la ronda.</p>
 
       <div class="character-picker" id="characterPicker"></div>
 
@@ -902,7 +943,7 @@
     </div>
   </div>
 
-  <!-- MODAL: CATÁLOGO DE RETOS Y CASTIGOS (Se cierra al tocar al aire) -->
+  <!-- MODAL: CATÁLOGO DE RETOS Y CASTIGOS (Se cierra al tocar al vacío) -->
   <div class="modal-overlay" id="catalogModal">
     <div class="modal-box">
       <h2 class="modal-title">Compendio de Retos</h2>
@@ -999,13 +1040,13 @@
       <div id="finalDecreeList" style="display: flex; flex-direction: column; gap: 6px; max-height: 180px; overflow-y: auto; margin-bottom: 15px;"></div>
 
       <button class="spin-button" style="background: linear-gradient(135deg, #2B8A3E, #237032);" onclick="resetGameToNewParty()">
-        INICIAR NUEVA PARTIDA 🔄
+        INICIAR NUEVA PARTIDA
       </button>
     </div>
   </div>
 
   <script>
-    /* 1. PERSONAJES */
+    /* 1. PERSONAJES ILUSTRADOS */
     const CHARACTERS = [
       {
         id: 'lord',
@@ -1346,9 +1387,9 @@
       renderer.render(scene, camera);
     }
 
-    /* 5. NOTIFICACIONES VISUALES */
+    /* 5. NOTIFICACIONES VISUALES RÁPIDAS (1.6s) */
     let toastTimeout = null;
-    function showVisualNotification(icon, text, duration = 3000) {
+    function showVisualNotification(icon, text, duration = 1600) {
       const banner = document.getElementById('toastBanner');
       document.getElementById('toastIcon').innerText = icon;
       document.getElementById('toastText').innerText = text;
@@ -1398,11 +1439,11 @@
         player.streak += 1;
         player.consecutiveFails = 0;
 
-        confetti({ particleCount: 40, spread: 50, origin: { y: 0.7 } });
+        confetti({ particleCount: 35, spread: 50, origin: { y: 0.7 } });
 
         if (player.streak % 3 === 0) {
           player.stars += 1;
-          showVisualNotification('⭐', `¡Bravísimo! ${player.name} logró 3 retos seguidos y gana 1 Estrella.`, 4000);
+          showVisualNotification('⭐', `¡Bravísimo! ${player.name} logró 3 retos seguidos y gana 1 Estrella.`, 2000);
         }
 
         if (player.streak >= 5 && player.streak % 5 === 0) {
@@ -1415,7 +1456,7 @@
         player.fails += 1;
         player.streak = 0;
         player.consecutiveFails = (player.consecutiveFails || 0) + 1;
-        showVisualNotification('🍺', `${player.name} se rajó o falló. ¡A beber!`);
+        showVisualNotification('🍺', `${player.name} se rajó o falló. ¡A beber!`, 1600);
 
         if (player.consecutiveFails >= 3) {
           player.consecutiveFails = 0;
@@ -1475,9 +1516,9 @@
 
       if (type === 'leader') {
         const punishment = document.getElementById('leaderCustomPunishment').value;
-        showVisualNotification('⚖️', `${currentTripleVictim.name} acató el castigo de ${currentTripleLeader.name}: ${punishment}`, 4500);
+        showVisualNotification('⚖️', `${currentTripleVictim.name} acató el castigo de ${currentTripleLeader.name}: ${punishment}`, 2200);
       } else {
-        showVisualNotification('👑', `¡Honor Real! ${currentTripleVictim.name} no se arrodilló y pagó con Autocastigo Soberano (Doble Shot).`, 4500);
+        showVisualNotification('👑', `¡Honor Real! ${currentTripleVictim.name} no se arrodilló y pagó con Autocastigo Soberano (Doble Shot).`, 2200);
       }
 
       nextTurn();
@@ -1559,7 +1600,7 @@
 
       if (victims.length === 0) {
         stealer.stars += 1;
-        showVisualNotification('👑', `🔥 ¡5 al hilo! Como nadie tiene estrellas, ${stealer.name} recibe una Estrella de Oro Real.`, 4500);
+        showVisualNotification('👑', `🔥 ¡5 al hilo! Como nadie tiene estrellas, ${stealer.name} recibe una Estrella de Oro Real.`, 2200);
         nextTurn();
         return;
       }
@@ -1576,7 +1617,7 @@
           v.stars -= 1;
           stealer.stars += 1;
           modal.classList.remove('active');
-          showVisualNotification('⚔️', `¡Robo Real! ${stealer.name} le arrebató una estrella a ${v.name}.`, 4000);
+          showVisualNotification('⚔️', `¡Robo Real! ${stealer.name} le arrebató una estrella a ${v.name}.`, 2000);
           nextTurn();
         };
         list.appendChild(btn);
@@ -1757,7 +1798,7 @@
       renderRegisteredPlayers();
       
       document.getElementById('registerModal').classList.add('active');
-      showVisualNotification('🔄', '¡Nueva partida lista! Pueden sumar o cambiar jugadores.');
+      showVisualNotification('✨', '¡Nueva partida lista! Pueden sumar o cambiar jugadores.', 1600);
     }
 
     /* 12. INSCRIPCIONES */
@@ -1788,7 +1829,7 @@
       if (!name) return;
 
       if (players.length >= 8) {
-        showVisualNotification('⚠️', 'Límite de 8 jugadores por mesa.');
+        showVisualNotification('⚠️', 'Límite de 8 jugadores por mesa.', 1600);
         return;
       }
 
@@ -1852,7 +1893,7 @@
       document.getElementById('registerModal').classList.remove('active');
       currentPlayerIndex = 0;
       updateTurnUI();
-      showVisualNotification('🎲', '¡La partida ha comenzado! Que ruede la pirinola.');
+      showVisualNotification('🎲', '¡La partida ha comenzado! Que ruede la pirinola.', 1600);
     }
 
     function openCatalogModal() {
@@ -1885,7 +1926,6 @@
       ['scoresModal', 'catalogModal', 'rulesModal'].forEach(modalId => {
         const modalEl = document.getElementById(modalId);
         modalEl.addEventListener('click', (e) => {
-          // Si el clic fue en el fondo translúcido y no dentro del cuadro de contenido
           if (e.target === modalEl) {
             modalEl.classList.remove('active');
           }
