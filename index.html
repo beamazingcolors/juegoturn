@@ -5,12 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Turn — Juego de Fiesta Rococó</title>
   
-  <!-- Tipografía de época elegante -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   
-  <!-- Three.js para la pirinola 3D y Canvas Confetti -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
@@ -25,7 +23,9 @@
       --text-muted: #6E665B;
       --border-gilded: #E2D3B8;
       --crimson: #9E2A2B;
-      --velvet-blue: #1D3557;
+      --crimson-light: #FFF0F0;
+      --green-success: #2B8A3E;
+      --green-light: #EBFBEE;
       --shadow-subtle: 0 10px 30px rgba(70, 50, 20, 0.08);
     }
 
@@ -54,7 +54,6 @@
       overflow-x: hidden;
     }
 
-    /* Contenedor principal estilo Bento Rococó */
     .app-container {
       width: 100%;
       max-width: 900px;
@@ -70,16 +69,11 @@
       border-radius: 18px;
       padding: 12px 20px;
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      box-shadow: var(--shadow-subtle);
-      position: relative;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
       gap: 10px;
+      box-shadow: var(--shadow-subtle);
     }
 
     .brand-title {
@@ -94,6 +88,7 @@
     .header-actions {
       display: flex;
       gap: 8px;
+      flex-wrap: wrap;
     }
 
     .btn-secondary {
@@ -134,8 +129,10 @@
       border-radius: 18px;
       padding: 14px 18px;
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
+      gap: 12px;
       box-shadow: var(--shadow-subtle);
     }
 
@@ -159,11 +156,9 @@
       justify-content: center;
     }
 
-    .player-avatar-frame svg, .player-avatar-frame img {
+    .player-avatar-frame svg {
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      border-radius: 50%;
     }
 
     .player-details h3 {
@@ -182,34 +177,56 @@
 
     .stats-pills {
       display: flex;
-      gap: 10px;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
     }
 
     .stat-pill {
-      background: var(--bg-cream);
-      border: 1px solid var(--border-gilded);
       padding: 6px 12px;
       border-radius: 20px;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 700;
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    .stat-success {
+      color: var(--green-success);
+      background: var(--green-light);
+      border: 1px solid #B7EB8F;
+    }
+
+    .stat-fail {
+      color: var(--crimson);
+      background: var(--crimson-light);
+      border: 1px solid #FFA39E;
     }
 
     .stat-stars {
-      color: #B38600;
-      background: #FFF9E6;
-      border-color: #F0D785;
+      color: #9254DE;
+      background: #F9F0FF;
+      border: 1px solid #D3ADF7;
     }
 
     .stat-streak {
       color: #D9480F;
       background: #FFF4E6;
-      border-color: #FFD8A8;
+      border: 1px solid #FFD8A8;
     }
 
-    /* Área central: Pirinola 3D interactiva */
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .dot-green { background: #2B8A3E; }
+    .dot-red { background: #C92A2A; }
+
+    /* Área central de juego */
     .gameplay-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -231,7 +248,6 @@
       flex-direction: column;
       align-items: center;
       box-shadow: var(--shadow-subtle);
-      position: relative;
     }
 
     #pirinola-canvas-container {
@@ -247,20 +263,6 @@
 
     #pirinola-canvas-container:active {
       cursor: grabbing;
-    }
-
-    .spin-prompt {
-      position: absolute;
-      bottom: 12px;
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(4px);
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-muted);
-      border: 1px solid var(--border-gilded);
-      pointer-events: none;
     }
 
     .spin-button {
@@ -285,16 +287,12 @@
       box-shadow: 0 8px 22px rgba(197, 160, 89, 0.5);
     }
 
-    .spin-button:active:not(:disabled) {
-      transform: translateY(1px);
-    }
-
     .spin-button:disabled {
       opacity: 0.5;
       cursor: not-allowed;
     }
 
-    /* Tarjeta de Reto Activo */
+    /* Tarjeta de reto */
     .card-challenge {
       background: var(--panel-bg);
       border: 2px solid var(--border-gilded);
@@ -304,7 +302,6 @@
       flex-direction: column;
       justify-content: space-between;
       box-shadow: var(--shadow-subtle);
-      position: relative;
       min-height: 350px;
     }
 
@@ -367,27 +364,16 @@
       transition: all 0.2s ease;
     }
 
-    .btn-success {
-      background: #2B8A3E;
-      color: white;
-    }
-    .btn-success:hover {
-      background: #237032;
-    }
+    .btn-success { background: #2B8A3E; color: white; }
+    .btn-success:hover { background: #237032; }
+    .btn-fail { background: #C92A2A; color: white; }
+    .btn-fail:hover { background: #A61E1E; }
 
-    .btn-fail {
-      background: #C92A2A;
-      color: white;
-    }
-    .btn-fail:hover {
-      background: #A61E1E;
-    }
-
-    /* Modal general */
+    /* Modales */
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(30, 25, 20, 0.6);
+      background: rgba(30, 25, 20, 0.65);
       backdrop-filter: blur(5px);
       display: flex;
       align-items: center;
@@ -410,7 +396,7 @@
       border-radius: 22px;
       width: 100%;
       max-width: 520px;
-      max-height: 85vh;
+      max-height: 88vh;
       overflow-y: auto;
       padding: 24px;
       box-shadow: 0 20px 40px rgba(0,0,0,0.2);
@@ -431,7 +417,40 @@
       margin-bottom: 20px;
     }
 
-    /* Selección de personajes al registrarse */
+    /* Notificación flotante visual */
+    .toast-banner {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-100px);
+      background: #FFFFFF;
+      border: 2px solid var(--gold-primary);
+      border-radius: 30px;
+      padding: 12px 24px;
+      box-shadow: 0 10px 25px rgba(197, 160, 89, 0.4);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--text-dark);
+      z-index: 1100;
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      pointer-events: none;
+    }
+
+    .toast-banner.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .confirm-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    /* Selector de personajes */
     .character-picker {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -474,10 +493,7 @@
       justify-content: center;
     }
 
-    .char-avatar-mini svg {
-      width: 100%;
-      height: 100%;
-    }
+    .char-avatar-mini svg { width: 100%; height: 100%; }
 
     .char-label {
       font-size: 10px;
@@ -502,9 +518,7 @@
       font-family: inherit;
     }
 
-    .player-input:focus {
-      border-color: var(--gold-primary);
-    }
+    .player-input:focus { border-color: var(--gold-primary); }
 
     .registered-players-list {
       margin: 15px 0;
@@ -532,8 +546,8 @@
     }
 
     .badge-thumb {
-      width: 30px;
-      height: 30px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       overflow: hidden;
     }
@@ -544,10 +558,9 @@
       color: #C92A2A;
       font-weight: bold;
       cursor: pointer;
-      font-size: 16px;
+      font-size: 18px;
     }
 
-    /* Lista del catálogo de retos */
     .catalog-item {
       padding: 10px 14px;
       border-bottom: 1px solid var(--border-gilded);
@@ -555,9 +568,7 @@
       flex-direction: column;
       gap: 4px;
     }
-    .catalog-item:last-child {
-      border-bottom: none;
-    }
+    .catalog-item:last-child { border-bottom: none; }
     .catalog-item-header {
       display: flex;
       justify-content: space-between;
@@ -569,89 +580,193 @@
       color: var(--text-muted);
     }
 
-    /* Podio de Ganadores */
-    .podium-box {
+    /* Juicio Real */
+    .coronation-header {
       text-align: center;
-      padding: 10px 0;
+      margin-bottom: 16px;
     }
-    .winner-portrait {
-      width: 90px;
-      height: 90px;
-      border-radius: 50%;
-      margin: 0 auto 12px;
-      border: 4px solid var(--gold-primary);
-      box-shadow: 0 6px 20px rgba(197, 160, 89, 0.5);
-      overflow: hidden;
+
+    .monarch-crown-badge {
+      display: inline-block;
+      font-size: 32px;
+      margin-bottom: 4px;
+      animation: floatCrown 2s infinite ease-in-out;
     }
-    .podium-row {
+
+    @keyframes floatCrown {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    .royal-title-display {
+      font-family: 'Cinzel', serif;
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--crimson);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 6px;
+    }
+
+    .court-judgment-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 15px 0;
+    }
+
+    .subject-judgment-card {
+      background: var(--bg-cream);
+      border: 1px solid var(--border-gilded);
+      border-radius: 14px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .subject-info {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 8px 12px;
-      background: var(--bg-cream);
-      border-radius: 10px;
-      margin-bottom: 6px;
-      font-size: 14px;
-      font-weight: 600;
+      gap: 10px;
+      font-weight: 700;
+    }
+
+    .subject-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+
+    .verdict-button-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .btn-verdict {
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 2px solid transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-pardon {
+      background: #FFF;
+      color: #2B8A3E;
+      border-color: #B7EB8F;
+    }
+    .btn-pardon.active {
+      background: #2B8A3E;
+      color: #FFF;
+      border-color: #237032;
+    }
+
+    .btn-punish {
+      background: #FFF;
+      color: #C92A2A;
+      border-color: #FFA39E;
+    }
+    .btn-punish.active {
+      background: #C92A2A;
+      color: #FFF;
+      border-color: #A61E1E;
+    }
+
+    .punishment-selector {
+      margin-top: 4px;
+      width: 100%;
+      padding: 6px 10px;
+      font-size: 12px;
+      border: 1px solid var(--border-gilded);
+      border-radius: 6px;
+      background: #FFF;
+      outline: none;
+    }
+
+    .decree-box {
+      background: radial-gradient(circle at center, #FFFDF9 0%, #F5ECE0 100%);
+      border: 2px solid var(--gold-primary);
+      border-radius: 16px;
+      padding: 16px;
+      margin: 15px 0;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(197, 160, 89, 0.2);
     }
   </style>
 </head>
 <body>
 
+  <!-- Notificación visual en pantalla -->
+  <div class="toast-banner" id="toastBanner">
+    <span id="toastIcon" style="font-size: 20px;">👑</span>
+    <span id="toastText">Mensaje de la corte</span>
+  </div>
+
   <div class="app-container">
-    <!-- Encabezado superior -->
+    <!-- Encabezado superior con botón de Marcador añadido -->
     <header>
       <div class="brand">
         <div class="brand-title">Turn</div>
       </div>
       <div class="header-actions">
+        <button class="btn-secondary" onclick="openScoresModal()">🏆 Marcador</button>
         <button class="btn-secondary" onclick="openCatalogModal()">Retos y Castigos</button>
-        <button class="btn-danger" onclick="endGameSession()">Terminar Partida</button>
+        <button class="btn-danger" onclick="promptEndGame()">Terminar Partida</button>
       </div>
     </header>
 
-    <!-- Barra de Turno Activo y Marcador -->
+    <!-- Marcadores de la interfaz -->
     <div class="turn-bar" id="turnBar">
       <div class="active-player-info">
-        <div class="player-avatar-frame" id="activeAvatar">
-          <!-- Renderizado dinámico -->
-        </div>
+        <div class="player-avatar-frame" id="activeAvatar"></div>
         <div class="player-details">
           <span class="player-role-tag" id="activeRole">Cargando...</span>
           <h3 id="activePlayerName">Jugador</h3>
         </div>
       </div>
+
       <div class="stats-pills">
-        <div class="stat-pill stat-streak" title="Racha consecutiva de retos cumplidos">
-          🔥 <span id="activeStreak">0</span>
+        <div class="stat-pill stat-success" title="Retos cumplidos con éxito">
+          <span class="status-dot dot-green"></span> Cumplidos: <b id="activeWins">0</b>
         </div>
-        <div class="stat-pill stat-stars" title="Estrellas de victoria ganadas">
-          ⭐ <span id="activeStars">0</span>
+        <div class="stat-pill stat-fail" title="Veces que se rajó o bebió">
+          <span class="status-dot dot-red"></span> Se rajó: <b id="activeFails">0</b>
+        </div>
+        <div class="stat-pill stat-stars" title="Estrellas de mérito">
+          ⭐ Estrellas: <b id="activeStars">0</b>
+        </div>
+        <div class="stat-pill stat-streak" title="Racha consecutiva actual">
+          🔥 Racha: <b id="activeStreak">0</b>
         </div>
       </div>
     </div>
 
-    <!-- Área de Juego (Pirinola 3D + Tarjeta de Reto) -->
+    <!-- Área de Juego (Pirinola 3D limpia de texto encima) -->
     <div class="gameplay-grid">
-      <!-- Pirinola 3D interactiva -->
       <div class="stage-card">
-        <div id="pirinola-canvas-container">
-          <div class="spin-prompt">Arrastra para girar o pulsa el botón</div>
-        </div>
+        <div id="pirinola-canvas-container"></div>
         <button class="spin-button" id="btnSpin" onclick="triggerPirinolaSpin()">
           GIRAR PIRINOLA
         </button>
       </div>
 
-      <!-- Tarjeta del Reto / Pregunta / Comodín -->
       <div class="card-challenge">
         <div>
-          <span class="challenge-tag" id="challengeCategory">Bienvenido</span>
+          <span class="challenge-tag" id="challengeCategory">Listo</span>
           <div class="challenge-body">
             <h2 class="challenge-title" id="challengeTitle">¿Quién tira primero?</h2>
-            <p class="challenge-text" id="challengeDesc">Presiona el botón para lanzar la pirinola 3D y que comience la fiesta.</p>
+            <p class="challenge-text" id="challengeDesc">Lanza la pirinola 3D para definir el destino del siguiente trago.</p>
             <div class="penalty-box" id="challengePenalty">
-              Sanción: Si no cumples el reto o te rajas, ¡te toca trago!
+              Sanción: Si dudas o te rajas, ¡te toca trago!
             </div>
           </div>
         </div>
@@ -668,28 +783,46 @@
     </div>
   </div>
 
+  <!-- MODAL: MARCADOR / TABLA DE POSICIONES EN VIVO -->
+  <div class="modal-overlay" id="scoresModal">
+    <div class="modal-box">
+      <h2 class="modal-title">Marcador de la Corte</h2>
+      <p class="modal-desc">Así marcha la contienda de puntos, estrellas y tragos en tiempo real:</p>
+      <div id="liveScoresList" style="display: flex; flex-direction: column; gap: 8px; max-height: 380px; overflow-y: auto; margin-bottom: 15px;"></div>
+      <button class="btn-secondary" style="width: 100%; padding: 12px; font-weight:700;" onclick="closeScoresModal()">Volver al Juego</button>
+    </div>
+  </div>
+
   <!-- MODAL: REGISTRO INICIAL DE JUGADORES -->
   <div class="modal-overlay" id="registerModal">
     <div class="modal-box">
       <h2 class="modal-title">¿Quiénes van a jugar?</h2>
-      <p class="modal-desc">Agreguen a sus jugadores, elijan su personaje y que la suerte decida.</p>
+      <p class="modal-desc">Inscriban a los jugadores, elijan sus personajes y comiencen la ronda.</p>
 
-      <div class="character-picker" id="characterPicker">
-        <!-- Generado dinámicamente -->
-      </div>
+      <div class="character-picker" id="characterPicker"></div>
 
       <div class="player-input-row">
         <input type="text" id="inputPlayerName" class="player-input" placeholder="Nombre o apodo..." maxlength="18">
         <button class="btn-secondary" style="background: var(--gold-light); font-weight:700;" onclick="addPlayerFromInput()">Agregar</button>
       </div>
 
-      <div class="registered-players-list" id="registeredPlayersList">
-        <!-- Lista de jugadores inscritos -->
-      </div>
+      <div class="registered-players-list" id="registeredPlayersList"></div>
 
       <button class="spin-button" style="margin-top: 10px;" id="btnStartGame" onclick="startGame()" disabled>
         COMENZAR LA RONDA (MÍN. 2)
       </button>
+    </div>
+  </div>
+
+  <!-- MODAL: CONFIRMACIÓN PARA TERMINAR PARTIDA -->
+  <div class="modal-overlay" id="confirmEndModal">
+    <div class="modal-box" style="text-align: center;">
+      <h2 class="modal-title">¿Cerrar la Partida?</h2>
+      <p class="modal-desc">Se suspenderán los giros de la pirinola y se coronará solemnemente al Gran Rey de la mesa.</p>
+      <div class="confirm-actions">
+        <button class="btn-secondary" style="padding: 12px;" onclick="closeConfirmEndModal()">Seguir Jugando</button>
+        <button class="btn-resolve btn-fail" style="padding: 12px;" onclick="executeEndGame()">Coronar al Rey</button>
+      </div>
     </div>
   </div>
 
@@ -698,43 +831,61 @@
     <div class="modal-box">
       <h2 class="modal-title">Compendio de Retos</h2>
       <p class="modal-desc">Todas las opciones posibles que esconde la pirinola.</p>
-      <div id="catalogList" style="max-height: 380px; overflow-y: auto; margin-bottom: 15px;">
-        <!-- Se llena con JS -->
-      </div>
+      <div id="catalogList" style="max-height: 380px; overflow-y: auto; margin-bottom: 15px;"></div>
       <button class="btn-secondary" style="width: 100%; padding: 12px;" onclick="closeCatalogModal()">Cerrar</button>
     </div>
   </div>
 
-  <!-- MODAL: ROBO DE ESTRELLAS (AL LLEGAR A 5 SEGUIDAS) -->
+  <!-- MODAL: ROBO DE ESTRELLAS -->
   <div class="modal-overlay" id="stealModal">
     <div class="modal-box">
       <h2 class="modal-title">¡Racha Imparable! 🔥</h2>
-      <p class="modal-desc">Llegaste a 5 retos cumplidos seguidos. Escoge a quién le vas a robar una de sus preciadas estrellas:</p>
-      <div id="stealTargetList" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px;">
-        <!-- Objetivos para robar -->
-      </div>
+      <p class="modal-desc">Completaste 5 retos al hilo. Elige a qué jugador le vas a arrebatar una estrella:</p>
+      <div id="stealTargetList" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px;"></div>
     </div>
   </div>
 
-  <!-- MODAL: FIN DE PARTIDA / PODIO -->
-  <div class="modal-overlay" id="podiumModal">
+  <!-- MODAL: CORONACIÓN Y JUICIO REAL -->
+  <div class="modal-overlay" id="coronationModal">
     <div class="modal-box">
-      <h2 class="modal-title">Fin de la Partida</h2>
-      <div class="podium-box">
-        <div class="winner-portrait" id="podiumWinnerAvatar"></div>
-        <h3 id="podiumWinnerName" style="font-family:'Cinzel', serif; font-size:22px; color:var(--gold-dark); margin-bottom: 4px;">Ganador</h3>
-        <p id="podiumWinnerStats" style="font-size:14px; color:var(--text-muted); margin-bottom: 20px;">0 Estrellas | 0 Victorias</p>
-        
-        <h4 style="text-align: left; font-size: 13px; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 8px;">Tabla de Posiciones:</h4>
-        <div id="podiumLeaderboard"></div>
+      <div class="coronation-header">
+        <div class="monarch-crown-badge">👑</div>
+        <h2 class="modal-title" id="monarchNameTitle">¡Habemus Rey!</h2>
+        <p class="modal-desc" style="margin-bottom: 8px;">Por tener más estrellas y victorias, eres el Monarca Absoluto. Juzga a cada vasallo de tu corte.</p>
       </div>
-      <button class="spin-button" style="margin-top: 15px;" onclick="restartFullGame()">Jugar de Nuevo</button>
+
+      <div class="court-judgment-list" id="courtJudgmentList"></div>
+
+      <button class="spin-button" style="margin-top: 15px;" onclick="proclaimRoyalDecree()">
+        PROCLAMAR DECRETO REAL
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: DECRETO FINAL (ESTILO JUEGO DE TRONOS) -->
+  <div class="modal-overlay" id="decreeModal">
+    <div class="modal-box" style="text-align: center;">
+      <div style="font-size: 36px; margin-bottom: 4px;">⚔️ 👑 🍷</div>
+      <h2 class="modal-title" style="font-size: 24px;">Decreto de la Corte</h2>
+      
+      <div class="decree-box">
+        <div style="font-size: 11px; letter-spacing: 2px; color: var(--gold-dark); text-transform: uppercase; font-weight: 800;">Por la gracia de la pirinola se proclama a:</div>
+        <div class="royal-title-display" id="proclaimedEpithet">Rey de los Condenados</div>
+        <p id="proclamationSummaryText" style="font-size: 13px; color: #5C4730; margin-top: 8px; line-height: 1.4;"></p>
+      </div>
+
+      <h4 style="text-align: left; font-size: 12px; text-transform: uppercase; color: var(--gold-dark); margin: 12px 0 6px;">Sentencias dictadas:</h4>
+      <div id="finalDecreeList" style="display: flex; flex-direction: column; gap: 6px; max-height: 180px; overflow-y: auto; margin-bottom: 15px;"></div>
+
+      <button class="spin-button" style="background: linear-gradient(135deg, #2B8A3E, #237032);" onclick="resetGameToNewParty()">
+        INICIAR NUEVA PARTIDA 🔄
+      </button>
     </div>
   </div>
 
   <script>
     /* ========================================================
-       1. CATÁLOGO DE PERSONAJES ILUSTRADOS (SVG EN LÍNEA)
+       1. PERSONAJES ILUSTRADOS (SVG)
        ======================================================== */
     const CHARACTERS = [
       {
@@ -743,18 +894,14 @@
         role: 'Aristócrata',
         svg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="50" cy="50" r="50" fill="#E8D7B8"/>
-          <!-- Peluca empolvada -->
           <path d="M25 45 C20 30, 35 15, 50 15 C65 15, 80 30, 75 45 C78 52, 70 60, 65 58 C60 65, 40 65, 35 58 C30 60, 22 52, 25 45 Z" fill="#F0EDE6"/>
-          <!-- Cara -->
           <circle cx="50" cy="50" r="18" fill="#FCD5B5"/>
-          <!-- Ojos y cejas elegantes -->
           <circle cx="44" cy="48" r="2" fill="#3A2818"/>
           <circle cx="56" cy="48" r="2" fill="#3A2818"/>
           <path d="M42 44 Q45 42 47 44" stroke="#3A2818" stroke-width="1.5" stroke-linecap="round"/>
           <path d="M53 44 Q55 42 58 44" stroke="#3A2818" stroke-width="1.5" stroke-linecap="round"/>
           <path d="M48 55 Q50 58 52 55" stroke="#C45A45" stroke-width="1.5" stroke-linecap="round"/>
-          <circle cx="55" cy="53" r="1.2" fill="#111"/> <!-- lunar postizo -->
-          <!-- Casaca de terciopelo y chorrera -->
+          <circle cx="55" cy="53" r="1.2" fill="#111"/>
           <path d="M30 75 C30 62, 70 62, 70 75 L70 100 L30 100 Z" fill="#1D3557"/>
           <path d="M45 64 L55 64 L53 78 L47 78 Z" fill="#FFFFFF"/>
           <path d="M42 66 Q50 72 58 66" stroke="#D4AF37" stroke-width="2"/>
@@ -766,18 +913,15 @@
         role: 'Dama de Corte',
         svg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="50" cy="50" r="50" fill="#F5E4E4"/>
-          <!-- Peinado alto rococó con lazo -->
           <path d="M32 40 C28 20, 72 20, 68 40 C75 45, 70 60, 60 55 C50 62, 40 60, 32 52 Z" fill="#FAF5ED"/>
           <ellipse cx="50" cy="22" rx="14" ry="12" fill="#FAF5ED"/>
-          <path d="M45 15 Q50 10 55 15 Q58 20 50 18 Q42 20 45 15 Z" fill="#D94868"/> <!-- Lazo rosa -->
-          <!-- Rostro -->
+          <path d="M45 15 Q50 10 55 15 Q58 20 50 18 Q42 20 45 15 Z" fill="#D94868"/>
           <circle cx="50" cy="50" r="17" fill="#FDDCB9"/>
           <circle cx="44" cy="49" r="2" fill="#2B1E17"/>
           <circle cx="56" cy="49" r="2" fill="#2B1E17"/>
           <circle cx="42" cy="53" r="3.5" fill="#FF8787" opacity="0.6"/>
           <circle cx="58" cy="53" r="3.5" fill="#FF8787" opacity="0.6"/>
           <path d="M47 56 Q50 59 53 56" stroke="#C92A2A" stroke-width="2" stroke-linecap="round"/>
-          <!-- Collar de perlas y vestido -->
           <path d="M30 74 C30 63, 70 63, 70 74 L75 100 L25 100 Z" fill="#C25975"/>
           <path d="M40 66 Q50 72 60 66" stroke="#FFFFFF" stroke-width="3" stroke-dasharray="3,3"/>
         </svg>`
@@ -788,18 +932,14 @@
         role: 'Mago Real',
         svg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="50" cy="50" r="50" fill="#E6E0F2"/>
-          <!-- Sombrero picudo místico -->
           <path d="M30 42 L50 8 L70 42 Z" fill="#4C3A69"/>
           <ellipse cx="50" cy="42" rx="26" ry="6" fill="#342849"/>
           <circle cx="50" cy="24" r="3" fill="#D4AF37"/>
-          <!-- Barba y cara -->
           <circle cx="50" cy="50" r="16" fill="#F8CEB0"/>
           <path d="M38 52 C38 72, 62 72, 62 52 C58 56, 42 56, 38 52 Z" fill="#EAE5F0"/>
-          <!-- Lentes redondos -->
           <circle cx="45" cy="48" r="4.5" stroke="#D4AF37" stroke-width="1.5" fill="none"/>
           <circle cx="55" cy="48" r="4.5" stroke="#D4AF37" stroke-width="1.5" fill="none"/>
           <line x1="49.5" y1="48" x2="50.5" y2="48" stroke="#D4AF37" stroke-width="1.5"/>
-          <!-- Túnica mágica -->
           <path d="M28 76 C28 64, 72 64, 72 76 L75 100 L25 100 Z" fill="#3B2D54"/>
           <polygon points="50,72 52,77 57,77 53,80 55,85 50,82 45,85 47,80 43,77 48,77" fill="#D4AF37"/>
         </svg>`
@@ -810,18 +950,14 @@
         role: 'Campesino Colado',
         svg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="50" cy="50" r="50" fill="#EFE8D6"/>
-          <!-- Boina de campesino -->
           <ellipse cx="50" cy="38" rx="22" ry="10" fill="#7A5636"/>
           <circle cx="50" cy="52" r="17" fill="#F4C7A1"/>
-          <!-- Cabello alborotado -->
           <path d="M33 46 Q31 52 35 55" stroke="#5C3B1E" stroke-width="3"/>
           <path d="M67 46 Q69 52 65 55" stroke="#5C3B1E" stroke-width="3"/>
-          <!-- Sonrisa traviesa chimuela -->
           <circle cx="45" cy="50" r="2" fill="#221"/>
           <circle cx="55" cy="50" r="2" fill="#221"/>
           <path d="M44 58 Q50 65 56 58 Z" fill="#802020"/>
           <rect x="47" y="58" width="3" height="3" fill="#FFF"/>
-          <!-- Camisa rústica con cordón -->
           <path d="M28 76 C28 65, 72 65, 72 76 L75 100 L25 100 Z" fill="#9C7753"/>
           <path d="M47 68 L53 76 M53 68 L47 76" stroke="#462C15" stroke-width="1.5"/>
         </svg>`
@@ -832,20 +968,17 @@
         role: 'Bufón de Copas',
         svg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="50" cy="50" r="50" fill="#FDECE8"/>
-          <!-- Gorro con cuernos y cascabeles -->
           <path d="M30 40 Q20 22 15 28 Q25 35 34 38 Z" fill="#9E2A2B"/>
           <path d="M70 40 Q80 22 85 28 Q75 35 66 38 Z" fill="#D4AF37"/>
           <circle cx="15" cy="28" r="3.5" fill="#FFD700"/>
           <circle cx="85" cy="28" r="3.5" fill="#FFD700"/>
           <path d="M32 42 C32 32, 68 32, 68 42 Z" fill="#9E2A2B"/>
-          <!-- Rostro con maquillaje -->
           <circle cx="50" cy="52" r="16" fill="#FCE2CE"/>
           <circle cx="44" cy="50" r="2" fill="#111"/>
           <circle cx="56" cy="50" r="2" fill="#111"/>
           <polygon points="44,45 42,42 46,42" fill="#9E2A2B"/>
           <polygon points="56,45 54,42 58,42" fill="#9E2A2B"/>
           <path d="M43 58 Q50 66 57 58" stroke="#9E2A2B" stroke-width="2.5" stroke-linecap="round"/>
-          <!-- Gola rizada de picos -->
           <path d="M30 76 L36 68 L43 74 L50 66 L57 74 L64 68 L70 76 L72 100 L28 100 Z" fill="#FAF6EF"/>
         </svg>`
       },
@@ -855,21 +988,16 @@
         role: 'Mascota Imperial',
         svg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="50" cy="50" r="50" fill="#E8F1F2"/>
-          <!-- Peluca noble y orejas de perro -->
           <path d="M30 35 C25 20, 75 20, 70 35 C80 50, 75 70, 70 65 C65 72, 35 72, 30 65 C25 70, 20 50, 30 35 Z" fill="#F4EEE4"/>
-          <!-- Orejas caídas marrones -->
           <path d="M26 40 C22 55, 30 68, 36 62 Z" fill="#8B5A2B"/>
           <path d="M74 40 C78 55, 70 68, 64 62 Z" fill="#8B5A2B"/>
-          <!-- Cara perrito noble -->
           <ellipse cx="50" cy="52" rx="16" ry="14" fill="#EEDAC5"/>
           <circle cx="43" cy="49" r="2.5" fill="#20150D"/>
           <circle cx="57" cy="49" r="2.5" fill="#20150D"/>
           <ellipse cx="50" cy="55" rx="4" ry="2.5" fill="#1B120C"/>
           <path d="M50 57.5 L50 61 M47 60 Q50 63 53 60" stroke="#1B120C" stroke-width="1.2"/>
-          <!-- Monóculo de oro -->
           <circle cx="57" cy="49" r="5" stroke="#D4AF37" stroke-width="1.5" fill="none"/>
           <line x1="62" y1="51" x2="68" y2="65" stroke="#D4AF37" stroke-width="1"/>
-          <!-- Cuello con lechuguilla -->
           <path d="M34 72 Q50 82 66 72 L68 100 L32 100 Z" fill="#78281F"/>
           <path d="M36 70 Q50 78 64 70" stroke="#FAF6EF" stroke-width="4" stroke-dasharray="4,4"/>
         </svg>`
@@ -880,16 +1008,13 @@
         role: 'Tabernera Mayor',
         svg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="50" cy="50" r="50" fill="#F4ECD8"/>
-          <!-- Cabello trenzado rojo -->
           <circle cx="50" cy="42" r="20" fill="#A8422B"/>
           <path d="M32 45 Q28 65 30 75" stroke="#A8422B" stroke-width="6" stroke-linecap="round"/>
           <circle cx="50" cy="51" r="16" fill="#FDDCB9"/>
           <circle cx="44" cy="49" r="2" fill="#2B1A09"/>
           <circle cx="56" cy="49" r="2" fill="#2B1A09"/>
-          <!-- Mirada retadora y sonrisa -->
           <path d="M42 45 L47 47 M58 45 L53 47" stroke="#2B1A09" stroke-width="1.5"/>
           <path d="M46 58 Q50 61 54 58" stroke="#872323" stroke-width="2" stroke-linecap="round"/>
-          <!-- Jarra de cerveza miniatura y blusa -->
           <path d="M30 74 C30 63, 70 63, 70 74 L75 100 L25 100 Z" fill="#3D5A45"/>
           <path d="M44 64 L56 64 L50 75 Z" fill="#FFF"/>
         </svg>`
@@ -900,17 +1025,13 @@
         role: 'Caballero Andante',
         svg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="50" cy="50" r="50" fill="#DDE5E8"/>
-          <!-- Yelmo con pluma -->
           <path d="M32 44 C32 28, 68 28, 68 44 L68 55 L32 55 Z" fill="#9BA4A8"/>
-          <path d="M50 28 Q52 10 65 8 Q55 18 50 28" fill="#C92A2A"/> <!-- Pluma roja -->
-          <!-- Visera del casco levantada -->
+          <path d="M50 28 Q52 10 65 8 Q55 18 50 28" fill="#C92A2A"/>
           <rect x="36" y="44" width="28" height="6" rx="2" fill="#5A6368"/>
           <circle cx="50" cy="56" r="14" fill="#FCD5B5"/>
-          <!-- Bigote orgulloso -->
           <circle cx="45" cy="53" r="1.8" fill="#111"/>
           <circle cx="55" cy="53" r="1.8" fill="#111"/>
           <path d="M42 58 Q46 54 50 58 Q54 54 58 58" stroke="#462C15" stroke-width="2.5" fill="none"/>
-          <!-- Armadura brillante -->
           <path d="M28 75 C28 65, 72 65, 72 75 L75 100 L25 100 Z" fill="#758287"/>
           <circle cx="50" cy="84" r="5" fill="#D4AF37"/>
         </svg>`
@@ -918,61 +1039,55 @@
     ];
 
     /* ========================================================
-       2. LISTA DE 32 RETOS DIVERTIDOS, COLOQUIALES Y CHUSCOS
+       2. RETOS DE FIESTA
        ======================================================== */
     const CHALLENGES = [
-      // Comodines
-      { title: 'Indulto de la Suerte', cat: 'Comodín', text: '¡Te salvaste por pura suerte! Nadie bebe de tu parte esta ronda y puedes brindar en paz.', penalty: 'Descanso total. No hay castigo.' },
-      { title: 'El Francotirador', cat: 'Comodín', text: 'Apunta sin temblar la mano. Escoge a quien tú quieras de la mesa y dale un trago directo.', penalty: 'Si dudas más de 5 segundos, te lo tomas tú.' },
+      { title: 'Indulto de la Suerte', cat: 'Comodín', text: '¡Te salvaste por pura suerte! Nadie bebe de tu parte esta ronda.', penalty: 'Descanso total. No hay castigo.' },
+      { title: 'El Francotirador', cat: 'Comodín', text: 'Apunta sin temblar la mano: escoge a quien quieras de la mesa y dale un trago directo.', penalty: 'Si dudas más de 5 segundos, te lo tomas tú.' },
       { title: 'Fuego Cruzado', cat: 'Comodín', text: 'Pagan los vecinos: el de tu derecha y el de tu izquierda le dan un buen trago a su vaso.', penalty: 'Si alguno se niega, se echa 2 tragos seguidos.' },
-      { title: 'Salud General', cat: 'Comodín', text: '¡Salud por el reino! Todos en la mesa le dan un trago a su bebida, menos tú.', penalty: '¡Fondo para el que se quede mirando!' },
-      { title: 'El Espejo Vengador', cat: 'Comodín', text: 'El jugador que tiró la pirinola justo antes que tú tiene que beber por andarse riendo.', penalty: 'El anterior bebe 1 trago.' },
-      { title: 'Efecto Cascada', cat: 'Comodín', text: 'Tú empiezas a beber y todos en la mesa te siguen. Nadie puede bajar su vaso hasta que tú pares.', penalty: 'El que baje el vaso antes, trago de castigo.' },
-
-      // Secretos y anécdotas de fiesta
-      { title: 'La Foto Incómoda', cat: 'Confesión', text: 'Enseña la última foto que tomaste con la cámara de tu celular a la mesa o confiésate.', penalty: 'Si escondes el teléfono: bebes 2 tragos.' },
-      { title: 'El Peor Oso Borracho', cat: 'Confesión', text: 'Cuenta tu anécdota más vergonzosa de borrachera o fiesta en menos de un minuto.', penalty: 'Si te da pena contarla: Fondo a tu vaso.' },
-      { title: 'Atracción Secreta', cat: 'Confesión', text: 'Di quién de los presentes te parece la persona más atractiva o de mejor estilo.', penalty: 'Si te da miedo responder: 2 tragos de castigo.' },
+      { title: 'Salud General', cat: 'Comodín', text: '¡Salud por el reino! Todos en la mesa le dan un trago a su bebida, menos tú.', penalty: 'Fondo para el que se quede mirando.' },
+      { title: 'El Espejo Vengador', cat: 'Comodín', text: 'El jugador que tiró antes que tú tiene que beber por andarse riendo.', penalty: 'El anterior bebe 1 trago.' },
+      { title: 'Efecto Cascada', cat: 'Comodín', text: 'Tú empiezas a beber y todos en la mesa te siguen. Nadie puede bajar su vaso hasta que pares.', penalty: 'El que baje el vaso antes, trago de castigo.' },
+      { title: 'La Foto Incómoda', cat: 'Confesión', text: 'Muestra la última foto que tomaste con la cámara de tu celular a la mesa.', penalty: 'Si escondes el teléfono: bebes 2 tragos.' },
+      { title: 'El Peor Oso Borracho', cat: 'Confesión', text: 'Cuenta tu anécdota más chusca de borrachera o fiesta en menos de un minuto.', penalty: 'Si te da pena contarla: Fondo a tu vaso.' },
+      { title: 'Atracción Secreta', cat: 'Confesión', text: 'Di quién de los presentes te parece la persona más atractiva o de mejor estilo.', penalty: 'Si te da miedo responder: 2 tragos.' },
       { title: 'El Historial Oscuro', cat: 'Confesión', text: 'Muestra a la persona a tu lado tu última búsqueda en Instagram o TikTok.', penalty: 'Si cierras la app: 2 tragos sin quejarte.' },
-      { title: 'Mentira Piadosa', cat: 'Confesión', text: 'Confiésale a alguien de la mesa una mentira que le hayas dicho alguna vez.', penalty: 'Si dices que nunca has mentido: bebes 2 tragos por hipócrita.' },
+      { title: 'Mentira Piadosa', cat: 'Confesión', text: 'Confiésale a alguien de la mesa una mentira que le hayas dicho alguna vez.', penalty: 'Si dices que nunca has mentido: bebes 2 tragos.' },
       { title: 'Gusto Culposo', cat: 'Confesión', text: 'Canta o di cuál es esa rola culposa que amas pero te daría pena que suene en tu auto.', penalty: 'Si te niegas: bebes 1 trago.' },
       { title: 'El Ex Innombrable', cat: 'Confesión', text: 'Menciona en 3 palabras cómo resumirías a tu peor ex pareja.', penalty: 'Si prefieres el silencio: 2 tragos.' },
       { title: 'El Chisme Real', cat: 'Confesión', text: 'Suelta un buen chisme o secreto de alguien conocido que no esté aquí sentado.', penalty: 'Si te haces el santo: te tomas 2 tragos.' },
-
-      // Retos fáciles y risas
-      { title: 'Karaoke a Capela', cat: 'Reto Rápido', text: 'Canta a todo pulmón el coro de una canción de reggaetón o despecho durante 10 segundos.', penalty: 'Si te desafinas a propósito o te niegas: 2 tragos.' },
+      { title: 'Karaoke a Capela', cat: 'Reto Rápido', text: 'Canta el coro de una rola de reggaetón o despecho durante 10 segundos.', penalty: 'Si te da pena: 2 tragos.' },
       { title: 'El Piropo Rococó', cat: 'Reto Rápido', text: 'Dile el piropo más exagerado, dramático y cursi a la persona que tengas enfrente.', penalty: 'Si te da risa antes de terminarlo: bebes 1 trago.' },
       { title: 'Imitación de la Mesa', cat: 'Reto Rápido', text: 'Imita un gesto, frase o maña de alguien que esté jugando aquí hasta que adivinen.', penalty: 'Si tardan más de 20 segundos o te rajas: 2 tragos.' },
       { title: 'Piedra, Papel o Tijera', cat: 'Duelo', text: 'Elige un rival de la mesa. Juegan un solo tiro rápido a muerte súbita.', penalty: 'El que pierda el tiro se empina su vaso.' },
       { title: 'Duelo de Miradas', cat: 'Duelo', text: 'Clávale la mirada al jugador de tu izquierda sin pestañear ni reírte durante 15 segundos.', penalty: 'El primero en reírse o cerrar los ojos bebe 1 trago.' },
-      { title: 'El Rey de la Estatua', cat: 'Reto Rápido', text: 'Quédate tieso como gárgola de piedra durante 15 segundos mientras los demás te hacen caras.', penalty: 'Si te mueves o sonríes: 2 tragos.' },
-      { title: 'Audio Peligroso', cat: 'Reto Rápido', text: 'Manda un audio de WhatsApp a tu tercer chat reciente diciendo solo: "Necesito decirte algo urgente" y apagas la pantalla.', penalty: 'Si te acobardas: te tomas 3 tragos.' },
+      { title: 'El Rey de la Estatua', cat: 'Reto Rápido', text: 'Quédate inmóvil durante 15 segundos mientras los demás intentan hacerte reír sin tocarte.', penalty: 'Si te mueves o sonríes: 2 tragos.' },
+      { title: 'Audio Peligroso', cat: 'Reto Rápido', text: 'Manda un audio al tercer chat reciente de WhatsApp diciendo: "Tenemos que hablar de algo urgente".', penalty: 'Si te acobardas: te tomas 3 tragos.' },
       { title: 'Baile Real', cat: 'Reto Rápido', text: 'Ponte de pie e inventa un paso de baile prohibido durante 8 segundos sin pena.', penalty: 'Si no te levantas: 2 tragos.' },
-
-      // Juegos de grupo rápidos
-      { title: 'Cultura Chupística: Marcas', cat: 'Grupo', text: 'Empiezas diciendo marcas de alcohol o cerveza. En círculo, el que repita o tarde más de 3 segundos, pierde.', penalty: 'El perdedor de la ronda bebe 1 trago.' },
-      { title: 'Cultura Chupística: Excusas', cat: 'Grupo', text: 'Excusas típicas para no ir a una fiesta o dejar plantado a alguien. El que se trabe, pierde.', penalty: 'El que se quede mudo bebe 1 trago.' },
+      { title: 'Cultura Chupística: Marcas', cat: 'Grupo', text: 'Marcas de alcohol o cerveza en círculo. El que repita o tarde más de 3 segundos, pierde.', penalty: 'El perdedor de la ronda bebe 1 trago.' },
+      { title: 'Cultura Chupística: Excusas', cat: 'Grupo', text: 'Excusas típicas para dejar plantado a alguien o salirte temprano de un plan.', penalty: 'El que se quede mudo bebe 1 trago.' },
       { title: 'Yo Nunca Nunca Picante', cat: 'Grupo', text: 'Di un "Yo nunca nunca" salseado. Todos los que sí lo hayan hecho tienen que tomar.', penalty: 'Si nadie en la mesa bebe, bebes tú solo por aburrido.' },
-      { title: 'El Pulgar Imperial', cat: 'Grupo', text: 'Pon tu pulgar discretamente en la orilla de la mesa. Los demás deben imitarte en silencio.', penalty: 'El último distraído en poner el pulgar bebe 1 trago.' },
-      { title: 'Rima Callejera', cat: 'Reto Rápido', text: 'Di una frase que termine con rima. El siguiente jugador tiene 3 segundos para responder con otra rima.', penalty: 'El primero que se trabe bebe 1 trago.' },
-      { title: 'La Votación Popular', cat: 'Grupo', text: 'A la cuenta de tres, todos apuntan con el dedo a quien crean que baila peor o es más mala copa.', penalty: 'El más votado por la corte se echa 2 tragos.' },
+      { title: 'El Pulgar Imperial', cat: 'Grupo', text: 'Pon tu pulgar discretamente en la mesa. Los demás deben imitarte en silencio.', penalty: 'El último distraído en poner el pulgar bebe 1 trago.' },
+      { title: 'Rima Callejera', cat: 'Reto Rápido', text: 'Di una frase rimada. El de al lado tiene 3 segundos para responder con otra rima.', penalty: 'El primero que se trabe bebe 1 trago.' },
+      { title: 'Votación Popular', cat: 'Grupo', text: 'A la cuenta de tres, todos apuntan con el dedo a quien crean que es más mala copa.', penalty: 'El más votado por la corte se echa 2 tragos.' },
       { title: 'Contacto Falso', cat: 'Confesión', text: 'Di en voz alta la última persona a la que le dejaste de contestar un mensaje a propósito.', penalty: 'Si no quieres admitirlo: bebes 2 tragos.' },
-      { title: 'El Trago Amigo', cat: 'Comodín', text: 'Elige a un compa para que sea tu compinche: cada vez que tú bebas en las próximas 2 rondas, él bebe contigo.', penalty: 'El compinche no puede rechazar la alianza.' },
-      { title: 'Cumplido con Veneno', cat: 'Reto Rápido', text: 'Dile un cumplido honesto pero gracioso a quien esté sentado frente a ti.', penalty: 'Si no se te ocurre nada: 1 trago.' },
-      { title: 'Amnistía Falsa', cat: 'Comodín', text: 'Te perdonamos esta ronda, pero en tu siguiente tiro, cualquier castigo que te toque valdrá el doble.', penalty: 'Peligro aplazado: la cuenta pendiente se cobra después.' }
+      { title: 'El Trago Amigo', cat: 'Comodín', text: 'Elige un compinche: cada vez que tú bebas en las próximas 2 rondas, él bebe contigo.', penalty: 'El compinche no puede rechazar la alianza.' },
+      { title: 'Cumplido con Veneno', cat: 'Reto Rápido', text: 'Dile un cumplido honesto pero chusco a quien esté sentado frente a ti.', penalty: 'Si no se te ocurre nada: 1 trago.' },
+      { title: 'Amnistía Falsa', cat: 'Comodín', text: 'Te perdonamos esta ronda, pero en tu siguiente tiro, cualquier castigo valdrá el doble.', penalty: 'Peligro aplazado: la deuda se cobra al doble.' }
     ];
 
     /* ========================================================
-       3. ESTADO DEL JUEGO
+       3. ESTADO
        ======================================================== */
     let players = [];
     let currentPlayerIndex = 0;
     let selectedCharId = 'lord';
     let isSpinning = false;
     let currentChallenge = null;
+    let judgmentDecisions = {};
 
     /* ========================================================
-       4. ESCENA 3D THREE.JS (PIRINOLA DE MARFIL Y ORO)
+       4. PIRINOLA 3D (THREE.JS)
        ======================================================== */
     let scene, camera, renderer, pirinolaGroup;
     let spinVelocity = 0;
@@ -993,7 +1108,6 @@
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       container.appendChild(renderer.domElement);
 
-      // Iluminación cálida rococó
       const ambientLight = new THREE.AmbientLight(0xfff5e6, 1.2);
       scene.add(ambientLight);
 
@@ -1005,35 +1119,16 @@
       pointLight.position.set(-3, 2, 2);
       scene.add(pointLight);
 
-      // Grupo de la pirinola
       pirinolaGroup = new THREE.Group();
       scene.add(pirinolaGroup);
 
-      // Materiales
-      const ivoryMat = new THREE.MeshStandardMaterial({
-        color: 0xfaf5ee,
-        roughness: 0.35,
-        metalness: 0.1
-      });
+      const ivoryMat = new THREE.MeshStandardMaterial({ color: 0xfaf5ee, roughness: 0.35, metalness: 0.1 });
+      const goldMat = new THREE.MeshStandardMaterial({ color: 0xd4af37, roughness: 0.25, metalness: 0.85 });
+      const woodMat = new THREE.MeshStandardMaterial({ color: 0x5a3d28, roughness: 0.6 });
 
-      const goldMat = new THREE.MeshStandardMaterial({
-        color: 0xd4af37,
-        roughness: 0.25,
-        metalness: 0.85
-      });
-
-      const woodMat = new THREE.MeshStandardMaterial({
-        color: 0x5a3d28,
-        roughness: 0.6
-      });
-
-      // Cuerpo octagonal
-      const bodyGeo = new THREE.CylinderGeometry(1.6, 1.6, 1.4, 8);
-      const bodyMesh = new THREE.Mesh(bodyGeo, ivoryMat);
-      bodyMesh.position.y = 0;
+      const bodyMesh = new THREE.Mesh(new THREE.CylinderGeometry(1.6, 1.6, 1.4, 8), ivoryMat);
       pirinolaGroup.add(bodyMesh);
 
-      // Anillos de oro decorativos
       const ringGeo = new THREE.TorusGeometry(1.61, 0.05, 8, 8);
       const ringTop = new THREE.Mesh(ringGeo, goldMat);
       ringTop.rotation.x = Math.PI / 2;
@@ -1044,38 +1139,27 @@
       ringBottom.position.y = -0.65;
       pirinolaGroup.add(ringBottom);
 
-      // Punta cónica inferior
-      const tipGeo = new THREE.ConeGeometry(1.6, 1.5, 8);
-      const tipMesh = new THREE.Mesh(tipGeo, ivoryMat);
+      const tipMesh = new THREE.Mesh(new THREE.ConeGeometry(1.6, 1.5, 8), ivoryMat);
       tipMesh.rotation.x = Math.PI;
       tipMesh.position.y = -1.45;
       pirinolaGroup.add(tipMesh);
 
-      // Pivote de apoyo
-      const pivotGeo = new THREE.CylinderGeometry(0.12, 0.02, 0.4, 8);
-      const pivotMesh = new THREE.Mesh(pivotGeo, goldMat);
+      const pivotMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.02, 0.4, 8), goldMat);
       pivotMesh.position.y = -2.3;
       pirinolaGroup.add(pivotMesh);
 
-      // Mástil de agarre superior
-      const stemGeo = new THREE.CylinderGeometry(0.28, 0.32, 1.6, 12);
-      const stemMesh = new THREE.Mesh(stemGeo, woodMat);
+      const stemMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.32, 1.6, 12), woodMat);
       stemMesh.position.y = 1.4;
       pirinolaGroup.add(stemMesh);
 
-      const knobGeo = new THREE.SphereGeometry(0.42, 16, 16);
-      const knobMesh = new THREE.Mesh(knobGeo, goldMat);
+      const knobMesh = new THREE.Mesh(new THREE.SphereGeometry(0.42, 16, 16), goldMat);
       knobMesh.position.y = 2.2;
       pirinolaGroup.add(knobMesh);
 
-      // Peana reflectiva debajo
-      const plateGeo = new THREE.CylinderGeometry(3.5, 3.8, 0.2, 32);
-      const plateMat = new THREE.MeshStandardMaterial({ color: 0xdfd4c0, roughness: 0.8 });
-      const plateMesh = new THREE.Mesh(plateGeo, plateMat);
+      const plateMesh = new THREE.Mesh(new THREE.CylinderGeometry(3.5, 3.8, 0.2, 32), new THREE.MeshStandardMaterial({ color: 0xdfd4c0, roughness: 0.8 }));
       plateMesh.position.y = -2.45;
       scene.add(plateMesh);
 
-      // Interacción táctil / arrastre
       let isDragging = false;
       let prevX = 0;
 
@@ -1125,9 +1209,8 @@
 
       if (spinVelocity > 0.001) {
         pirinolaGroup.rotation.y += spinVelocity;
-        spinVelocity *= 0.985; // Fricción suave
+        spinVelocity *= 0.985;
 
-        // Efecto de bamboleo / precesión realista
         wobbleAngle += 0.2;
         const wobbleIntensity = Math.min(0.2, (0.5 - spinVelocity) * 0.4);
         if (spinVelocity < 0.25) {
@@ -1142,7 +1225,6 @@
           finishSpin();
         }
       } else {
-        // Giro lento pasivo cuando descansa
         pirinolaGroup.rotation.y += 0.003;
       }
 
@@ -1150,7 +1232,23 @@
     }
 
     /* ========================================================
-       5. LÓGICA DE GIRO Y RETOS
+       5. NOTIFICACIONES VISUALES
+       ======================================================== */
+    let toastTimeout = null;
+    function showVisualNotification(icon, text, duration = 3000) {
+      const banner = document.getElementById('toastBanner');
+      document.getElementById('toastIcon').innerText = icon;
+      document.getElementById('toastText').innerText = text;
+
+      banner.classList.add('show');
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        banner.classList.remove('show');
+      }, duration);
+    }
+
+    /* ========================================================
+       6. GIRO Y RESOLUCIÓN
        ======================================================== */
     function triggerPirinolaSpin() {
       if (isSpinning || players.length === 0) return;
@@ -1160,10 +1258,9 @@
 
       document.getElementById('challengeTitle').innerText = 'Girando la suerte...';
       document.getElementById('challengeDesc').innerText = 'La pirinola está decidiendo el destino de esta ronda.';
-      document.getElementById('challengePenalty').innerText = '¡Preparen sus vasos!';
-      document.getElementById('challengeCategory').innerText = 'Sorteo en curso';
+      document.getElementById('challengePenalty').innerText = '¡Preparen sus copas!';
+      document.getElementById('challengeCategory').innerText = 'Sorteo';
 
-      // Impulso aleatorio
       spinVelocity = 0.45 + Math.random() * 0.35;
     }
 
@@ -1171,7 +1268,6 @@
       isSpinning = false;
       document.getElementById('btnSpin').disabled = false;
 
-      // Seleccionar un reto aleatorio
       const randomIndex = Math.floor(Math.random() * CHALLENGES.length);
       currentChallenge = CHALLENGES[randomIndex];
 
@@ -1183,9 +1279,6 @@
       document.getElementById('decisionActions').style.display = 'grid';
     }
 
-    /* ========================================================
-       6. SISTEMA DE RACHAS, ESTRELLAS Y MARIO KART STEAL
-       ======================================================== */
     function resolveTurn(success) {
       const player = players[currentPlayerIndex];
 
@@ -1193,28 +1286,22 @@
         player.wins += 1;
         player.streak += 1;
 
-        // Disparo de confeti festivo
-        confetti({
-          particleCount: 50,
-          spread: 60,
-          origin: { y: 0.7 }
-        });
+        confetti({ particleCount: 40, spread: 50, origin: { y: 0.7 } });
 
-        // 3 VICTORIAS SEGUIDAS = 1 ESTRELLA
         if (player.streak % 3 === 0) {
           player.stars += 1;
-          alert(`🌟 ¡Bravísimo! ${player.name} logró 3 retos seguidos y se gana una Estrella de Victoria.`);
+          showVisualNotification('⭐', `¡Bravísimo! ${player.name} logró 3 retos seguidos y gana 1 Estrella.`, 4000);
         }
 
-        // 5 VICTORIAS SEGUIDAS = ROBAR ESTRELLA A UN COMPA
         if (player.streak >= 5 && player.streak % 5 === 0) {
           openStealModal(player);
-          return; // Espera la resolución del robo
+          return;
         }
 
       } else {
-        player.penalties += 1;
-        player.streak = 0; // Se reinicia la racha
+        player.fails += 1;
+        player.streak = 0;
+        showVisualNotification('🍺', `${player.name} se rajó o falló. ¡A beber!`);
       }
 
       nextTurn();
@@ -1224,8 +1311,8 @@
       currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
       updateTurnUI();
       document.getElementById('decisionActions').style.display = 'none';
-      document.getElementById('challengeTitle').innerText = 'Siguiente Jugador';
-      document.getElementById('challengeDesc').innerText = 'Pulsa el botón para lanzar la pirinola.';
+      document.getElementById('challengeTitle').innerText = 'Siguiente Turno';
+      document.getElementById('challengeDesc').innerText = 'Gira la pirinola para conocer tu reto.';
       document.getElementById('challengeCategory').innerText = 'Listo';
       document.getElementById('challengePenalty').innerText = 'Sanción: Atentos a las reglas.';
     }
@@ -1238,23 +1325,86 @@
       document.getElementById('activePlayerName').innerText = p.name;
       document.getElementById('activeRole').innerText = char.name + ' (' + char.role + ')';
       document.getElementById('activeAvatar').innerHTML = char.svg;
-      document.getElementById('activeStreak').innerText = p.streak;
+      
+      document.getElementById('activeWins').innerText = p.wins;
+      document.getElementById('activeFails').innerText = p.fails;
       document.getElementById('activeStars').innerText = p.stars;
+      document.getElementById('activeStreak').innerText = p.streak;
     }
 
-    /* MODAL DE ROBO DE ESTRELLAS */
+    /* ========================================================
+       7. MARCADOR EN TIEMPO REAL
+       ======================================================== */
+    function openScoresModal() {
+      const list = document.getElementById('liveScoresList');
+      list.innerHTML = '';
+
+      if (players.length === 0) {
+        list.innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-muted);">No hay participantes activos aún.</div>`;
+        document.getElementById('scoresModal').classList.add('active');
+        return;
+      }
+
+      // Ordenar por estrellas, luego por victorias, y luego menos castigos
+      const sorted = [...players].sort((a, b) => {
+        const scoreA = (a.stars * 10) + a.wins - (a.fails * 0.5);
+        const scoreB = (b.stars * 10) + b.wins - (b.fails * 0.5);
+        return scoreB - scoreA;
+      });
+
+      sorted.forEach((p, idx) => {
+        const char = CHARACTERS.find(c => c.id === p.charId) || CHARACTERS[0];
+        const isCurrentTurn = (players[currentPlayerIndex] && players[currentPlayerIndex].id === p.id);
+        const row = document.createElement('div');
+        row.style.background = isCurrentTurn ? '#FFF9E6' : 'var(--bg-cream)';
+        row.style.border = isCurrentTurn ? '2px solid var(--gold-primary)' : '1px solid var(--border-gilded)';
+        row.style.borderRadius = '12px';
+        row.style.padding = '10px 14px';
+        row.style.display = 'flex';
+        row.style.alignItems = 'center';
+        row.style.justifyContent = 'space-between';
+        row.style.gap = '10px';
+
+        row.innerHTML = `
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-family:'Cinzel',serif; font-weight:900; color:var(--gold-dark); font-size:14px; min-width:22px;">#${idx + 1}</span>
+            <div style="width:36px; height:36px; border-radius:50%; overflow:hidden; border:1px solid var(--gold-primary); background:#fff;">${char.svg}</div>
+            <div>
+              <div style="font-weight:700; font-size:14px; display:flex; align-items:center; gap:6px;">
+                ${p.name} ${isCurrentTurn ? '<span style="font-size:9px; background:var(--gold-primary); color:#fff; padding:2px 6px; border-radius:10px; font-weight:800;">TURNO</span>' : ''}
+              </div>
+              <div style="font-size:11px; color:var(--text-muted);">${char.name}</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:6px; align-items:center; font-size:12px; font-weight:700;">
+            <span style="background:#F9F0FF; color:#9254DE; border:1px solid #D3ADF7; padding:4px 8px; border-radius:8px;" title="Estrellas">⭐ ${p.stars}</span>
+            <span style="background:var(--green-light); color:var(--green-success); border:1px solid #B7EB8F; padding:4px 8px; border-radius:8px;" title="Cumplidos">✅ ${p.wins}</span>
+            <span style="background:var(--crimson-light); color:var(--crimson); border:1px solid #FFA39E; padding:4px 8px; border-radius:8px;" title="Se rajó">🍺 ${p.fails}</span>
+          </div>
+        `;
+        list.appendChild(row);
+      });
+
+      document.getElementById('scoresModal').classList.add('active');
+    }
+
+    function closeScoresModal() {
+      document.getElementById('scoresModal').classList.remove('active');
+    }
+
+    /* ========================================================
+       8. ROBO DE ESTRELLAS
+       ======================================================== */
     function openStealModal(stealer) {
       const modal = document.getElementById('stealModal');
       const list = document.getElementById('stealTargetList');
       list.innerHTML = '';
 
-      // Adversarios con al menos 1 estrella
       const victims = players.filter(p => p !== stealer && p.stars > 0);
 
       if (victims.length === 0) {
-        // Si nadie tiene estrellas, gana una gratis
         stealer.stars += 1;
-        alert(`🔥 ¡5 seguidas! Como nadie tiene estrellas que robar, el reino le otorga a ${stealer.name} una Estrella de Oro adicional.`);
+        showVisualNotification('👑', `🔥 ¡5 al hilo! Como nadie tiene estrellas, ${stealer.name} recibe una Estrella de Oro Real.`, 4500);
         nextTurn();
         return;
       }
@@ -1271,7 +1421,7 @@
           v.stars -= 1;
           stealer.stars += 1;
           modal.classList.remove('active');
-          alert(`👑 ¡Robo consumado! ${stealer.name} le quitó una estrella a ${v.name}.`);
+          showVisualNotification('⚔️', `¡Robo Real! ${stealer.name} le arrebató una estrella a ${v.name}.`, 4000);
           nextTurn();
         };
         list.appendChild(btn);
@@ -1281,7 +1431,183 @@
     }
 
     /* ========================================================
-       7. GESTIÓN DE JUGADORES E INICIO
+       9. CORONACIÓN Y DECRETO
+       ======================================================== */
+    function promptEndGame() {
+      if (players.length === 0) return;
+      document.getElementById('confirmEndModal').classList.add('active');
+    }
+
+    function closeConfirmEndModal() {
+      document.getElementById('confirmEndModal').classList.remove('active');
+    }
+
+    let crownedKing = null;
+
+    function executeEndGame() {
+      closeConfirmEndModal();
+
+      const sorted = [...players].sort((a, b) => {
+        const scoreA = (a.stars * 10) + a.wins - (a.fails * 0.5);
+        const scoreB = (b.stars * 10) + b.wins - (b.fails * 0.5);
+        return scoreB - scoreA;
+      });
+
+      crownedKing = sorted[0];
+      const courtList = document.getElementById('courtJudgmentList');
+      courtList.innerHTML = '';
+      judgmentDecisions = {};
+
+      document.getElementById('monarchNameTitle').innerText = `¡${crownedKing.name} es coronado Rey!`;
+
+      const vassals = players.filter(p => p !== crownedKing);
+
+      vassals.forEach(vas => {
+        judgmentDecisions[vas.id] = { type: 'punish', punishment: '1 Shot Fuerte' };
+
+        const char = CHARACTERS.find(c => c.id === vas.charId) || CHARACTERS[0];
+        const card = document.createElement('div');
+        card.className = 'subject-judgment-card';
+        card.innerHTML = `
+          <div class="subject-info">
+            <div class="subject-avatar">${char.svg}</div>
+            <div>
+              <div>${vas.name}</div>
+              <div style="font-size:11px; color:var(--text-muted); font-weight:normal;">⭐ ${vas.stars} estrellas | 🍺 ${vas.fails} tragos</div>
+            </div>
+          </div>
+          <div class="verdict-button-group">
+            <button class="btn-verdict btn-punish active" id="btnPunish_${vas.id}" onclick="setJudgment('${vas.id}', 'punish')">
+              ⚔️ Castigar
+            </button>
+            <button class="btn-verdict btn-pardon" id="btnPardon_${vas.id}" onclick="setJudgment('${vas.id}', 'pardon')">
+              🕊️ Indulto (Perdonar)
+            </button>
+          </div>
+          <div id="punishOptions_${vas.id}">
+            <select class="punishment-selector" onchange="updatePunishmentCustom('${vas.id}', this.value)">
+              <option value="1 Shot de la Casa">1 Shot Fuerte</option>
+              <option value="2 Tragos Largos">2 Tragos Largos</option>
+              <option value="Fondo al Vaso">Fondo al Vaso</option>
+              <option value="Servir las bebidas de la mesa">Servir las bebidas la próxima ronda</option>
+              <option value="Reto vergonzoso a elección del Rey">Reto sorpresa a elección del Rey</option>
+            </select>
+          </div>
+        `;
+        courtList.appendChild(card);
+      });
+
+      document.getElementById('coronationModal').classList.add('active');
+      confetti({ particleCount: 120, spread: 80, origin: { y: 0.5 } });
+    }
+
+    function setJudgment(vassalId, type) {
+      const btnPunish = document.getElementById(`btnPunish_${vassalId}`);
+      const btnPardon = document.getElementById(`btnPardon_${vassalId}`);
+      const punishBox = document.getElementById(`punishOptions_${vassalId}`);
+
+      if (type === 'punish') {
+        btnPunish.classList.add('active');
+        btnPardon.classList.remove('active');
+        punishBox.style.display = 'block';
+        judgmentDecisions[vassalId].type = 'punish';
+      } else {
+        btnPardon.classList.add('active');
+        btnPunish.classList.remove('active');
+        punishBox.style.display = 'none';
+        judgmentDecisions[vassalId].type = 'pardon';
+      }
+    }
+
+    function updatePunishmentCustom(vassalId, value) {
+      if (judgmentDecisions[vassalId]) {
+        judgmentDecisions[vassalId].punishment = value;
+      }
+    }
+
+    function proclaimRoyalDecree() {
+      document.getElementById('coronationModal').classList.remove('active');
+
+      const vassals = players.filter(p => p !== crownedKing);
+      let punishCount = 0;
+      let pardonCount = 0;
+
+      vassals.forEach(v => {
+        if (judgmentDecisions[v.id].type === 'punish') punishCount++;
+        else pardonCount++;
+      });
+
+      let royalTitle = '';
+      let royalSummary = '';
+
+      if (punishCount === vassals.length && vassals.length > 0) {
+        royalTitle = `${crownedKing.name}, Rey de los Condenados`;
+        royalSummary = `Nadie escapó de tu ira imperial. Condenaste a toda la corte al castigo supremo sin mostrar piedad.`;
+      } else if (pardonCount === vassals.length && vassals.length > 0) {
+        royalTitle = `${crownedKing.name}, El Santo y Absolvedor de Pecados`;
+        royalSummary = `La corte entera fue absuelta de sus faltas. Tu gracia infinita será recordada por siglos en las tabernas.`;
+      } else if (pardonCount > 1 && punishCount > 0) {
+        royalTitle = `${crownedKing.name}, Rey Misericordioso`;
+        royalSummary = `Perdonaste a varios cortesanos, administrando la clemencia con sabiduría regia.`;
+      } else if (pardonCount === 1) {
+        royalTitle = `${crownedKing.name}, El Tirano Seleccionador`;
+        royalSummary = `Solo un elegido conoció tu perdón, mientras descargaste el peso de la ley sobre todos los demás.`;
+      } else if (punishCount > pardonCount) {
+        royalTitle = `${crownedKing.name}, El Azote de Hígados y Señor del Hierro`;
+        royalSummary = `La balanza real se inclinó hacia el castigo. La corte teme tu reinado implacable.`;
+      } else {
+        royalTitle = `${crownedKing.name}, El Justo y Señor del Equilibrio`;
+        royalSummary = `Castigaste con medida y perdonaste con templanza, guardando el orden del reino.`;
+      }
+
+      document.getElementById('proclaimedEpithet').innerText = royalTitle;
+      document.getElementById('proclamationSummaryText').innerText = royalSummary;
+
+      const list = document.getElementById('finalDecreeList');
+      list.innerHTML = '';
+
+      vassals.forEach(vas => {
+        const dec = judgmentDecisions[vas.id];
+        const row = document.createElement('div');
+        row.style.background = '#FAF6EF';
+        row.style.padding = '8px 12px';
+        row.style.borderRadius = '8px';
+        row.style.fontSize = '13px';
+        row.style.display = 'flex';
+        row.style.justifyContent = 'space-between';
+        row.style.alignItems = 'center';
+
+        if (dec.type === 'pardon') {
+          row.innerHTML = `<span><strong>${vas.name}</strong></span> <span style="color:#2B8A3E; font-weight:700;">🕊️ Indulto Real (Perdonado)</span>`;
+        } else {
+          row.innerHTML = `<span><strong>${vas.name}</strong></span> <span style="color:#C92A2A; font-weight:700;">🍺 ${dec.punishment}</span>`;
+        }
+        list.appendChild(row);
+      });
+
+      document.getElementById('decreeModal').classList.add('active');
+      confetti({ particleCount: 100, spread: 90, origin: { y: 0.6 } });
+    }
+
+    function resetGameToNewParty() {
+      document.getElementById('decreeModal').classList.remove('active');
+      
+      players.forEach(p => {
+        p.wins = 0;
+        p.fails = 0;
+        p.streak = 0;
+        p.stars = 0;
+      });
+
+      currentPlayerIndex = 0;
+      renderRegisteredPlayers();
+      
+      document.getElementById('registerModal').classList.add('active');
+      showVisualNotification('🔄', '¡Nueva partida lista! Pueden sumar o cambiar jugadores.');
+    }
+
+    /* ========================================================
+       10. INSCRIPCIONES
        ======================================================== */
     function setupCharacterPicker() {
       const container = document.getElementById('characterPicker');
@@ -1310,16 +1636,16 @@
       if (!name) return;
 
       if (players.length >= 8) {
-        alert('El máximo es de 8 jugadores por mesa.');
+        showVisualNotification('⚠️', 'Límite de 8 jugadores por mesa.');
         return;
       }
 
       players.push({
-        id: Date.now(),
+        id: 'p_' + Date.now() + Math.random(),
         name: name,
         charId: selectedCharId,
         wins: 0,
-        penalties: 0,
+        fails: 0,
         streak: 0,
         stars: 0
       });
@@ -1327,7 +1653,6 @@
       input.value = '';
       renderRegisteredPlayers();
 
-      // Cambiar la selección al siguiente personaje automáticamente
       const nextChar = CHARACTERS[(players.length) % CHARACTERS.length];
       selectedCharId = nextChar.id;
       setupCharacterPicker();
@@ -1374,11 +1699,9 @@
       document.getElementById('registerModal').classList.remove('active');
       currentPlayerIndex = 0;
       updateTurnUI();
+      showVisualNotification('🎲', '¡La partida ha comenzado! Que ruede la pirinola.');
     }
 
-    /* ========================================================
-       8. CATÁLOGO Y PODIO FINAL
-       ======================================================== */
     function openCatalogModal() {
       const list = document.getElementById('catalogList');
       list.innerHTML = '';
@@ -1404,59 +1727,11 @@
       document.getElementById('catalogModal').classList.remove('active');
     }
 
-    function endGameSession() {
-      if (players.length === 0) return;
-      if (!confirm('¿Desean terminar la sesión y proclamar al ganador?')) return;
-
-      // Ordenar por: más estrellas, luego más victorias, luego menos castigos
-      const sorted = [...players].sort((a, b) => {
-        const scoreA = (a.stars * 10) + a.wins - (a.penalties * 0.5);
-        const scoreB = (b.stars * 10) + b.wins - (b.penalties * 0.5);
-        return scoreB - scoreA;
-      });
-
-      const winner = sorted[0];
-      const winChar = CHARACTERS.find(c => c.id === winner.charId) || CHARACTERS[0];
-
-      document.getElementById('podiumWinnerAvatar').innerHTML = winChar.svg;
-      document.getElementById('podiumWinnerName').innerText = `👑 ${winner.name}`;
-      document.getElementById('podiumWinnerStats').innerText = `${winner.stars} Estrellas | ${winner.wins} Retos cumplidos | ${winner.penalties} Tragos tomados`;
-
-      const lead = document.getElementById('podiumLeaderboard');
-      lead.innerHTML = '';
-      sorted.forEach((p, i) => {
-        const row = document.createElement('div');
-        row.className = 'podium-row';
-        row.innerHTML = `
-          <span>#${i + 1} ${p.name}</span>
-          <span>⭐ ${p.stars} &nbsp;|&nbsp; ✅ ${p.wins} &nbsp;|&nbsp; 🍺 ${p.penalties}</span>
-        `;
-        lead.appendChild(row);
-      });
-
-      document.getElementById('podiumModal').classList.add('active');
-      confetti({ particleCount: 100, spread: 80, origin: { y: 0.6 } });
-    }
-
-    function restartFullGame() {
-      document.getElementById('podiumModal').classList.remove('active');
-      players.forEach(p => {
-        p.wins = 0;
-        p.penalties = 0;
-        p.streak = 0;
-        p.stars = 0;
-      });
-      currentPlayerIndex = 0;
-      updateTurnUI();
-    }
-
-    // Inicialización al cargar la página
     window.addEventListener('DOMContentLoaded', () => {
       init3D();
       setupCharacterPicker();
       document.getElementById('registerModal').classList.add('active');
 
-      // Tecla Enter para añadir jugadores rápido
       document.getElementById('inputPlayerName').addEventListener('keypress', (e) => {
         if (e.key === 'Enter') addPlayerFromInput();
       });
