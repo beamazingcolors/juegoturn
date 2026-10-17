@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Turn — Juego de Fiesta Rococó</title>
+  <title>Turn — Juego Rococó</title>
   
   <!-- Favicon oficial con el logo SVG -->
   <link rel="icon" type="image/svg+xml" href="turn-logo.svg">
@@ -57,7 +57,6 @@
       align-items: center;
       padding: 12px;
       overflow-x: hidden;
-      /* Evita el refresco accidental por deslizamiento hacia abajo en teléfonos */
       overscroll-behavior-y: contain;
     }
 
@@ -837,7 +836,7 @@
     </div>
   </div>
 
-  <!-- MODAL: REGLAMENTO COMPLETO (Se cierra al tocar al vacío) -->
+  <!-- MODAL: REGLAMENTO COMPLETO -->
   <div class="modal-overlay" id="rulesModal">
     <div class="modal-box">
       <h2 class="modal-title">Reglamento Oficial de Turn</h2>
@@ -847,7 +846,7 @@
         <div class="rule-card">
           <div class="rule-card-header">🎲 1. Giro y Dinámica de Turno</div>
           <div class="rule-card-body">
-            En su turno, cada participante presiona <b>Girar Pirinola</b> (o la arrastra con el dedo o ratón). La pirinola 3D desacelerará de forma realista y sorteará un reto, comodín o confesión. Al finalizar, la mesa decide si <b>¡Cumplió!</b> o si <b>Se rajó / Falló</b>.
+            En su turno, cada participante presiona <b>Girar Pirinola</b> (o la arrastra directamente con el dedo o ratón). La pirinola 3D desacelerará de forma realista y sorteará un reto, comodín o confesión. Al finalizar, la mesa decide si <b>¡Cumplió!</b> o si <b>Se rajó / Falló</b>.
           </div>
         </div>
 
@@ -892,7 +891,7 @@
     </div>
   </div>
 
-  <!-- MODAL: MARCADOR EN VIVO (Se cierra al tocar al vacío) -->
+  <!-- MODAL: MARCADOR EN VIVO -->
   <div class="modal-overlay" id="scoresModal">
     <div class="modal-box">
       <h2 class="modal-title">Marcador de la Corte</h2>
@@ -902,7 +901,7 @@
     </div>
   </div>
 
-  <!-- MODAL: REGISTRO INICIAL DE JUGADORES (Con botón de Ver Reglas) -->
+  <!-- MODAL: REGISTRO INICIAL DE JUGADORES -->
   <div class="modal-overlay" id="registerModal">
     <div class="modal-box">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
@@ -940,7 +939,7 @@
     </div>
   </div>
 
-  <!-- MODAL: CATÁLOGO DE RETOS Y CASTIGOS (Se cierra al tocar al vacío) -->
+  <!-- MODAL: CATÁLOGO DE RETOS Y CASTIGOS -->
   <div class="modal-overlay" id="catalogModal">
     <div class="modal-box">
       <h2 class="modal-title">Compendio de Retos</h2>
@@ -1021,7 +1020,7 @@
     </div>
   </div>
 
-  <!-- MODAL: DECRETO FINAL (ESTILO JUEGO DE TRONOS) -->
+  <!-- MODAL: DECRETO FINAL -->
   <div class="modal-overlay" id="decreeModal">
     <div class="modal-box" style="text-align: center;">
       <div style="font-size: 36px; margin-bottom: 4px;">⚔️ 👑 🍷</div>
@@ -1240,7 +1239,7 @@
     let judgmentDecisions = {};
     let currentTripleVictim = null;
     let currentTripleLeader = null;
-    let isGameActive = false; // Control de partida activa para evitar refrescos
+    let isGameActive = false;
 
     /* 4. PIRINOLA 3D */
     let scene, camera, renderer, pirinolaGroup;
@@ -1361,18 +1360,19 @@
     function animate() {
       requestAnimationFrame(animate);
 
-      if (spinVelocity > 0.001) {
+      // Giro veloz y dinámico con desaceleración corta (~2s) para no frenar la partida
+      if (spinVelocity > 0.005) {
         pirinolaGroup.rotation.y += spinVelocity;
-        spinVelocity *= 0.985;
+        spinVelocity *= 0.965; // Fricción acelerada y enérgica
 
-        wobbleAngle += 0.2;
-        const wobbleIntensity = Math.min(0.2, (0.5 - spinVelocity) * 0.4);
-        if (spinVelocity < 0.25) {
+        wobbleAngle += 0.35;
+        const wobbleIntensity = Math.min(0.24, (0.45 - spinVelocity) * 0.5);
+        if (spinVelocity < 0.38) {
           pirinolaGroup.rotation.z = Math.sin(wobbleAngle) * wobbleIntensity;
           pirinolaGroup.rotation.x = Math.cos(wobbleAngle) * wobbleIntensity;
         }
 
-        if (spinVelocity <= 0.002) {
+        if (spinVelocity <= 0.009) {
           spinVelocity = 0;
           pirinolaGroup.rotation.z = 0.05;
           pirinolaGroup.rotation.x = 0.05;
@@ -1411,7 +1411,8 @@
       document.getElementById('challengePenalty').innerText = '¡Preparen sus copas!';
       document.getElementById('challengeCategory').innerText = 'Sorteo';
 
-      spinVelocity = 0.45 + Math.random() * 0.35;
+      // Impulso inicial el doble de veloz para giro vertiginoso
+      spinVelocity = 0.95 + Math.random() * 0.45;
     }
 
     function finishSpin() {
@@ -1638,7 +1639,7 @@
 
     function executeEndGame() {
       closeConfirmEndModal();
-      isGameActive = false; // La partida se da por terminada, ya no se bloquea la salida
+      isGameActive = false;
 
       const sorted = [...players].sort((a, b) => {
         const scoreA = (a.stars * 10) + a.wins - (a.fails * 0.5);
@@ -1892,7 +1893,7 @@
       if (players.length < 2) return;
       document.getElementById('registerModal').classList.remove('active');
       currentPlayerIndex = 0;
-      isGameActive = true; // Se activa el candado protector de recarga
+      isGameActive = true;
       updateTurnUI();
       showVisualNotification('🎲', '¡La partida ha comenzado! Que ruede la pirinola.', 1600);
     }
@@ -1922,7 +1923,7 @@
       document.getElementById('catalogModal').classList.remove('active');
     }
 
-    /* 13. CIERRE AL PRESIONAR AL VACÍO / AFUERA DEL MODAL */
+    /* 13. CIERRE AL PRESIONAR AL VACÍO */
     function setupOutsideClickModals() {
       ['scoresModal', 'catalogModal', 'rulesModal'].forEach(modalId => {
         const modalEl = document.getElementById(modalId);
@@ -1936,15 +1937,13 @@
 
     /* 14. SISTEMA DE PROTECCIÓN CONTRA REFRESCADO INVOLUNTARIO */
     function setupRefreshProtection() {
-      // 1. Alerta nativa del navegador al intentar recargar, salir o cerrar pestaña
       window.addEventListener('beforeunload', (e) => {
         if (isGameActive) {
           e.preventDefault();
-          e.returnValue = ''; // Activa el mensaje de advertencia del navegador
+          e.returnValue = '';
         }
       });
 
-      // 2. Bloqueo de atajos comunes de teclado (F5, Ctrl+R, Cmd+R)
       window.addEventListener('keydown', (e) => {
         if (isGameActive) {
           const isCtrlR = (e.ctrlKey || e.metaKey) && (e.key === 'r' || e.key === 'R');
