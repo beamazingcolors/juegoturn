@@ -62,7 +62,6 @@
       gap: 14px;
     }
 
-    /* Barra superior */
     header {
       background: var(--panel-bg);
       border: 2px solid var(--border-gilded);
@@ -122,7 +121,6 @@
       background: #FFCCC7;
     }
 
-    /* Marcador y turno del jugador */
     .turn-bar {
       background: var(--panel-bg);
       border: 2px solid var(--border-gilded);
@@ -226,7 +224,6 @@
     .dot-green { background: #2B8A3E; }
     .dot-red { background: #C92A2A; }
 
-    /* Área central de juego */
     .gameplay-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -292,7 +289,6 @@
       cursor: not-allowed;
     }
 
-    /* Tarjeta de reto */
     .card-challenge {
       background: var(--panel-bg);
       border: 2px solid var(--border-gilded);
@@ -369,7 +365,6 @@
     .btn-fail { background: #C92A2A; color: white; }
     .btn-fail:hover { background: #A61E1E; }
 
-    /* Modales */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -395,7 +390,7 @@
       border: 2px solid var(--border-gilded);
       border-radius: 22px;
       width: 100%;
-      max-width: 520px;
+      max-width: 540px;
       max-height: 88vh;
       overflow-y: auto;
       padding: 24px;
@@ -417,7 +412,7 @@
       margin-bottom: 20px;
     }
 
-    /* Notificación flotante visual */
+    /* Notificación visual en pantalla */
     .toast-banner {
       position: fixed;
       top: 20px;
@@ -448,6 +443,36 @@
       grid-template-columns: 1fr 1fr;
       gap: 10px;
       margin-top: 20px;
+    }
+
+    /* Estilos del modal de reglas */
+    .rule-card {
+      background: var(--bg-cream);
+      border: 1px solid var(--border-gilded);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+    }
+
+    .rule-card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Cinzel', serif;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--gold-dark);
+      margin-bottom: 6px;
+    }
+
+    .rule-card-body {
+      font-size: 13px;
+      line-height: 1.5;
+      color: #3D352E;
+    }
+
+    .rule-card-body b {
+      color: var(--text-dark);
     }
 
     /* Selector de personajes */
@@ -580,7 +605,6 @@
       color: var(--text-muted);
     }
 
-    /* Juicio Real */
     .coronation-header {
       text-align: center;
       margin-bottom: 16px;
@@ -705,26 +729,24 @@
 </head>
 <body>
 
-  <!-- Notificación visual en pantalla -->
   <div class="toast-banner" id="toastBanner">
     <span id="toastIcon" style="font-size: 20px;">👑</span>
     <span id="toastText">Mensaje de la corte</span>
   </div>
 
   <div class="app-container">
-    <!-- Encabezado superior con botón de Marcador añadido -->
     <header>
       <div class="brand">
         <div class="brand-title">Turn</div>
       </div>
       <div class="header-actions">
         <button class="btn-secondary" onclick="openScoresModal()">🏆 Marcador</button>
+        <button class="btn-secondary" onclick="openRulesModal()">📜 Reglas</button>
         <button class="btn-secondary" onclick="openCatalogModal()">Retos y Castigos</button>
         <button class="btn-danger" onclick="promptEndGame()">Terminar Partida</button>
       </div>
     </header>
 
-    <!-- Marcadores de la interfaz -->
     <div class="turn-bar" id="turnBar">
       <div class="active-player-info">
         <div class="player-avatar-frame" id="activeAvatar"></div>
@@ -750,7 +772,6 @@
       </div>
     </div>
 
-    <!-- Área de Juego (Pirinola 3D limpia de texto encima) -->
     <div class="gameplay-grid">
       <div class="stage-card">
         <div id="pirinola-canvas-container"></div>
@@ -783,7 +804,62 @@
     </div>
   </div>
 
-  <!-- MODAL: MARCADOR / TABLA DE POSICIONES EN VIVO -->
+  <!-- MODAL: REGLAMENTO COMPLETO (Se cierra al tocar al aire) -->
+  <div class="modal-overlay" id="rulesModal">
+    <div class="modal-box">
+      <h2 class="modal-title">Reglamento Oficial de Turn</h2>
+      <p class="modal-desc">Leyes y ordenanzas que rigen la fiesta en esta corte:</p>
+      
+      <div style="max-height: 400px; overflow-y: auto; padding-right: 4px; margin-bottom: 15px;">
+        <div class="rule-card">
+          <div class="rule-card-header">🎲 1. Giro y Dinámica de Turno</div>
+          <div class="rule-card-body">
+            En su turno, cada participante presiona <b>Girar Pirinola</b> (o la arrastra con el dedo). La pirinola 3D desacelerará de forma realista y sorteará un reto, comodín o confesión. Al finalizar, la mesa decide si <b>¡Cumplió!</b> o si <b>Se rajó / Falló</b>.
+          </div>
+        </div>
+
+        <div class="rule-card">
+          <div class="rule-card-header">⭐ 2. Rachas y Estrellas (Estilo Mario Kart)</div>
+          <div class="rule-card-body">
+            • <b>3 Victorias Seguidas (🔥 Racha 3):</b> Ganas 1 Estrella de Oro automáticamente.<br>
+            • <b>5 Victorias Seguidas (🔥 Racha 5):</b> Se activa el <b>Robo de Estrellas</b>. Tienes el derecho imperial de arrebatarle 1 estrella a cualquier compa (si nadie tiene, la corte te regala 1 estrella extra).<br>
+            • <b>Si te rajas o fallas:</b> Tu racha se reinicia a cero inmediatamente.
+          </div>
+        </div>
+
+        <div class="rule-card">
+          <div class="rule-card-header">💀 3. Ley del Triple Rajón (3 Rajadas Seguidas)</div>
+          <div class="rule-card-body">
+            Si un jugador se niega o falla retos 3 veces consecutivas, el juego se suspende y se abre el <b>Tribunal de Cobardía</b>:<br>
+            • <b>Voluntad del Líder:</b> El jugador que va en 1° lugar de la mesa le impone un castigo obligatorio (shot fuerte, trago largo, secreto oscuro o bailar ridículo).<br>
+            • <b>Autocastigo Soberano 👑:</b> Si el infractor tiene demasiado orgullo para arrodillarse, puede elegir autocastigarse con valor (Fondo al vaso o Doble Shot) para lavar su honor.
+          </div>
+        </div>
+
+        <div class="rule-card">
+          <div class="rule-card-header">👑 4. Coronación del Rey y Sentencias (Juego de Tronos)</div>
+          <div class="rule-card-body">
+            Al tocar <b>Terminar Partida</b>, el jugador con más estrellas y retos cumplidos es coronado <b>Monarca Absoluto</b>.<br>
+            El nuevo Rey debe juzgar a cada vasallo individualmente:<br>
+            • <b>⚔️ Castigar:</b> Le dicta un shot, tragos largos o reto sorpresa.<br>
+            • <b>🕊️ Indulto:</b> Le perdona el castigo por completo.<br>
+            Dependiendo de cuántos perdone o castigue, recibirá títulos reales como: <i>"Rey de los Condenados"</i>, <i>"Rey Misericordioso"</i>, <i>"El Santo y Absolvedor de Pecados"</i> o <i>"El Azote de Hígados"</i>.
+          </div>
+        </div>
+
+        <div class="rule-card">
+          <div class="rule-card-header">🍷 5. Brindis Responsable</div>
+          <div class="rule-card-body">
+            Todos los retos y tragos son bajo consentimiento amistoso. Se puede jugar con cerveza, cócteles o shots. ¡El objetivo principal es reírse y convivir!
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-secondary" style="width: 100%; padding: 12px; font-weight:700;" onclick="closeRulesModal()">Entendido, a Jugar</button>
+    </div>
+  </div>
+
+  <!-- MODAL: MARCADOR EN VIVO (Se cierra al tocar al aire) -->
   <div class="modal-overlay" id="scoresModal">
     <div class="modal-box">
       <h2 class="modal-title">Marcador de la Corte</h2>
@@ -826,7 +902,7 @@
     </div>
   </div>
 
-  <!-- MODAL: CATÁLOGO DE RETOS Y CASTIGOS -->
+  <!-- MODAL: CATÁLOGO DE RETOS Y CASTIGOS (Se cierra al tocar al aire) -->
   <div class="modal-overlay" id="catalogModal">
     <div class="modal-box">
       <h2 class="modal-title">Compendio de Retos</h2>
@@ -842,6 +918,51 @@
       <h2 class="modal-title">¡Racha Imparable! 🔥</h2>
       <p class="modal-desc">Completaste 5 retos al hilo. Elige a qué jugador le vas a arrebatar una estrella:</p>
       <div id="stealTargetList" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px;"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: SENTENCIA POR 3 RAJADAS CONSECUTIVAS -->
+  <div class="modal-overlay" id="tripleFailModal">
+    <div class="modal-box" style="text-align: center;">
+      <div style="font-size: 38px; margin-bottom: 6px;">💀 🍺 💀</div>
+      <h2 class="modal-title" style="color: var(--crimson);">¡Sentencia al Triple Rajón!</h2>
+      <p class="modal-desc" id="tripleFailDesc">
+        El jugador acumula 3 faltas consecutivas. La corte exige expiación inmediata.
+      </p>
+
+      <div style="background: var(--bg-cream); border: 1px solid var(--border-gilded); border-radius: 14px; padding: 14px; margin-bottom: 14px; text-align: left;">
+        <h4 style="font-size: 13px; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 6px;">
+          Opción 1: Decretado por el Líder (<span id="leaderNameTag" style="color:var(--text-dark);">Líder</span>)
+        </h4>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">
+          El primer lugar de la corte impone su castigo sobre el infractor:
+        </p>
+        <select id="leaderCustomPunishment" class="punishment-selector" style="margin-bottom: 10px;">
+          <option value="Tomarse 1 Shot Fuerte al seco">Tomarse 1 Shot Fuerte al seco</option>
+          <option value="Tomarse 2 Tragos Largos de golpe">Tomarse 2 Tragos Largos de golpe</option>
+          <option value="Confesar su secreto más oscuro">Confesar su secreto más oscuro a la mesa</option>
+          <option value="Bailar como bufón ridículo por 15 segundos">Bailar como bufón ridículo por 15 segundos</option>
+          <option value="Servirle los vasos a todos la siguiente ronda">Servirle los vasos a todos la siguiente ronda</option>
+        </select>
+        <button class="btn-resolve btn-fail" style="width: 100%; padding: 10px;" onclick="resolveTripleFail('leader')">
+          Acatar Voluntad del Líder
+        </button>
+      </div>
+
+      <div style="background: #FFF9E6; border: 1px solid var(--gold-primary); border-radius: 14px; padding: 14px; text-align: left;">
+        <h4 style="font-size: 13px; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 6px;">
+          Opción 2: Autocastigo Soberano 👑
+        </h4>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 6px;">
+          ¿Demasiado orgullo para arrodillarse? El rajón puede redimirse como soberano:
+        </p>
+        <div style="font-size: 12px; font-weight: 700; color: var(--crimson); margin-bottom: 10px;">
+          Honor Real: ¡Fondo completo al vaso o Doble Shot directo!
+        </div>
+        <button class="btn-resolve" style="width: 100%; padding: 10px; background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark)); color: white;" onclick="resolveTripleFail('sovereign')">
+          Elegir Autocastigo Soberano
+        </button>
+      </div>
     </div>
   </div>
 
@@ -884,9 +1005,7 @@
   </div>
 
   <script>
-    /* ========================================================
-       1. PERSONAJES ILUSTRADOS (SVG)
-       ======================================================== */
+    /* 1. PERSONAJES */
     const CHARACTERS = [
       {
         id: 'lord',
@@ -1038,9 +1157,7 @@
       }
     ];
 
-    /* ========================================================
-       2. RETOS DE FIESTA
-       ======================================================== */
+    /* 2. RETOS DE FIESTA */
     const CHALLENGES = [
       { title: 'Indulto de la Suerte', cat: 'Comodín', text: '¡Te salvaste por pura suerte! Nadie bebe de tu parte esta ronda.', penalty: 'Descanso total. No hay castigo.' },
       { title: 'El Francotirador', cat: 'Comodín', text: 'Apunta sin temblar la mano: escoge a quien quieras de la mesa y dale un trago directo.', penalty: 'Si dudas más de 5 segundos, te lo tomas tú.' },
@@ -1076,19 +1193,17 @@
       { title: 'Amnistía Falsa', cat: 'Comodín', text: 'Te perdonamos esta ronda, pero en tu siguiente tiro, cualquier castigo valdrá el doble.', penalty: 'Peligro aplazado: la deuda se cobra al doble.' }
     ];
 
-    /* ========================================================
-       3. ESTADO
-       ======================================================== */
+    /* 3. ESTADO */
     let players = [];
     let currentPlayerIndex = 0;
     let selectedCharId = 'lord';
     let isSpinning = false;
     let currentChallenge = null;
     let judgmentDecisions = {};
+    let currentTripleVictim = null;
+    let currentTripleLeader = null;
 
-    /* ========================================================
-       4. PIRINOLA 3D (THREE.JS)
-       ======================================================== */
+    /* 4. PIRINOLA 3D */
     let scene, camera, renderer, pirinolaGroup;
     let spinVelocity = 0;
     let wobbleAngle = 0;
@@ -1231,9 +1346,7 @@
       renderer.render(scene, camera);
     }
 
-    /* ========================================================
-       5. NOTIFICACIONES VISUALES
-       ======================================================== */
+    /* 5. NOTIFICACIONES VISUALES */
     let toastTimeout = null;
     function showVisualNotification(icon, text, duration = 3000) {
       const banner = document.getElementById('toastBanner');
@@ -1247,9 +1360,7 @@
       }, duration);
     }
 
-    /* ========================================================
-       6. GIRO Y RESOLUCIÓN
-       ======================================================== */
+    /* 6. GIRO Y EVALUACIÓN DE TURNOS */
     function triggerPirinolaSpin() {
       if (isSpinning || players.length === 0) return;
       isSpinning = true;
@@ -1285,6 +1396,7 @@
       if (success) {
         player.wins += 1;
         player.streak += 1;
+        player.consecutiveFails = 0;
 
         confetti({ particleCount: 40, spread: 50, origin: { y: 0.7 } });
 
@@ -1298,13 +1410,21 @@
           return;
         }
 
+        nextTurn();
       } else {
         player.fails += 1;
         player.streak = 0;
+        player.consecutiveFails = (player.consecutiveFails || 0) + 1;
         showVisualNotification('🍺', `${player.name} se rajó o falló. ¡A beber!`);
-      }
 
-      nextTurn();
+        if (player.consecutiveFails >= 3) {
+          player.consecutiveFails = 0;
+          openTripleFailModal(player);
+          return;
+        }
+
+        nextTurn();
+      }
     }
 
     function nextTurn() {
@@ -1332,9 +1452,38 @@
       document.getElementById('activeStreak').innerText = p.streak;
     }
 
-    /* ========================================================
-       7. MARCADOR EN TIEMPO REAL
-       ======================================================== */
+    /* 7. MODAL DE TRIPLE RAJADA */
+    function openTripleFailModal(victim) {
+      currentTripleVictim = victim;
+
+      const sorted = [...players].sort((a, b) => {
+        const scoreA = (a.stars * 10) + a.wins - (a.fails * 0.5);
+        const scoreB = (b.stars * 10) + b.wins - (b.fails * 0.5);
+        return scoreB - scoreA;
+      });
+
+      currentTripleLeader = sorted.find(p => p.id !== victim.id) || sorted[0];
+
+      document.getElementById('tripleFailDesc').innerHTML = `<b>${victim.name}</b> se ha rajado 3 veces consecutivas. La corte no tolera tanta cobardía: debe recibir un castigo ejemplar.`;
+      document.getElementById('leaderNameTag').innerText = currentTripleLeader.name;
+
+      document.getElementById('tripleFailModal').classList.add('active');
+    }
+
+    function resolveTripleFail(type) {
+      document.getElementById('tripleFailModal').classList.remove('active');
+
+      if (type === 'leader') {
+        const punishment = document.getElementById('leaderCustomPunishment').value;
+        showVisualNotification('⚖️', `${currentTripleVictim.name} acató el castigo de ${currentTripleLeader.name}: ${punishment}`, 4500);
+      } else {
+        showVisualNotification('👑', `¡Honor Real! ${currentTripleVictim.name} no se arrodilló y pagó con Autocastigo Soberano (Doble Shot).`, 4500);
+      }
+
+      nextTurn();
+    }
+
+    /* 8. MARCADOR EN TIEMPO REAL */
     function openScoresModal() {
       const list = document.getElementById('liveScoresList');
       list.innerHTML = '';
@@ -1345,7 +1494,6 @@
         return;
       }
 
-      // Ordenar por estrellas, luego por victorias, y luego menos castigos
       const sorted = [...players].sort((a, b) => {
         const scoreA = (a.stars * 10) + a.wins - (a.fails * 0.5);
         const scoreB = (b.stars * 10) + b.wins - (b.fails * 0.5);
@@ -1392,9 +1540,16 @@
       document.getElementById('scoresModal').classList.remove('active');
     }
 
-    /* ========================================================
-       8. ROBO DE ESTRELLAS
-       ======================================================== */
+    /* 9. MODAL DE REGLAS */
+    function openRulesModal() {
+      document.getElementById('rulesModal').classList.add('active');
+    }
+
+    function closeRulesModal() {
+      document.getElementById('rulesModal').classList.remove('active');
+    }
+
+    /* 10. ROBO DE ESTRELLAS */
     function openStealModal(stealer) {
       const modal = document.getElementById('stealModal');
       const list = document.getElementById('stealTargetList');
@@ -1430,9 +1585,7 @@
       modal.classList.add('active');
     }
 
-    /* ========================================================
-       9. CORONACIÓN Y DECRETO
-       ======================================================== */
+    /* 11. CORONACIÓN Y DECRETO */
     function promptEndGame() {
       if (players.length === 0) return;
       document.getElementById('confirmEndModal').classList.add('active');
@@ -1595,6 +1748,7 @@
       players.forEach(p => {
         p.wins = 0;
         p.fails = 0;
+        p.consecutiveFails = 0;
         p.streak = 0;
         p.stars = 0;
       });
@@ -1606,9 +1760,7 @@
       showVisualNotification('🔄', '¡Nueva partida lista! Pueden sumar o cambiar jugadores.');
     }
 
-    /* ========================================================
-       10. INSCRIPCIONES
-       ======================================================== */
+    /* 12. INSCRIPCIONES */
     function setupCharacterPicker() {
       const container = document.getElementById('characterPicker');
       container.innerHTML = '';
@@ -1646,6 +1798,7 @@
         charId: selectedCharId,
         wins: 0,
         fails: 0,
+        consecutiveFails: 0,
         streak: 0,
         stars: 0
       });
@@ -1727,9 +1880,23 @@
       document.getElementById('catalogModal').classList.remove('active');
     }
 
+    /* 13. CIERRE AL PRESIONAR AL VACÍO / AFUERA DEL MODAL */
+    function setupOutsideClickModals() {
+      ['scoresModal', 'catalogModal', 'rulesModal'].forEach(modalId => {
+        const modalEl = document.getElementById(modalId);
+        modalEl.addEventListener('click', (e) => {
+          // Si el clic fue en el fondo translúcido y no dentro del cuadro de contenido
+          if (e.target === modalEl) {
+            modalEl.classList.remove('active');
+          }
+        });
+      });
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
       init3D();
       setupCharacterPicker();
+      setupOutsideClickModals();
       document.getElementById('registerModal').classList.add('active');
 
       document.getElementById('inputPlayerName').addEventListener('keypress', (e) => {
