@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Turn</title>
   
-  <!-- Favicon e Icono Táctil oficial en formato PNG -->
+  <!-- Favicon e Icono Táctil oficial en formato PNG transparente -->
   <link rel="icon" type="image/png" href="turn-logo.png">
   <link rel="apple-touch-icon" href="turn-logo.png">
   
@@ -99,9 +99,9 @@
       background: var(--panel-bg);
       border: 1.5px solid var(--border-gilded);
       border-radius: 16px;
-      padding: 8px 18px;
+      padding: 10px 16px;
       display: flex;
-      flex-wrap: wrap;
+      flex-direction: row;
       justify-content: space-between;
       align-items: center;
       gap: 10px;
@@ -119,11 +119,9 @@
       width: auto;
       max-width: 180px;
       object-fit: contain;
-      filter: drop-shadow(0 3px 6px rgba(122, 91, 30, 0.28));
+      background: transparent;
+      filter: drop-shadow(0 3px 6px rgba(122, 91, 30, 0.25));
       transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    .brand-logo:hover {
-      transform: scale(1.03);
     }
 
     .brand-title-fallback {
@@ -139,13 +137,14 @@
       display: flex;
       gap: 6px;
       flex-wrap: wrap;
+      align-items: center;
     }
 
     .btn-rococo-nav {
       background: var(--bg-cream);
       border: 1px solid var(--border-gilded);
       color: var(--text-dark);
-      padding: 7px 13px;
+      padding: 7px 12px;
       border-radius: 9px;
       font-family: 'Cinzel', serif;
       font-size: 11px;
@@ -153,6 +152,9 @@
       letter-spacing: 0.8px;
       text-transform: uppercase;
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       transition: background 0.15s ease, transform 0.1s ease, border-color 0.15s ease;
     }
     .btn-rococo-nav:active {
@@ -165,7 +167,7 @@
       background: var(--carmin-light);
       border: 1px solid var(--carmin-border);
       color: var(--carmin-velours);
-      padding: 7px 13px;
+      padding: 7px 12px;
       border-radius: 9px;
       font-family: 'Cinzel', serif;
       font-size: 11px;
@@ -173,11 +175,43 @@
       letter-spacing: 0.8px;
       text-transform: uppercase;
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       transition: background 0.15s ease, transform 0.1s ease;
     }
     .btn-rococo-danger:active {
       transform: scale(0.97);
       background: #F0D5D8;
+    }
+
+    @media (max-width: 640px) {
+      header {
+        flex-direction: column;
+        align-items: center;
+        padding: 10px 12px;
+        gap: 8px;
+      }
+      .brand {
+        justify-content: center;
+        width: 100%;
+      }
+      .brand-logo {
+        height: 60px;
+        max-width: 210px;
+      }
+      .header-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 4px;
+      }
+      .btn-rococo-nav, .btn-rococo-danger {
+        padding: 8px 2px;
+        font-size: 10px;
+        letter-spacing: 0.2px;
+        text-align: center;
+      }
     }
 
     .turn-bar {
@@ -191,6 +225,17 @@
       justify-content: space-between;
       gap: 10px;
       box-shadow: var(--shadow-rococo);
+    }
+
+    @media (max-width: 640px) {
+      .turn-bar {
+        padding: 10px 12px;
+        gap: 8px;
+      }
+      .stats-pills {
+        width: 100%;
+        justify-content: center;
+      }
     }
 
     .active-player-info {
@@ -471,6 +516,92 @@
       background: #DCE7EB;
     }
 
+    /* PIE DE PÁGINA ROCOCÓ LIMPIO CON BOTONES */
+    .court-footer {
+      background: var(--panel-bg);
+      border: 1.5px solid var(--border-gilded);
+      border-radius: 16px;
+      padding: 14px 18px;
+      box-shadow: var(--shadow-rococo);
+      margin-top: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .footer-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .footer-bottom-bar {
+      font-family: 'Cinzel', serif;
+      font-size: 10.5px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--gold-dark);
+      text-align: center;
+    }
+
+    /* Listas para los modales de Créditos y Políticas */
+    .modal-credits-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      padding: 0;
+      margin: 10px 0 16px;
+    }
+
+    .modal-credit-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-cream);
+      border: 1px solid var(--border-gilded);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 13.5px;
+      color: var(--text-dark);
+    }
+
+    .modal-role-badge {
+      font-family: 'Cinzel', serif;
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--gold-dark);
+      background: #FFF9E6;
+      border: 1px solid #F0D785;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .modal-legal-card {
+      background: var(--bg-cream);
+      border: 1px solid var(--border-gilded);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 14px;
+      text-align: left;
+    }
+
+    .modal-legal-points {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      font-size: 12px;
+      line-height: 1.55;
+      color: var(--text-muted);
+    }
+
+    .modal-legal-points li {
+      margin-bottom: 6px;
+    }
+
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -493,7 +624,7 @@
       pointer-events: auto;
     }
 
-    #rulesModal, #tripleCondoneModal {
+    #rulesModal, #tripleCondoneModal, #creditsModal, #policiesModal {
       z-index: 1050;
     }
 
@@ -905,6 +1036,7 @@
   <div class="app-container">
     <header>
       <div class="brand">
+        <!-- Logo PNG oficial con fondo transparente -->
         <img
           src="turn-logo.png"
           alt="Turn"
@@ -983,6 +1115,68 @@
           </button>
         </div>
       </div>
+    </div>
+
+    <!-- PIE DE PÁGINA LIMPIO CON BOTONES A POPUPS -->
+    <footer class="court-footer">
+      <div class="footer-actions">
+        <button class="btn-rococo-nav" onclick="RococoAudio.playClick('do'); openCreditsModal()">Créditos</button>
+        <button class="btn-rococo-nav" onclick="RococoAudio.playClick('mi'); openPoliciesModal()">Políticas y Restricciones</button>
+      </div>
+      <div class="footer-bottom-bar">
+        Turn &bull; Todos los derechos reservados
+      </div>
+    </footer>
+  </div>
+
+  <!-- MODAL POPUP: CRÉDITOS DE LA CORTE -->
+  <div class="modal-overlay" id="creditsModal">
+    <div class="modal-box">
+      <h2 class="modal-title">Créditos de la Corte</h2>
+      <p class="modal-desc">Artífices y dignatarios responsables de esta obra:</p>
+      
+      <ul class="modal-credits-list">
+        <li class="modal-credit-item">
+          <span><strong>Luis Torres</strong></span>
+          <span class="modal-role-badge">CEO</span>
+        </li>
+        <li class="modal-credit-item">
+          <span><strong>Alexus</strong></span>
+          <span class="modal-role-badge">Dirección</span>
+        </li>
+        <li class="modal-credit-item">
+          <span><strong>Kevin Darza</strong></span>
+          <span class="modal-role-badge">Diseño</span>
+        </li>
+      </ul>
+
+      <button class="btn-rococo-nav" style="width: 100%; padding: 11px; background: var(--gold-light); border-color: var(--gold-primary);" onclick="RococoAudio.playClick('do'); closeCreditsModal()">Cerrar Créditos</button>
+    </div>
+  </div>
+
+  <!-- MODAL POPUP: POLÍTICAS Y RESTRICCIONES -->
+  <div class="modal-overlay" id="policiesModal">
+    <div class="modal-box">
+      <div style="display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 6px;">
+        <h2 class="modal-title" style="margin-bottom: 0;">Políticas y Restricciones</h2>
+      </div>
+      <p class="modal-desc">Ordenanza de seguridad y consumo responsable:</p>
+
+      <div class="modal-legal-card">
+        <div style="display: inline-block; font-family: 'Cinzel', serif; font-size: 10.5px; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; color: var(--carmin-velours); background: var(--carmin-light); border: 1px solid var(--carmin-border); padding: 3px 8px; border-radius: 6px; margin-bottom: 8px;">
+          +18 Años Exclusivo
+        </div>
+        <p class="footer-legal-text" style="font-size: 12.5px; margin-bottom: 8px;">
+          Este juego ha sido concebido única y exclusivamente como entretenimiento de convivencia social para <strong>mayores de 18 años</strong>.
+        </p>
+        <ul class="modal-legal-points">
+          <li><strong>Consumo con Moderación:</strong> Se exhorta a beber de manera responsable. Conoce tus límites y salvaguarda tu bienestar y el de tus acompañantes.</li>
+          <li><strong>Tolerancia Cero al Volante:</strong> Si consumes bebidas alcohólicas, no conduzcas bajo ninguna circunstancia. Planifica tu transporte previamente.</li>
+          <li><strong>Consentimiento Absoluto:</strong> Ningún comensal puede ser forzado a beber contra su voluntad. El agua o bebidas no alcohólicas son siempre una alternativa válida de indulto.</li>
+        </ul>
+      </div>
+
+      <button class="btn-rococo-nav" style="width: 100%; padding: 11px; background: var(--gold-light); border-color: var(--gold-primary);" onclick="RococoAudio.playClick('mi'); closePoliciesModal()">Comprendido y Aceptado</button>
     </div>
   </div>
 
@@ -1250,8 +1444,6 @@
   <script>
     /* ========================================================
        SISTEMA ACÚSTICO ROCOCÓ DE CLAVICORDIO (WEB AUDIO API)
-       Síntesis pura con dobles cuerdas de latón, ataque de tangente
-       y acordes/arpegios en MI, DO, RE y escalas barrocas.
        ======================================================== */
     const RococoAudio = {
       ctx: null,
@@ -1273,7 +1465,6 @@
         }
       },
 
-      // Sonido físico de clavicordio: tangente golpeando par de cuerdas
       playClavichordTone(freq, timeOffset = 0, duration = 0.32, gainLevel = 0.22) {
         if (!this.ctx) return;
         const now = this.ctx.currentTime + timeOffset;
@@ -1283,19 +1474,16 @@
         const filter = this.ctx.createBiquadFilter();
         const gain = this.ctx.createGain();
 
-        // Par de cuerdas (bichord) con ligero desajuste para timbre natural
         osc1.type = 'sawtooth';
         osc2.type = 'triangle';
 
         osc1.frequency.setValueAtTime(freq * 0.998, now);
         osc2.frequency.setValueAtTime(freq * 1.002, now);
 
-        // Resonancia de caja armónica de madera y latón
         filter.type = 'bandpass';
         filter.frequency.setValueAtTime(freq * 2.6, now);
         filter.Q.setValueAtTime(3.2, now);
 
-        // Ataque percusivo inmediato y caída dulce
         gain.gain.setValueAtTime(0.0001, now);
         gain.gain.linearRampToValueAtTime(gainLevel, now + 0.003);
         gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
@@ -1311,33 +1499,28 @@
         osc2.stop(now + duration + 0.02);
       },
 
-      // Sonido para botones: Acordes o notas MI, DO, RE o micro-arpegios
       playClick(mode = 'arpeggio') {
         this.init();
         if (!this.ctx) return;
 
         if (mode === 'do') {
-          // Acorde arpegiado en DO Mayor (Do5 - Mi5 - Sol5)
           this.playClavichordTone(523.25, 0.000, 0.34, 0.22);
           this.playClavichordTone(659.25, 0.025, 0.34, 0.19);
           this.playClavichordTone(783.99, 0.050, 0.34, 0.17);
         } else if (mode === 'mi') {
-          // Acorde arpegiado en MI (Mi5 - Sol#5 - Si5)
           this.playClavichordTone(659.25, 0.000, 0.34, 0.22);
           this.playClavichordTone(830.61, 0.025, 0.34, 0.19);
           this.playClavichordTone(987.77, 0.050, 0.34, 0.17);
         } else if (mode === 're') {
-          // Acorde arpegiado en RE (Re5 - Fa#5 - La5)
           this.playClavichordTone(587.33, 0.000, 0.34, 0.22);
           this.playClavichordTone(739.99, 0.025, 0.34, 0.19);
           this.playClavichordTone(880.00, 0.050, 0.34, 0.17);
         } else {
-          // Micro-arpegios cortesanos rotativos en escala barroca
           const motifs = [
-            [523.25, 659.25],          // DO5 -> MI5
-            [587.33, 783.99],          // RE5 -> SOL5
-            [659.25, 783.99, 1046.50], // MI5 -> SOL5 -> DO6
-            [523.25, 587.33, 659.25]   // DO5 -> RE5 -> MI5
+            [523.25, 659.25],
+            [587.33, 783.99],
+            [659.25, 783.99, 1046.50],
+            [523.25, 587.33, 659.25]
           ];
           const selected = motifs[this.clickNoteIndex % motifs.length];
           this.clickNoteIndex++;
@@ -1348,11 +1531,9 @@
         }
       },
 
-      // Floritura arpegiada brillante en Clavicordio para el giro de la pirinola
       playClavichordFlourish() {
         this.init();
         if (!this.ctx) return;
-        // Arpegio ascendente barroco en RE Mayor: Re4 -> Fa#4 -> La4 -> Re5 -> Fa#5
         const flourish = [
           { f: 293.66, t: 0.00 },
           { f: 369.99, t: 0.03 },
@@ -1431,7 +1612,6 @@
           }, 120);
         }
 
-        // Acorde resolutivo de Clavicordio: Do5 - Mi5 - Sol5 - Do6
         this.playClavichordTone(523.25, 0.00, 0.45, 0.20);
         this.playClavichordTone(659.25, 0.03, 0.45, 0.18);
         this.playClavichordTone(783.99, 0.06, 0.45, 0.16);
@@ -1441,7 +1621,6 @@
       playSuccess() {
         this.init();
         if (!this.ctx) return;
-        // Acorde triunfal radiante en MI Mayor
         this.playClavichordTone(659.25, 0.00, 0.55, 0.22);
         this.playClavichordTone(830.61, 0.04, 0.55, 0.20);
         this.playClavichordTone(987.77, 0.08, 0.55, 0.18);
@@ -1451,7 +1630,6 @@
       playFail() {
         this.init();
         if (!this.ctx) return;
-        // Acorde menor en RE Menor
         this.playClavichordTone(587.33, 0.00, 0.50, 0.20);
         this.playClavichordTone(698.46, 0.05, 0.50, 0.18);
         this.playClavichordTone(880.00, 0.10, 0.50, 0.16);
@@ -1460,7 +1638,6 @@
       playCondone() {
         this.init();
         if (!this.ctx) return;
-        // Resonancia de tiempo: La4 -> Mi5
         this.playClavichordTone(440.00, 0.00, 0.65, 0.22);
         this.playClavichordTone(659.25, 0.04, 0.65, 0.20);
       }
@@ -1493,6 +1670,21 @@
           });
         }
       }
+    }
+
+    /* Modales de Créditos y Políticas */
+    function openCreditsModal() {
+      document.getElementById('creditsModal').classList.add('active');
+    }
+    function closeCreditsModal() {
+      document.getElementById('creditsModal').classList.remove('active');
+    }
+
+    function openPoliciesModal() {
+      document.getElementById('policiesModal').classList.add('active');
+    }
+    function closePoliciesModal() {
+      document.getElementById('policiesModal').classList.remove('active');
     }
 
     /* 1. PERSONAJES ILUSTRADOS */
@@ -1696,7 +1888,6 @@
     let currentCondoneLeader = null;
     let isGameActive = false;
 
-    // Configuración de Rondas
     let totalRounds = 10;
     let currentRound = 1;
 
@@ -2512,14 +2703,16 @@
 
     /* 14. CIERRE AL PRESIONAR AL VACÍO */
     function setupOutsideClickModals() {
-      ['scoresModal', 'catalogModal', 'rulesModal'].forEach(modalId => {
+      ['scoresModal', 'catalogModal', 'rulesModal', 'creditsModal', 'policiesModal'].forEach(modalId => {
         const modalEl = document.getElementById(modalId);
-        modalEl.addEventListener('click', (e) => {
-          if (e.target === modalEl) {
-            RococoAudio.playClick('arpeggio');
-            modalEl.classList.remove('active');
-          }
-        });
+        if (modalEl) {
+          modalEl.addEventListener('click', (e) => {
+            if (e.target === modalEl) {
+              RococoAudio.playClick('arpeggio');
+              modalEl.classList.remove('active');
+            }
+          });
+        }
       });
     }
 
