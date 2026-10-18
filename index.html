@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Turn — Juego de Fiesta Rococó</title>
+  <title>Turn</title>
   
   <!-- Favicon e Icono Táctil oficial en formato PNG -->
   <link rel="icon" type="image/png" href="turn-logo.png">
@@ -114,7 +114,6 @@
       gap: 10px;
     }
 
-    /* Presentación del nuevo blasón PNG */
     .brand-logo {
       height: 52px;
       width: auto;
@@ -149,9 +148,9 @@
       padding: 7px 13px;
       border-radius: 9px;
       font-family: 'Cinzel', serif;
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 700;
-      letter-spacing: 1px;
+      letter-spacing: 0.8px;
       text-transform: uppercase;
       cursor: pointer;
       transition: background 0.15s ease, transform 0.1s ease, border-color 0.15s ease;
@@ -169,9 +168,9 @@
       padding: 7px 13px;
       border-radius: 9px;
       font-family: 'Cinzel', serif;
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 700;
-      letter-spacing: 1px;
+      letter-spacing: 0.8px;
       text-transform: uppercase;
       cursor: pointer;
       transition: background 0.15s ease, transform 0.1s ease;
@@ -254,6 +253,12 @@
       gap: 5px;
       text-transform: uppercase;
       box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    }
+
+    .stat-round {
+      color: var(--gold-dark);
+      background: var(--gold-light);
+      border: 1px solid var(--gold-primary);
     }
 
     .stat-success {
@@ -597,6 +602,49 @@
       color: var(--text-dark);
     }
 
+    .rounds-picker-container {
+      margin: 12px 0 16px;
+      text-align: left;
+    }
+
+    .rounds-label {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--gold-dark);
+      margin-bottom: 7px;
+      display: block;
+    }
+
+    .rounds-options-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+    }
+
+    .round-option-btn {
+      background: var(--bg-cream);
+      border: 1px solid var(--border-gilded);
+      color: var(--text-dark);
+      padding: 9px 0;
+      border-radius: 10px;
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: center;
+    }
+
+    .round-option-btn.selected {
+      background: var(--gold-primary);
+      color: #FFFFFF;
+      border-color: var(--gold-dark);
+      box-shadow: 0 2px 8px rgba(122, 91, 30, 0.3);
+    }
+
     .character-picker {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -846,6 +894,9 @@
 </head>
 <body>
 
+  <!-- Reproductor de música de fondo (Flow Music) -->
+  <audio id="bgMusic" src="musica.mp3" loop preload="auto"></audio>
+
   <!-- Cartela de Notificación Cortesana -->
   <div class="toast-banner" id="toastBanner">
     <span id="toastText">Decreto de la Corte</span>
@@ -854,20 +905,21 @@
   <div class="app-container">
     <header>
       <div class="brand">
-        <!-- Nuevo Logo PNG en formato auténtico con fallback decorativo -->
         <img
           src="turn-logo.png"
-          alt="TURN - Bienvenido al Reino"
+          alt="Turn"
           class="brand-logo"
           onerror="this.style.display='none'; document.getElementById('brandFallback').style.display='block';"
         >
         <span id="brandFallback" class="brand-title-fallback" style="display:none;">Turn</span>
       </div>
       <div class="header-actions">
-        <button class="btn-rococo-nav" onclick="RococoAudio.playClick(); openScoresModal()">Marcador</button>
-        <button class="btn-rococo-nav" onclick="RococoAudio.playClick(); openRulesModal()">Reglamento</button>
-        <button class="btn-rococo-nav" onclick="RococoAudio.playClick(); openCatalogModal()">Retos</button>
-        <button class="btn-rococo-danger" onclick="RococoAudio.playClick(); promptEndGame()">Terminar</button>
+        <!-- Botones con notas y acordes de clavicordio -->
+        <button class="btn-rococo-nav" id="btnToggleMusic" onclick="toggleBackgroundMusic()">Música</button>
+        <button class="btn-rococo-nav" onclick="RococoAudio.playClick('do'); openScoresModal()">Marcador</button>
+        <button class="btn-rococo-nav" onclick="RococoAudio.playClick('mi'); openRulesModal()">Reglamento</button>
+        <button class="btn-rococo-nav" onclick="RococoAudio.playClick('re'); openCatalogModal()">Retos</button>
+        <button class="btn-rococo-danger" onclick="RococoAudio.playClick('re'); promptEndGame()">Terminar</button>
       </div>
     </header>
 
@@ -881,6 +933,9 @@
       </div>
 
       <div class="stats-pills">
+        <div class="stat-pill stat-round" title="Ronda actual de la sesión">
+          Ronda: <b id="activeRound">1/10</b>
+        </div>
         <div class="stat-pill stat-success" title="Retos cumplidos con éxito">
           Cumplidos: <b id="activeWins">0</b>
         </div>
@@ -939,14 +994,21 @@
       
       <div style="max-height: 400px; overflow-y: auto; padding-right: 2px; margin-bottom: 14px;">
         <div class="rule-card">
-          <div class="rule-card-header">1. Dinámica de Turno</div>
+          <div class="rule-card-header">1. Duración y Rondas</div>
+          <div class="rule-card-body">
+            La sesión se pacta a <b>5, 10, 15, 20 o 25 rondas</b>. Una ronda concluye cuando cada participante inscrito ha tomado su turno con la pirinola. Al expirar la última ronda, la sesión finaliza y se procede de inmediato al juicio del soberano.
+          </div>
+        </div>
+
+        <div class="rule-card">
+          <div class="rule-card-header">2. Dinámica de Turno</div>
           <div class="rule-card-body">
             Cada comensal acciona el giro de la pirinola en su turno. Al cesar su inercia, se revela el desafío o comodín. La asamblea resuelve si la prueba fue <b>Superada</b>, si hubo <b>Falta</b> o si el comensal decide <b>Condonar</b>.
           </div>
         </div>
 
         <div class="rule-card">
-          <div class="rule-card-header">2. Ley de la Condonación y Deuda Acumulativa</div>
+          <div class="rule-card-header">3. Ley de la Condonación y Deuda Acumulativa</div>
           <div class="rule-card-body">
             • Es posible aplazar el trago de la ronda mediante una condonación formal.<br>
             • Las condonaciones consecutivas engrosan el registro de <b>Deuda</b>.<br>
@@ -956,7 +1018,7 @@
         </div>
 
         <div class="rule-card">
-          <div class="rule-card-header">3. Laureles y Expropiación de Mérito</div>
+          <div class="rule-card-header">4. Laureles y Expropiación de Mérito</div>
           <div class="rule-card-body">
             • <b>3 Victorias Consecutivas:</b> Otorgan 1 Laurel de Oro de inmediato.<br>
             • <b>5 Victorias Consecutivas:</b> Activan el derecho de <b>Expropiación Soberana</b>, permitiendo arrebatar 1 laurel a cualquier rival.<br>
@@ -965,7 +1027,7 @@
         </div>
 
         <div class="rule-card">
-          <div class="rule-card-header">4. Tribunal por Faltas Reiteradas</div>
+          <div class="rule-card-header">5. Tribunal por Faltas Reiteradas</div>
           <div class="rule-card-body">
             Si un jugador acumula 3 faltas consecutivas sin recurrir a la condonación, el certamen se interrumpe:<br>
             • El líder en turno le impone una sanción disciplinaria.<br>
@@ -974,14 +1036,14 @@
         </div>
 
         <div class="rule-card">
-          <div class="rule-card-header">5. Coronación y Juicio Real</div>
+          <div class="rule-card-header">6. Coronación y Juicio Real</div>
           <div class="rule-card-body">
-            Al concluir la velada, quien reúna el mayor balance de laureles y aciertos asciende al trono. El nuevo Rey somete a cada vasallo a juicio individual con <b>Castigo</b> o <b>Indulto</b>, ganando títulos dinámicos acordes a su temple.
+            Al concluir las rondas pactadas o pulsar Terminar, quien reúna el mayor balance de laureles y aciertos asciende al trono. El nuevo Rey somete a cada vasallo a juicio individual con <b>Castigo</b> o <b>Indulto Real</b>, ganando títulos dinámicos acordes a su temple.
           </div>
         </div>
       </div>
 
-      <button class="btn-rococo-nav" style="width: 100%; padding: 11px; background: var(--gold-light); border-color: var(--gold-primary);" onclick="RococoAudio.playClick(); closeRulesModal()">Comprendido</button>
+      <button class="btn-rococo-nav" style="width: 100%; padding: 11px; background: var(--gold-light); border-color: var(--gold-primary);" onclick="RococoAudio.playClick('mi'); closeRulesModal()">Comprendido</button>
     </div>
   </div>
 
@@ -1033,20 +1095,31 @@
       <h2 class="modal-title">Escalafón de Honor</h2>
       <p class="modal-desc">Registro ministerial de puntos, laureles y deudas:</p>
       <div id="liveScoresList" style="display: flex; flex-direction: column; gap: 7px; max-height: 380px; overflow-y: auto; margin-bottom: 14px;"></div>
-      <button class="btn-rococo-nav" style="width: 100%; padding: 11px;" onclick="RococoAudio.playClick(); closeScoresModal()">Regresar al Certamen</button>
+      <button class="btn-rococo-nav" style="width: 100%; padding: 11px;" onclick="RococoAudio.playClick('do'); closeScoresModal()">Regresar al Certamen</button>
     </div>
   </div>
 
-  <!-- MODAL: REGISTRO INICIAL DE JUGADORES (Con botón Reglamento) -->
+  <!-- MODAL: REGISTRO INICIAL DE JUGADORES Y CONFIGURACIÓN DE RONDAS -->
   <div class="modal-overlay" id="registerModal">
     <div class="modal-box">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
         <h2 class="modal-title" style="margin-bottom: 0; text-align: left; font-size: 17px;">Inscripción de la Corte</h2>
-        <button type="button" class="btn-rococo-nav" style="font-size: 10.5px; padding: 5px 9px;" onclick="RococoAudio.playClick(); openRulesModal()">
+        <button type="button" class="btn-rococo-nav" style="font-size: 10.5px; padding: 5px 9px;" onclick="RococoAudio.playClick('mi'); openRulesModal()">
           Reglamento
         </button>
       </div>
-      <p class="modal-desc" style="text-align: left; margin-bottom: 12px;">Inscriban a los participantes, elijan su retrato oficial y den inicio a la sesión.</p>
+      <p class="modal-desc" style="text-align: left; margin-bottom: 12px;">Definan la cantidad de rondas, inscriban comensales y comiencen la velada.</p>
+
+      <div class="rounds-picker-container">
+        <span class="rounds-label">Duración del Certamen (Rondas):</span>
+        <div class="rounds-options-grid" id="roundSelectorGrid">
+          <button type="button" class="round-option-btn" onclick="selectGameRounds(5, this)">5</button>
+          <button type="button" class="round-option-btn selected" onclick="selectGameRounds(10, this)">10</button>
+          <button type="button" class="round-option-btn" onclick="selectGameRounds(15, this)">15</button>
+          <button type="button" class="round-option-btn" onclick="selectGameRounds(20, this)">20</button>
+          <button type="button" class="round-option-btn" onclick="selectGameRounds(25, this)">25</button>
+        </div>
+      </div>
 
       <div class="character-picker" id="characterPicker"></div>
 
@@ -1069,7 +1142,7 @@
       <h2 class="modal-title">¿Clausurar la Sesión?</h2>
       <p class="modal-desc">Se suspenderán los giros y se procederá a la proclamación del Soberano de la mesa.</p>
       <div class="confirm-actions">
-        <button class="btn-rococo-nav" style="padding: 11px;" onclick="RococoAudio.playClick(); closeConfirmEndModal()">Permanecer</button>
+        <button class="btn-rococo-nav" style="padding: 11px;" onclick="RococoAudio.playClick('arpeggio'); closeConfirmEndModal()">Permanecer</button>
         <button class="btn-resolve btn-fail" style="padding: 11px;" onclick="executeEndGame()">Proceder al Juicio</button>
       </div>
     </div>
@@ -1081,7 +1154,7 @@
       <h2 class="modal-title">Compendio de Pruebas</h2>
       <p class="modal-desc">Todas las opciones y comodines que depara la suerte:</p>
       <div id="catalogList" style="max-height: 380px; overflow-y: auto; margin-bottom: 14px;"></div>
-      <button class="btn-rococo-nav" style="width: 100%; padding: 11px;" onclick="RococoAudio.playClick(); closeCatalogModal()">Cerrar</button>
+      <button class="btn-rococo-nav" style="width: 100%; padding: 11px;" onclick="RococoAudio.playClick('re'); closeCatalogModal()">Cerrar</button>
     </div>
   </div>
 
@@ -1176,7 +1249,9 @@
 
   <script>
     /* ========================================================
-       SISTEMA ACÚSTICO ROCOCÓ (WEB AUDIO API PROCEDIMENTAL)
+       SISTEMA ACÚSTICO ROCOCÓ DE CLAVICORDIO (WEB AUDIO API)
+       Síntesis pura con dobles cuerdas de latón, ataque de tangente
+       y acordes/arpegios en MI, DO, RE y escalas barrocas.
        ======================================================== */
     const RococoAudio = {
       ctx: null,
@@ -1184,6 +1259,7 @@
       spinGain: null,
       spinFilter: null,
       lastTapTime: 0,
+      clickNoteIndex: 0,
 
       init() {
         if (!this.ctx) {
@@ -1197,32 +1273,96 @@
         }
       },
 
-      playClick() {
-        this.init();
+      // Sonido físico de clavicordio: tangente golpeando par de cuerdas
+      playClavichordTone(freq, timeOffset = 0, duration = 0.32, gainLevel = 0.22) {
         if (!this.ctx) return;
-        const now = this.ctx.currentTime;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
+        const now = this.ctx.currentTime + timeOffset;
+
+        const osc1 = this.ctx.createOscillator();
+        const osc2 = this.ctx.createOscillator();
         const filter = this.ctx.createBiquadFilter();
+        const gain = this.ctx.createGain();
 
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(587.33, now);
-        osc.frequency.exponentialRampToValueAtTime(580, now + 0.12);
+        // Par de cuerdas (bichord) con ligero desajuste para timbre natural
+        osc1.type = 'sawtooth';
+        osc2.type = 'triangle';
 
+        osc1.frequency.setValueAtTime(freq * 0.998, now);
+        osc2.frequency.setValueAtTime(freq * 1.002, now);
+
+        // Resonancia de caja armónica de madera y latón
         filter.type = 'bandpass';
-        filter.frequency.setValueAtTime(2400, now);
-        filter.Q.setValueAtTime(3.5, now);
+        filter.frequency.setValueAtTime(freq * 2.6, now);
+        filter.Q.setValueAtTime(3.2, now);
 
-        gain.gain.setValueAtTime(0.001, now);
-        gain.gain.linearRampToValueAtTime(0.25, now + 0.006);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
+        // Ataque percusivo inmediato y caída dulce
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.linearRampToValueAtTime(gainLevel, now + 0.003);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
 
-        osc.connect(filter);
+        osc1.connect(filter);
+        osc2.connect(filter);
         filter.connect(gain);
         gain.connect(this.ctx.destination);
 
-        osc.start(now);
-        osc.stop(now + 0.17);
+        osc1.start(now);
+        osc2.start(now);
+        osc1.stop(now + duration + 0.02);
+        osc2.stop(now + duration + 0.02);
+      },
+
+      // Sonido para botones: Acordes o notas MI, DO, RE o micro-arpegios
+      playClick(mode = 'arpeggio') {
+        this.init();
+        if (!this.ctx) return;
+
+        if (mode === 'do') {
+          // Acorde arpegiado en DO Mayor (Do5 - Mi5 - Sol5)
+          this.playClavichordTone(523.25, 0.000, 0.34, 0.22);
+          this.playClavichordTone(659.25, 0.025, 0.34, 0.19);
+          this.playClavichordTone(783.99, 0.050, 0.34, 0.17);
+        } else if (mode === 'mi') {
+          // Acorde arpegiado en MI (Mi5 - Sol#5 - Si5)
+          this.playClavichordTone(659.25, 0.000, 0.34, 0.22);
+          this.playClavichordTone(830.61, 0.025, 0.34, 0.19);
+          this.playClavichordTone(987.77, 0.050, 0.34, 0.17);
+        } else if (mode === 're') {
+          // Acorde arpegiado en RE (Re5 - Fa#5 - La5)
+          this.playClavichordTone(587.33, 0.000, 0.34, 0.22);
+          this.playClavichordTone(739.99, 0.025, 0.34, 0.19);
+          this.playClavichordTone(880.00, 0.050, 0.34, 0.17);
+        } else {
+          // Micro-arpegios cortesanos rotativos en escala barroca
+          const motifs = [
+            [523.25, 659.25],          // DO5 -> MI5
+            [587.33, 783.99],          // RE5 -> SOL5
+            [659.25, 783.99, 1046.50], // MI5 -> SOL5 -> DO6
+            [523.25, 587.33, 659.25]   // DO5 -> RE5 -> MI5
+          ];
+          const selected = motifs[this.clickNoteIndex % motifs.length];
+          this.clickNoteIndex++;
+
+          selected.forEach((f, i) => {
+            this.playClavichordTone(f, i * 0.032, 0.28, 0.18);
+          });
+        }
+      },
+
+      // Floritura arpegiada brillante en Clavicordio para el giro de la pirinola
+      playClavichordFlourish() {
+        this.init();
+        if (!this.ctx) return;
+        // Arpegio ascendente barroco en RE Mayor: Re4 -> Fa#4 -> La4 -> Re5 -> Fa#5
+        const flourish = [
+          { f: 293.66, t: 0.00 },
+          { f: 369.99, t: 0.03 },
+          { f: 440.00, t: 0.06 },
+          { f: 587.33, t: 0.09 },
+          { f: 739.99, t: 0.12 }
+        ];
+        flourish.forEach(n => {
+          this.playClavichordTone(n.f, n.t, 0.40, 0.24);
+        });
       },
 
       startSpin() {
@@ -1291,78 +1431,69 @@
           }, 120);
         }
 
-        this.playHarpsichordChord([523.25, 659.25, 783.99, 1046.50], 0.05, 0.45);
+        // Acorde resolutivo de Clavicordio: Do5 - Mi5 - Sol5 - Do6
+        this.playClavichordTone(523.25, 0.00, 0.45, 0.20);
+        this.playClavichordTone(659.25, 0.03, 0.45, 0.18);
+        this.playClavichordTone(783.99, 0.06, 0.45, 0.16);
+        this.playClavichordTone(1046.50, 0.09, 0.45, 0.14);
       },
 
       playSuccess() {
         this.init();
         if (!this.ctx) return;
-        this.playHarpsichordChord([659.25, 830.61, 987.77, 1318.51], 0.04, 0.6);
+        // Acorde triunfal radiante en MI Mayor
+        this.playClavichordTone(659.25, 0.00, 0.55, 0.22);
+        this.playClavichordTone(830.61, 0.04, 0.55, 0.20);
+        this.playClavichordTone(987.77, 0.08, 0.55, 0.18);
+        this.playClavichordTone(1318.51, 0.12, 0.60, 0.16);
       },
 
       playFail() {
         this.init();
         if (!this.ctx) return;
-        this.playHarpsichordChord([440.00, 523.25, 622.25], 0.08, 0.5);
+        // Acorde menor en RE Menor
+        this.playClavichordTone(587.33, 0.00, 0.50, 0.20);
+        this.playClavichordTone(698.46, 0.05, 0.50, 0.18);
+        this.playClavichordTone(880.00, 0.10, 0.50, 0.16);
       },
 
       playCondone() {
         this.init();
         if (!this.ctx) return;
-        const now = this.ctx.currentTime;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        const filter = this.ctx.createBiquadFilter();
-
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(440, now);
-
-        filter.type = 'bandpass';
-        filter.frequency.setValueAtTime(880, now);
-        filter.Q.setValueAtTime(4, now);
-
-        gain.gain.setValueAtTime(0.001, now);
-        gain.gain.linearRampToValueAtTime(0.28, now + 0.01);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.65);
-
-        osc.connect(filter);
-        filter.connect(gain);
-        gain.connect(this.ctx.destination);
-
-        osc.start(now);
-        osc.stop(now + 0.7);
-      },
-
-      playHarpsichordChord(freqs, stagger = 0.04, duration = 0.5) {
-        if (!this.ctx) return;
-        const start = this.ctx.currentTime;
-
-        freqs.forEach((freq, idx) => {
-          const noteTime = start + idx * stagger;
-          const osc = this.ctx.createOscillator();
-          const gain = this.ctx.createGain();
-          const filter = this.ctx.createBiquadFilter();
-
-          osc.type = 'sawtooth';
-          osc.frequency.setValueAtTime(freq, noteTime);
-
-          filter.type = 'bandpass';
-          filter.frequency.setValueAtTime(freq * 2.2, noteTime);
-          filter.Q.setValueAtTime(2.5, noteTime);
-
-          gain.gain.setValueAtTime(0.001, noteTime);
-          gain.gain.linearRampToValueAtTime(0.18, noteTime + 0.005);
-          gain.gain.exponentialRampToValueAtTime(0.0001, noteTime + duration);
-
-          osc.connect(filter);
-          filter.connect(gain);
-          gain.connect(this.ctx.destination);
-
-          osc.start(noteTime);
-          osc.stop(noteTime + duration + 0.05);
-        });
+        // Resonancia de tiempo: La4 -> Mi5
+        this.playClavichordTone(440.00, 0.00, 0.65, 0.22);
+        this.playClavichordTone(659.25, 0.04, 0.65, 0.20);
       }
     };
+
+    /* Control de Música de Fondo (Flow Music) */
+    let isMusicPlaying = false;
+    function toggleBackgroundMusic() {
+      const musicEl = document.getElementById('bgMusic');
+      const btn = document.getElementById('btnToggleMusic');
+      RococoAudio.playClick('mi');
+
+      if (!musicEl) return;
+
+      if (isMusicPlaying) {
+        musicEl.pause();
+        isMusicPlaying = false;
+        btn.innerText = 'Música';
+        btn.style.borderColor = 'var(--border-gilded)';
+      } else {
+        musicEl.volume = 0.30;
+        const playPromise = musicEl.play();
+        if (playPromise !== undefined) {
+          playPromise.then(() => {
+            isMusicPlaying = true;
+            btn.innerText = 'Música: On';
+            btn.style.borderColor = 'var(--gold-primary)';
+          }).catch(() => {
+            showVisualNotification('Coloca musica.mp3 junto a turn.html para oír tu tema.', 2400);
+          });
+        }
+      }
+    }
 
     /* 1. PERSONAJES ILUSTRADOS */
     const CHARACTERS = [
@@ -1565,6 +1696,17 @@
     let currentCondoneLeader = null;
     let isGameActive = false;
 
+    // Configuración de Rondas
+    let totalRounds = 10;
+    let currentRound = 1;
+
+    function selectGameRounds(num, btn) {
+      RococoAudio.playClick('arpeggio');
+      totalRounds = num;
+      document.querySelectorAll('.round-option-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    }
+
     /* 4. MOTOR 3D OPTIMIZADO (THREE.JS + DELTA CLOCK) */
     let scene, camera, renderer, pirinolaGroup;
     let spinVelocity = 0;
@@ -1744,7 +1886,7 @@
     /* 6. GIRO Y EVALUACIÓN DE TURNOS */
     function triggerPirinolaSpin() {
       if (isSpinning || players.length === 0) return;
-      RococoAudio.playClick();
+      RococoAudio.playClavichordFlourish();
       RococoAudio.startSpin();
 
       isSpinning = true;
@@ -1833,7 +1975,20 @@
     }
 
     function nextTurn() {
-      currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+      const nextIndex = (currentPlayerIndex + 1) % players.length;
+
+      if (nextIndex === 0) {
+        currentRound++;
+        if (currentRound > totalRounds) {
+          showVisualNotification('¡La última ronda ha concluido! Proclamemos al Soberano.', 2400);
+          setTimeout(() => {
+            executeEndGame();
+          }, 800);
+          return;
+        }
+      }
+
+      currentPlayerIndex = nextIndex;
       updateTurnUI();
       document.getElementById('decisionActions').style.display = 'none';
       document.getElementById('challengeTitle').innerText = 'Turno Ministerial';
@@ -1850,6 +2005,7 @@
       document.getElementById('activeRole').innerText = char.name + ' (' + char.role + ')';
       document.getElementById('activeAvatar').innerHTML = char.svg;
       
+      document.getElementById('activeRound').innerText = `${currentRound}/${totalRounds}`;
       document.getElementById('activeWins').innerText = p.wins;
       document.getElementById('activeFails').innerText = p.fails;
       document.getElementById('activeDebt').innerText = `${p.condonedStreak || 0}/3`;
@@ -1880,7 +2036,7 @@
     }
 
     function resolveTripleCondone(type) {
-      RococoAudio.playClick();
+      RococoAudio.playClick('do');
       document.getElementById('tripleCondoneModal').classList.remove('active');
 
       if (type === 'force') {
@@ -1912,7 +2068,7 @@
     }
 
     function resolveTripleFail(type) {
-      RococoAudio.playClick();
+      RococoAudio.playClick('do');
       document.getElementById('tripleFailModal').classList.remove('active');
 
       if (type === 'leader') {
@@ -2016,7 +2172,7 @@
         btn.style.justifyContent = 'space-between';
         btn.innerHTML = `<span><strong>${v.name}</strong></span> <span>${v.stars} Laureles</span>`;
         btn.onclick = () => {
-          RococoAudio.playClick();
+          RococoAudio.playClick('do');
           v.stars -= 1;
           stealer.stars += 1;
           modal.classList.remove('active');
@@ -2042,7 +2198,7 @@
     let crownedKing = null;
 
     function executeEndGame() {
-      RococoAudio.playClick();
+      RococoAudio.playClick('do');
       closeConfirmEndModal();
       isGameActive = false;
 
@@ -2101,7 +2257,7 @@
     }
 
     function setJudgment(vassalId, type) {
-      RococoAudio.playClick();
+      RococoAudio.playClick('arpeggio');
       const btnPunish = document.getElementById(`btnPunish_${vassalId}`);
       const btnPardon = document.getElementById(`btnPardon_${vassalId}`);
       const punishBox = document.getElementById(`punishOptions_${vassalId}`);
@@ -2179,7 +2335,7 @@
         row.style.alignItems = 'center';
 
         if (dec.type === 'pardon') {
-          row.innerHTML = `<span><strong>${vas.name}</strong></span> <span style="color:var(--vert-celadon); font-family:'Cinzel',serif; font-weight:700;">Indulto Regio</span>`;
+          row.innerHTML = `<span><strong>${vas.name}</strong></span> <span style="color:var(--vert-celadon); font-family:'Cinzel',serif; font-weight:700;">Indulto Real</span>`;
         } else {
           row.innerHTML = `<span><strong>${vas.name}</strong></span> <span style="color:var(--rose-pompadour); font-weight:700;">${dec.punishment}</span>`;
         }
@@ -2191,10 +2347,11 @@
     }
 
     function resetGameToNewParty() {
-      RococoAudio.playClick();
+      RococoAudio.playClick('do');
       document.getElementById('decreeModal').classList.remove('active');
       isGameActive = false;
       
+      currentRound = 1;
       players.forEach(p => {
         p.wins = 0;
         p.fails = 0;
@@ -2221,7 +2378,7 @@
         const item = document.createElement('div');
         item.className = 'char-option' + (idx === 0 ? ' selected' : '');
         item.onclick = () => {
-          RococoAudio.playClick();
+          RococoAudio.playClick('arpeggio');
           document.querySelectorAll('.char-option').forEach(el => el.classList.remove('selected'));
           item.classList.add('selected');
           selectedCharId = c.id;
@@ -2245,7 +2402,7 @@
         return;
       }
 
-      RococoAudio.playClick();
+      RococoAudio.playClick('arpeggio');
       players.push({
         id: 'p_' + Date.now() + Math.random(),
         name: name,
@@ -2299,7 +2456,7 @@
     }
 
     function removePlayer(idx) {
-      RococoAudio.playClick();
+      RococoAudio.playClick('re');
       players.splice(idx, 1);
       renderRegisteredPlayers();
     }
@@ -2307,8 +2464,23 @@
     function startGame() {
       if (players.length < 2) return;
       RococoAudio.playSuccess();
+      
+      const musicEl = document.getElementById('bgMusic');
+      if (musicEl && !isMusicPlaying) {
+        musicEl.volume = 0.30;
+        musicEl.play().then(() => {
+          isMusicPlaying = true;
+          const btn = document.getElementById('btnToggleMusic');
+          if (btn) {
+            btn.innerText = 'Música: On';
+            btn.style.borderColor = 'var(--gold-primary)';
+          }
+        }).catch(() => {});
+      }
+
       document.getElementById('registerModal').classList.remove('active');
       currentPlayerIndex = 0;
+      currentRound = 1;
       isGameActive = true;
       updateTurnUI();
       showVisualNotification('La sesión ha comenzado. Ruede la pirinola.', 1600);
@@ -2344,7 +2516,7 @@
         const modalEl = document.getElementById(modalId);
         modalEl.addEventListener('click', (e) => {
           if (e.target === modalEl) {
-            RococoAudio.playClick();
+            RococoAudio.playClick('arpeggio');
             modalEl.classList.remove('active');
           }
         });
