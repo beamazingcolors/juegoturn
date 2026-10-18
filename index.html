@@ -2,36 +2,55 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Turn — Juego de Fiesta Rococó</title>
   
-  <!-- Favicon oficial con el logo SVG -->
-  <link rel="icon" type="image/svg+xml" href="turn-logo.svg">
+  <!-- Favicon e Icono Táctil oficial en formato PNG -->
+  <link rel="icon" type="image/png" href="turn-logo.png">
+  <link rel="apple-touch-icon" href="turn-logo.png">
   
-  <!-- Tipografía de época elegante -->
+  <!-- Tipografía cortesana de época -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   
   <!-- Three.js para la pirinola 3D y Canvas Confetti -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <style>
+    /* PALETA HISTÓRICA ROCOCÓ (SIGLO XVIII) */
     :root {
-      --bg-cream: #FAF6EF;
+      --bg-cream: #FAF6EE;
       --panel-bg: #FFFFFF;
       --gold-primary: #C5A059;
-      --gold-dark: #8F6B28;
-      --gold-light: #F3E5C8;
-      --text-dark: #221C16;
-      --text-muted: #6E665B;
-      --border-gilded: #E2D3B8;
-      --crimson: #9E2A2B;
-      --crimson-light: #FFF0F0;
-      --green-success: #2B8A3E;
-      --green-light: #EBFBEE;
-      --shadow-subtle: 0 10px 30px rgba(70, 50, 20, 0.08);
+      --gold-dark: #7A5B1E;
+      --gold-light: #F4EBD9;
+      --border-gilded: #D9C8A9;
+      --text-dark: #2B2118;
+      --text-muted: #6B5E52;
+      
+      /* Vert Céladon */
+      --vert-celadon: #385E42;
+      --vert-light: #EEF4F0;
+      --vert-border: #B2D1BA;
+      
+      /* Rose Pompadour */
+      --rose-pompadour: #A84859;
+      --rose-light: #F8EDEF;
+      --rose-border: #E4B4BD;
+      
+      /* Bleu Céleste */
+      --bleu-celeste: #3D6875;
+      --bleu-light: #EBF2F5;
+      --bleu-border: #A7C5D0;
+      
+      /* Velours Carmin */
+      --carmin-velours: #631B22;
+      --carmin-light: #F6EAEC;
+      --carmin-border: #D69CA3;
+
+      --shadow-rococo: 0 8px 24px rgba(70, 50, 20, 0.07);
     }
 
     * {
@@ -40,24 +59,31 @@
       padding: 0;
       -webkit-tap-highlight-color: transparent;
       user-select: none;
+      touch-action: manipulation;
+    }
+
+    html, body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      background-color: var(--bg-cream);
     }
 
     body {
-      background-color: var(--bg-cream);
       background-image: 
         radial-gradient(#D6C5A5 0.75px, transparent 0.75px),
         radial-gradient(#D6C5A5 0.75px, var(--bg-cream) 0.75px);
-      background-size: 30px 30px;
-      background-position: 0 0, 15px 15px;
+      background-size: 28px 28px;
+      background-position: 0 0, 14px 14px;
       color: var(--text-dark);
       font-family: 'Plus Jakarta Sans', sans-serif;
-      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 12px;
+      padding: 10px;
       overflow-x: hidden;
       overscroll-behavior-y: contain;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     .app-container {
@@ -65,20 +91,21 @@
       max-width: 900px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
+      transform: translateZ(0);
     }
 
     header {
       background: var(--panel-bg);
-      border: 2px solid var(--border-gilded);
-      border-radius: 18px;
-      padding: 10px 20px;
+      border: 1.5px solid var(--border-gilded);
+      border-radius: 16px;
+      padding: 8px 18px;
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
-      box-shadow: var(--shadow-subtle);
+      gap: 10px;
+      box-shadow: var(--shadow-rococo);
     }
 
     .brand {
@@ -87,95 +114,105 @@
       gap: 10px;
     }
 
+    /* Presentación del nuevo blasón PNG */
     .brand-logo {
-      max-height: 46px;
+      height: 52px;
       width: auto;
       max-width: 180px;
       object-fit: contain;
-      filter: drop-shadow(0 2px 4px rgba(197, 160, 89, 0.25));
-      transition: transform 0.2s ease;
+      filter: drop-shadow(0 3px 6px rgba(122, 91, 30, 0.28));
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
     .brand-logo:hover {
-      transform: scale(1.02);
+      transform: scale(1.03);
     }
 
     .brand-title-fallback {
       font-family: 'Cinzel', serif;
       font-weight: 900;
-      font-size: 24px;
-      letter-spacing: 3px;
+      font-size: 22px;
+      letter-spacing: 2.5px;
       color: var(--gold-dark);
       text-transform: uppercase;
     }
 
     .header-actions {
       display: flex;
-      gap: 8px;
+      gap: 6px;
       flex-wrap: wrap;
     }
 
-    .btn-secondary {
+    .btn-rococo-nav {
       background: var(--bg-cream);
       border: 1px solid var(--border-gilded);
       color: var(--text-dark);
-      padding: 8px 14px;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 600;
+      padding: 7px 13px;
+      border-radius: 9px;
+      font-family: 'Cinzel', serif;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: background 0.15s ease, transform 0.1s ease, border-color 0.15s ease;
     }
-    .btn-secondary:hover {
+    .btn-rococo-nav:active {
+      transform: scale(0.97);
       background: var(--gold-light);
       border-color: var(--gold-primary);
     }
 
-    .btn-danger {
-      background: #FFF1F0;
-      border: 1px solid #FFA39E;
-      color: var(--crimson);
-      padding: 8px 14px;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 600;
+    .btn-rococo-danger {
+      background: var(--carmin-light);
+      border: 1px solid var(--carmin-border);
+      color: var(--carmin-velours);
+      padding: 7px 13px;
+      border-radius: 9px;
+      font-family: 'Cinzel', serif;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: background 0.15s ease, transform 0.1s ease;
     }
-    .btn-danger:hover {
-      background: #FFCCC7;
+    .btn-rococo-danger:active {
+      transform: scale(0.97);
+      background: #F0D5D8;
     }
 
     .turn-bar {
       background: var(--panel-bg);
-      border: 2px solid var(--border-gilded);
-      border-radius: 18px;
-      padding: 14px 18px;
+      border: 1.5px solid var(--border-gilded);
+      border-radius: 16px;
+      padding: 12px 16px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      box-shadow: var(--shadow-subtle);
+      gap: 10px;
+      box-shadow: var(--shadow-rococo);
     }
 
     .active-player-info {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
     }
 
     .player-avatar-frame {
-      width: 52px;
-      height: 52px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
-      border: 3px solid var(--gold-primary);
+      border: 2px solid var(--gold-primary);
       padding: 2px;
       background: #FFF;
-      box-shadow: 0 4px 10px rgba(197, 160, 89, 0.3);
+      box-shadow: 0 3px 8px rgba(197, 160, 89, 0.22);
       overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
     }
 
     .player-avatar-frame svg {
@@ -185,73 +222,74 @@
 
     .player-details h3 {
       font-family: 'Cinzel', serif;
-      font-size: 17px;
+      font-size: 16px;
+      font-weight: 700;
       color: var(--text-dark);
+      line-height: 1.2;
     }
 
     .player-role-tag {
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 0.8px;
       color: var(--gold-dark);
     }
 
     .stats-pills {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       flex-wrap: wrap;
     }
 
     .stat-pill {
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 12px;
+      padding: 5px 11px;
+      border-radius: 14px;
+      font-size: 11px;
       font-weight: 700;
+      letter-spacing: 0.5px;
       display: flex;
       align-items: center;
-      gap: 6px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      gap: 5px;
+      text-transform: uppercase;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
     }
 
     .stat-success {
-      color: var(--green-success);
-      background: var(--green-light);
-      border: 1px solid #B7EB8F;
+      color: var(--vert-celadon);
+      background: var(--vert-light);
+      border: 1px solid var(--vert-border);
     }
 
     .stat-fail {
-      color: var(--crimson);
-      background: var(--crimson-light);
-      border: 1px solid #FFA39E;
+      color: var(--rose-pompadour);
+      background: var(--rose-light);
+      border: 1px solid var(--rose-border);
+    }
+
+    .stat-debt {
+      color: var(--bleu-celeste);
+      background: var(--bleu-light);
+      border: 1px solid var(--bleu-border);
     }
 
     .stat-stars {
-      color: #9254DE;
-      background: #F9F0FF;
-      border: 1px solid #D3ADF7;
+      color: var(--gold-dark);
+      background: #FFF9E6;
+      border: 1px solid #F0D785;
     }
 
     .stat-streak {
-      color: #D9480F;
-      background: #FFF4E6;
-      border: 1px solid #FFD8A8;
+      color: #9A5B27;
+      background: #FFF3E6;
+      border: 1px solid #F3CCA6;
     }
-
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      display: inline-block;
-    }
-    .dot-green { background: #2B8A3E; }
-    .dot-red { background: #C92A2A; }
 
     .gameplay-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 14px;
+      gap: 12px;
     }
 
     @media (min-width: 768px) {
@@ -262,146 +300,187 @@
 
     .stage-card {
       background: var(--panel-bg);
-      border: 2px solid var(--border-gilded);
-      border-radius: 20px;
-      padding: 16px;
+      border: 1.5px solid var(--border-gilded);
+      border-radius: 18px;
+      padding: 14px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      box-shadow: var(--shadow-subtle);
+      box-shadow: var(--shadow-rococo);
+      transform: translateZ(0);
     }
 
     #pirinola-canvas-container {
       width: 100%;
-      height: 290px;
+      height: 270px;
       border-radius: 14px;
       background: radial-gradient(circle at center, #FDF9F2 0%, #EFE7D8 100%);
       border: 1px solid var(--border-gilded);
       overflow: hidden;
       cursor: grab;
       position: relative;
+      touch-action: none;
+      transform: translateZ(0);
     }
 
     #pirinola-canvas-container:active {
       cursor: grabbing;
     }
 
+    #pirinola-canvas-container canvas {
+      width: 100% !important;
+      height: 100% !important;
+      display: block;
+    }
+
     .spin-button {
-      margin-top: 14px;
+      margin-top: 12px;
       width: 100%;
+      min-height: 50px;
       background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
       color: #FFFFFF;
       font-family: 'Cinzel', serif;
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 800;
       letter-spacing: 2px;
-      padding: 15px;
+      padding: 14px;
       border-radius: 12px;
-      border: none;
-      box-shadow: 0 6px 16px rgba(197, 160, 89, 0.4);
+      border: 1px solid #E5C37A;
+      box-shadow: 0 4px 14px rgba(197, 160, 89, 0.35);
       cursor: pointer;
-      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+      will-change: transform;
     }
 
-    .spin-button:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 22px rgba(197, 160, 89, 0.5);
+    .spin-button:active:not(:disabled) {
+      transform: scale(0.98);
+      box-shadow: 0 2px 8px rgba(197, 160, 89, 0.4);
     }
 
     .spin-button:disabled {
-      opacity: 0.5;
+      opacity: 0.6;
       cursor: not-allowed;
     }
 
     .card-challenge {
       background: var(--panel-bg);
-      border: 2px solid var(--border-gilded);
-      border-radius: 20px;
-      padding: 20px;
+      border: 1.5px solid var(--border-gilded);
+      border-radius: 18px;
+      padding: 22px 20px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      box-shadow: var(--shadow-subtle);
-      min-height: 350px;
-    }
-
-    .challenge-tag {
-      align-self: flex-start;
-      background: var(--gold-light);
-      color: var(--gold-dark);
-      padding: 4px 10px;
-      border-radius: 8px;
-      font-size: 11px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      box-shadow: var(--shadow-rococo);
+      min-height: 320px;
+      transform: translateZ(0);
     }
 
     .challenge-body {
-      margin: 15px 0;
+      margin: 8px 0 16px;
       text-align: center;
     }
 
     .challenge-title {
       font-family: 'Cinzel', serif;
       font-size: 20px;
+      font-weight: 800;
       color: var(--text-dark);
-      margin-bottom: 10px;
+      margin-bottom: 12px;
+      line-height: 1.28;
+      letter-spacing: 0.5px;
     }
 
     .challenge-text {
-      font-size: 16px;
-      line-height: 1.5;
+      font-size: 15.5px;
+      line-height: 1.55;
       color: #3B332B;
       font-weight: 500;
     }
 
     .penalty-box {
-      background: #FFF5F5;
-      border: 1px dashed #FEB2B2;
+      background: var(--rose-light);
+      border: 1px dashed var(--rose-border);
       border-radius: 10px;
-      padding: 10px;
-      margin-top: 15px;
-      font-size: 13px;
-      color: var(--crimson);
+      padding: 11px;
+      margin-top: 14px;
+      font-size: 12.5px;
+      color: var(--rose-pompadour);
       font-weight: 600;
     }
 
     .decision-actions {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 15px;
+      gap: 8px;
+      margin-top: 12px;
     }
 
     .btn-resolve {
-      padding: 12px;
+      min-height: 46px;
+      padding: 10px;
       border-radius: 10px;
+      font-family: 'Cinzel', serif;
       font-weight: 700;
-      font-size: 14px;
+      font-size: 12.5px;
+      letter-spacing: 0.5px;
       cursor: pointer;
       border: none;
-      transition: all 0.2s ease;
+      transition: transform 0.1s ease;
+    }
+    .btn-resolve:active {
+      transform: scale(0.97);
     }
 
-    .btn-success { background: #2B8A3E; color: white; }
-    .btn-success:hover { background: #237032; }
-    .btn-fail { background: #C92A2A; color: white; }
-    .btn-fail:hover { background: #A61E1E; }
+    .btn-success {
+      background: var(--vert-celadon);
+      color: white;
+      border: 1px solid #2B4E34;
+    }
+
+    .btn-fail {
+      background: var(--rose-pompadour);
+      color: white;
+      border: 1px solid #8A3745;
+    }
+
+    .btn-condone {
+      grid-column: span 2;
+      min-height: 44px;
+      background: var(--bleu-light);
+      color: var(--bleu-celeste);
+      border: 1.5px solid var(--bleu-border);
+      padding: 10px;
+      border-radius: 10px;
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.1s ease, background 0.15s ease;
+    }
+    .btn-condone:active {
+      transform: scale(0.98);
+      background: #DCE7EB;
+    }
 
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(30, 25, 20, 0.65);
-      backdrop-filter: blur(5px);
+      background: rgba(35, 27, 20, 0.65);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 16px;
+      padding: 14px;
       z-index: 999;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.2s ease;
+      will-change: opacity;
     }
 
     .modal-overlay.active {
@@ -409,67 +488,85 @@
       pointer-events: auto;
     }
 
-    #rulesModal {
+    #rulesModal, #tripleCondoneModal {
       z-index: 1050;
     }
 
     .modal-box {
       background: #FFFFFF;
-      border: 2px solid var(--border-gilded);
-      border-radius: 22px;
+      border: 2px double var(--gold-primary);
+      border-radius: 20px;
       width: 100%;
-      max-width: 540px;
-      max-height: 88vh;
+      max-width: 520px;
+      max-height: 86vh;
+      max-height: 86dvh;
       overflow-y: auto;
-      padding: 24px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      -webkit-overflow-scrolling: touch;
+      padding: 22px;
+      box-shadow: 0 16px 36px rgba(0,0,0,0.22);
+      transform: translate3d(0, 8px, 0);
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      will-change: transform;
+    }
+
+    .modal-overlay.active .modal-box {
+      transform: translate3d(0, 0, 0);
     }
 
     .modal-title {
       font-family: 'Cinzel', serif;
-      font-size: 22px;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 1px;
       color: var(--gold-dark);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       text-align: center;
+      text-transform: uppercase;
     }
 
     .modal-desc {
-      font-size: 14px;
+      font-size: 13.5px;
       color: var(--text-muted);
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
+      line-height: 1.4;
     }
 
     .toast-banner {
       position: fixed;
-      top: 20px;
+      top: 14px;
       left: 50%;
-      transform: translateX(-50%) translateY(-100px);
+      transform: translate3d(-50%, -100px, 0);
       background: #FFFFFF;
-      border: 2px solid var(--gold-primary);
-      border-radius: 30px;
-      padding: 10px 20px;
-      box-shadow: 0 10px 25px rgba(197, 160, 89, 0.4);
+      border: 2px double var(--gold-primary);
+      border-radius: 24px;
+      padding: 9px 20px;
+      box-shadow: 0 6px 18px rgba(122, 91, 30, 0.25);
       display: flex;
       align-items: center;
       gap: 10px;
+      font-family: 'Cinzel', serif;
       font-weight: 700;
-      font-size: 13.5px;
+      font-size: 12.5px;
+      letter-spacing: 0.5px;
       color: var(--text-dark);
       z-index: 1200;
-      transition: transform 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: transform 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       pointer-events: none;
+      will-change: transform;
+      max-width: 90vw;
+      text-align: center;
     }
 
     .toast-banner.show {
-      transform: translateX(-50%) translateY(0);
+      transform: translate3d(-50%, 0, 0);
     }
 
     .confirm-actions {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
-      margin-top: 20px;
+      margin-top: 18px;
     }
 
     .rule-card {
@@ -477,23 +574,22 @@
       border: 1px solid var(--border-gilded);
       border-radius: 12px;
       padding: 12px 14px;
-      margin-bottom: 10px;
+      margin-bottom: 9px;
     }
 
     .rule-card-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
       font-family: 'Cinzel', serif;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 800;
+      letter-spacing: 0.8px;
       color: var(--gold-dark);
-      margin-bottom: 6px;
+      text-transform: uppercase;
+      margin-bottom: 5px;
     }
 
     .rule-card-body {
-      font-size: 13px;
-      line-height: 1.5;
+      font-size: 12.5px;
+      line-height: 1.45;
       color: #3D352E;
     }
 
@@ -504,12 +600,12 @@
     .character-picker {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin: 15px 0;
+      gap: 8px;
+      margin: 12px 0;
     }
 
     .char-option {
-      border: 2px solid var(--border-gilded);
+      border: 1.5px solid var(--border-gilded);
       border-radius: 12px;
       padding: 8px 4px;
       display: flex;
@@ -517,12 +613,10 @@
       align-items: center;
       cursor: pointer;
       background: var(--bg-cream);
-      transition: all 0.2s ease;
+      transition: transform 0.1s ease, border-color 0.1s ease;
     }
-
-    .char-option:hover {
-      border-color: var(--gold-primary);
-      transform: translateY(-2px);
+    .char-option:active {
+      transform: scale(0.95);
     }
 
     .char-option.selected {
@@ -532,10 +626,10 @@
     }
 
     .char-avatar-mini {
-      width: 44px;
-      height: 44px;
+      width: 42px;
+      height: 42px;
       border-radius: 50%;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
       overflow: hidden;
       background: #FFF;
       display: flex;
@@ -546,16 +640,17 @@
     .char-avatar-mini svg { width: 100%; height: 100%; }
 
     .char-label {
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 700;
       text-align: center;
       color: var(--text-dark);
+      line-height: 1.1;
     }
 
     .player-input-row {
       display: flex;
       gap: 8px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .player-input {
@@ -571,12 +666,13 @@
     .player-input:focus { border-color: var(--gold-primary); }
 
     .registered-players-list {
-      margin: 15px 0;
+      margin: 12px 0;
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      max-height: 180px;
+      gap: 7px;
+      max-height: 160px;
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .player-badge {
@@ -584,7 +680,7 @@
       align-items: center;
       justify-content: space-between;
       background: var(--bg-cream);
-      padding: 8px 12px;
+      padding: 7px 11px;
       border-radius: 10px;
       border: 1px solid var(--border-gilded);
     }
@@ -592,12 +688,12 @@
     .badge-info {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 9px;
     }
 
     .badge-thumb {
-      width: 32px;
-      height: 32px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
       overflow: hidden;
     }
@@ -605,14 +701,15 @@
     .btn-remove-player {
       background: transparent;
       border: none;
-      color: #C92A2A;
+      color: var(--rose-pompadour);
       font-weight: bold;
       cursor: pointer;
       font-size: 18px;
+      padding: 4px 8px;
     }
 
     .catalog-item {
-      padding: 10px 14px;
+      padding: 9px 12px;
       border-bottom: 1px solid var(--border-gilded);
       display: flex;
       flex-direction: column;
@@ -622,118 +719,113 @@
     .catalog-item-header {
       display: flex;
       justify-content: space-between;
+      font-family: 'Cinzel', serif;
       font-weight: 700;
-      font-size: 13px;
+      font-size: 12px;
+      letter-spacing: 0.5px;
     }
     .catalog-item-desc {
-      font-size: 13px;
+      font-size: 12px;
       color: var(--text-muted);
     }
 
     .coronation-header {
       text-align: center;
-      margin-bottom: 16px;
-    }
-
-    .monarch-crown-badge {
-      display: inline-block;
-      font-size: 32px;
-      margin-bottom: 4px;
-      animation: floatCrown 2s infinite ease-in-out;
-    }
-
-    @keyframes floatCrown {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
+      margin-bottom: 14px;
     }
 
     .royal-title-display {
       font-family: 'Cinzel', serif;
-      font-size: 20px;
+      font-size: 19px;
       font-weight: 900;
-      color: var(--crimson);
+      color: var(--carmin-velours);
       text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-top: 6px;
+      letter-spacing: 0.8px;
+      margin-top: 5px;
+      line-height: 1.25;
     }
 
     .court-judgment-list {
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      margin: 15px 0;
+      gap: 10px;
+      margin: 14px 0;
     }
 
     .subject-judgment-card {
       background: var(--bg-cream);
       border: 1px solid var(--border-gilded);
-      border-radius: 14px;
-      padding: 12px;
+      border-radius: 12px;
+      padding: 11px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 7px;
     }
 
     .subject-info {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 9px;
       font-weight: 700;
+      font-size: 13.5px;
     }
 
     .subject-avatar {
-      width: 36px;
-      height: 36px;
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
       overflow: hidden;
+      flex-shrink: 0;
     }
 
     .verdict-button-group {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 8px;
+      gap: 7px;
     }
 
     .btn-verdict {
-      padding: 8px 10px;
+      min-height: 40px;
+      padding: 7px 9px;
       border-radius: 8px;
-      font-size: 12px;
+      font-family: 'Cinzel', serif;
+      font-size: 11.5px;
       font-weight: 700;
-      border: 2px solid transparent;
+      letter-spacing: 0.5px;
+      border: 1.5px solid transparent;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 5px;
-      transition: all 0.2s ease;
+      text-transform: uppercase;
     }
 
     .btn-pardon {
       background: #FFF;
-      color: #2B8A3E;
-      border-color: #B7EB8F;
+      color: var(--vert-celadon);
+      border-color: var(--vert-border);
     }
     .btn-pardon.active {
-      background: #2B8A3E;
+      background: var(--vert-celadon);
       color: #FFF;
-      border-color: #237032;
+      border-color: #2B4E34;
     }
 
     .btn-punish {
       background: #FFF;
-      color: #C92A2A;
-      border-color: #FFA39E;
+      color: var(--rose-pompadour);
+      border-color: var(--rose-border);
     }
     .btn-punish.active {
-      background: #C92A2A;
+      background: var(--rose-pompadour);
       color: #FFF;
-      border-color: #A61E1E;
+      border-color: #8A3745;
     }
 
     .punishment-selector {
       margin-top: 4px;
       width: 100%;
-      padding: 6px 10px;
+      padding: 7px 10px;
       font-size: 12px;
       border: 1px solid var(--border-gilded);
       border-radius: 6px;
@@ -743,39 +835,39 @@
 
     .decree-box {
       background: radial-gradient(circle at center, #FFFDF9 0%, #F5ECE0 100%);
-      border: 2px solid var(--gold-primary);
-      border-radius: 16px;
-      padding: 16px;
-      margin: 15px 0;
+      border: 2px double var(--gold-primary);
+      border-radius: 14px;
+      padding: 14px;
+      margin: 14px 0;
       text-align: center;
-      box-shadow: 0 4px 15px rgba(197, 160, 89, 0.2);
+      box-shadow: 0 4px 14px rgba(197, 160, 89, 0.18);
     }
   </style>
 </head>
 <body>
 
+  <!-- Cartela de Notificación Cortesana -->
   <div class="toast-banner" id="toastBanner">
-    <span id="toastIcon" style="font-size: 18px;">👑</span>
-    <span id="toastText">Mensaje de la corte</span>
+    <span id="toastText">Decreto de la Corte</span>
   </div>
 
   <div class="app-container">
     <header>
       <div class="brand">
+        <!-- Nuevo Logo PNG en formato auténtico con fallback decorativo -->
         <img
-          src="turn-logo.svg"
-          alt="TURN - Juego de fiesta"
+          src="turn-logo.png"
+          alt="TURN - Bienvenido al Reino"
           class="brand-logo"
-          width="180"
           onerror="this.style.display='none'; document.getElementById('brandFallback').style.display='block';"
         >
         <span id="brandFallback" class="brand-title-fallback" style="display:none;">Turn</span>
       </div>
       <div class="header-actions">
-        <button class="btn-secondary" onclick="openScoresModal()">🏆 Marcador</button>
-        <button class="btn-secondary" onclick="openRulesModal()">📜 Reglas</button>
-        <button class="btn-secondary" onclick="openCatalogModal()">Retos y Castigos</button>
-        <button class="btn-danger" onclick="promptEndGame()">Terminar Partida</button>
+        <button class="btn-rococo-nav" onclick="RococoAudio.playClick(); openScoresModal()">Marcador</button>
+        <button class="btn-rococo-nav" onclick="RococoAudio.playClick(); openRulesModal()">Reglamento</button>
+        <button class="btn-rococo-nav" onclick="RococoAudio.playClick(); openCatalogModal()">Retos</button>
+        <button class="btn-rococo-danger" onclick="RococoAudio.playClick(); promptEndGame()">Terminar</button>
       </div>
     </header>
 
@@ -783,23 +875,26 @@
       <div class="active-player-info">
         <div class="player-avatar-frame" id="activeAvatar"></div>
         <div class="player-details">
-          <span class="player-role-tag" id="activeRole">Cargando...</span>
+          <span class="player-role-tag" id="activeRole">Participante</span>
           <h3 id="activePlayerName">Jugador</h3>
         </div>
       </div>
 
       <div class="stats-pills">
         <div class="stat-pill stat-success" title="Retos cumplidos con éxito">
-          <span class="status-dot dot-green"></span> Cumplidos: <b id="activeWins">0</b>
+          Cumplidos: <b id="activeWins">0</b>
         </div>
-        <div class="stat-pill stat-fail" title="Veces que se rajó o bebió">
-          <span class="status-dot dot-red"></span> Se rajó: <b id="activeFails">0</b>
+        <div class="stat-pill stat-fail" title="Veces que se negó o bebió">
+          Faltas: <b id="activeFails">0</b>
         </div>
-        <div class="stat-pill stat-stars" title="Estrellas de mérito">
-          ⭐ Estrellas: <b id="activeStars">0</b>
+        <div class="stat-pill stat-debt" title="Racha de tragos condonados (a los 3 consecutivos: Fondo Supremo)">
+          Deuda: <b id="activeDebt">0/3</b>
+        </div>
+        <div class="stat-pill stat-stars" title="Laureles de mérito">
+          Laureles: <b id="activeStars">0</b>
         </div>
         <div class="stat-pill stat-streak" title="Racha consecutiva actual">
-          🔥 Racha: <b id="activeStreak">0</b>
+          Racha: <b id="activeStreak">0</b>
         </div>
       </div>
     </div>
@@ -813,116 +908,157 @@
       </div>
 
       <div class="card-challenge">
-        <div>
-          <span class="challenge-tag" id="challengeCategory">Listo</span>
-          <div class="challenge-body">
-            <h2 class="challenge-title" id="challengeTitle">¿Quién tira primero?</h2>
-            <p class="challenge-text" id="challengeDesc">Lanza la pirinola 3D para definir el destino del siguiente trago.</p>
-            <div class="penalty-box" id="challengePenalty">
-              Sanción: Si dudas o te rajas, ¡te toca trago!
-            </div>
+        <div class="challenge-body">
+          <h2 class="challenge-title" id="challengeTitle">¿Quién inicia el certamen?</h2>
+          <p class="challenge-text" id="challengeDesc">Hagan rodar la pirinola para dar comienzo a la contienda cortesana.</p>
+          <div class="penalty-box" id="challengePenalty">
+            Sanción: Si vacilas o te niegas al reto, habrás de apurar tu copa.
           </div>
         </div>
 
         <div class="decision-actions" id="decisionActions" style="display: none;">
-          <button class="btn-resolve btn-success" onclick="resolveTurn(true)">
-            ¡Cumplió! (+1 victoria)
+          <button class="btn-resolve btn-success" onclick="resolveTurn('win')">
+            Superado
           </button>
-          <button class="btn-resolve btn-fail" onclick="resolveTurn(false)">
-            Se rajó / Falló (Bebe)
+          <button class="btn-resolve btn-fail" onclick="resolveTurn('fail')">
+            Falta (Bebe)
+          </button>
+          <button class="btn-condone" onclick="resolveTurn('condone')">
+            Condonar por esta ronda (Aplazar)
           </button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: REGLAMENTO COMPLETO -->
+  <!-- MODAL: REGLAMENTO OFICIAL -->
   <div class="modal-overlay" id="rulesModal">
     <div class="modal-box">
-      <h2 class="modal-title">Reglamento Oficial de Turn</h2>
-      <p class="modal-desc">Leyes y ordenanzas que rigen la fiesta en esta corte:</p>
+      <h2 class="modal-title">Reglamento Oficial</h2>
+      <p class="modal-desc">Ordenanzas y leyes que rigen a la corte:</p>
       
-      <div style="max-height: 400px; overflow-y: auto; padding-right: 4px; margin-bottom: 15px;">
+      <div style="max-height: 400px; overflow-y: auto; padding-right: 2px; margin-bottom: 14px;">
         <div class="rule-card">
-          <div class="rule-card-header">🎲 1. Giro y Dinámica de Turno</div>
+          <div class="rule-card-header">1. Dinámica de Turno</div>
           <div class="rule-card-body">
-            En su turno, cada participante presiona <b>Girar Pirinola</b> (o la arrastra directamente con el dedo o ratón). La pirinola 3D desacelerará de forma realista y sorteará un reto, comodín o confesión. Al finalizar, la mesa decide si <b>¡Cumplió!</b> o si <b>Se rajó / Falló</b>.
+            Cada comensal acciona el giro de la pirinola en su turno. Al cesar su inercia, se revela el desafío o comodín. La asamblea resuelve si la prueba fue <b>Superada</b>, si hubo <b>Falta</b> o si el comensal decide <b>Condonar</b>.
           </div>
         </div>
 
         <div class="rule-card">
-          <div class="rule-card-header">⭐ 2. Rachas y Estrellas (Estilo Mario Kart)</div>
+          <div class="rule-card-header">2. Ley de la Condonación y Deuda Acumulativa</div>
           <div class="rule-card-body">
-            • <b>3 Victorias Seguidas (🔥 Racha 3):</b> Ganas 1 Estrella de Oro automáticamente.<br>
-            • <b>5 Victorias Seguidas (🔥 Racha 5):</b> Se activa el <b>Robo de Estrellas</b>. Tienes el derecho imperial de arrebatarle 1 estrella a cualquier contrincante (si nadie tiene, la corte te regala 1 estrella extra).<br>
-            • <b>Si te rajas o fallas:</b> Tu racha se reinicia a cero inmediatamente.
+            • Es posible aplazar el trago de la ronda mediante una condonación formal.<br>
+            • Las condonaciones consecutivas engrosan el registro de <b>Deuda</b>.<br>
+            • <b>A la 3ª condonación consecutiva:</b> La paciencia de la corte expira y se dicta <b>Fondo al Vaso</b> obligatorio.<br>
+            • El líder en puntos decide qué brebaje prepararle para su fondo, o bien, si lo prefiere por orgullo o soberanía, ¡puede bebérselo el líder mismo!
           </div>
         </div>
 
         <div class="rule-card">
-          <div class="rule-card-header">💀 3. Ley del Triple Rajón (3 Rajadas Seguidas)</div>
+          <div class="rule-card-header">3. Laureles y Expropiación de Mérito</div>
           <div class="rule-card-body">
-            Si un jugador se niega o falla retos 3 veces consecutivas, el juego se suspende y se abre el <b>Tribunal de Cobardía</b>:<br>
-            • <b>Voluntad del Líder:</b> El jugador que va en 1° lugar de la mesa le impone un castigo obligatorio (shot fuerte, trago largo, secreto oscuro o bailar ridículo).<br>
-            • <b>Autocastigo Soberano 👑:</b> Si el infractor tiene demasiado orgullo para arrodillarse, puede elegir autocastigarse con valor (Fondo al vaso o Doble Shot) para lavar su honor.
+            • <b>3 Victorias Consecutivas:</b> Otorgan 1 Laurel de Oro de inmediato.<br>
+            • <b>5 Victorias Consecutivas:</b> Activan el derecho de <b>Expropiación Soberana</b>, permitiendo arrebatar 1 laurel a cualquier rival.<br>
+            • En caso de cometer falta o condonar, la racha consecutiva vuelve a cero.
           </div>
         </div>
 
         <div class="rule-card">
-          <div class="rule-card-header">👑 4. Coronación del Rey y Sentencias (Juego de Tronos)</div>
+          <div class="rule-card-header">4. Tribunal por Faltas Reiteradas</div>
           <div class="rule-card-body">
-            Al tocar <b>Terminar Partida</b>, el jugador con más estrellas y retos cumplidos es coronado <b>Monarca Absoluto</b>.<br>
-            El nuevo Rey debe juzgar a cada vasallo individualmente:<br>
-            • <b>⚔️ Castigar:</b> Le dicta un shot, tragos largos o reto sorpresa.<br>
-            • <b>🕊️ Indulto:</b> Le perdona el castigo por completo.<br>
-            Dependiendo de cuántos perdone o castigue, recibirá títulos reales como: <i>"Rey de los Condenados"</i>, <i>"Rey Misericordioso"</i>, <i>"El Santo y Absolvedor de Pecados"</i> o <i>"El Azote de Hígados"</i>.
+            Si un jugador acumula 3 faltas consecutivas sin recurrir a la condonación, el certamen se interrumpe:<br>
+            • El líder en turno le impone una sanción disciplinaria.<br>
+            • O bien, el infractor puede reclamar <b>Autocastigo Soberano</b> (Doble trago directo) para resguardar su honor.
           </div>
         </div>
 
         <div class="rule-card">
-          <div class="rule-card-header">🍷 5. Brindis Responsable</div>
+          <div class="rule-card-header">5. Coronación y Juicio Real</div>
           <div class="rule-card-body">
-            Todos los retos y tragos son bajo consentimiento amistoso. Se puede jugar con cerveza, cócteles o shots. ¡El objetivo principal es convivir y divertirse!
+            Al concluir la velada, quien reúna el mayor balance de laureles y aciertos asciende al trono. El nuevo Rey somete a cada vasallo a juicio individual con <b>Castigo</b> o <b>Indulto</b>, ganando títulos dinámicos acordes a su temple.
           </div>
         </div>
       </div>
 
-      <button class="btn-secondary" style="width: 100%; padding: 12px; font-weight:700;" onclick="closeRulesModal()">Entendido, a Jugar</button>
+      <button class="btn-rococo-nav" style="width: 100%; padding: 11px; background: var(--gold-light); border-color: var(--gold-primary);" onclick="RococoAudio.playClick(); closeRulesModal()">Comprendido</button>
+    </div>
+  </div>
+
+  <!-- MODAL: SENTENCIA POR 3 CONDONACIONES (FONDO SUPREMO) -->
+  <div class="modal-overlay" id="tripleCondoneModal">
+    <div class="modal-box" style="text-align: center;">
+      <h2 class="modal-title" style="color: var(--carmin-velours);">Deuda Vencida: Fondo al Vaso</h2>
+      <p class="modal-desc" id="tripleCondoneDesc">
+        El participante ha condonado su compromiso 3 veces consecutivas. La deuda cortesana exige su cobro inmediato.
+      </p>
+
+      <div style="background: var(--bg-cream); border: 1.5px solid var(--gold-primary); border-radius: 14px; padding: 14px; margin-bottom: 12px; text-align: left;">
+        <h4 style="font-family:'Cinzel',serif; font-size: 12px; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 5px;">
+          Resolución del Líder (<span id="condoneLeaderName" style="color:var(--text-dark); font-weight:800;">Líder</span>)
+        </h4>
+        <p style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 9px;">
+          Por hallarte en el primer escaño del reino, dictas el destino de esta copa:
+        </p>
+
+        <div style="margin-bottom: 12px;">
+          <label style="font-size: 10.5px; font-weight: 700; text-transform: uppercase; color: var(--text-dark); display: block; margin-bottom: 4px;">
+            Prescribir brebaje para <span id="condoneVictimName">el deudor</span>:
+          </label>
+          <select id="condoneDrinkChoice" class="punishment-selector" style="margin-bottom: 8px;">
+            <option value="Fondo de copa completa sin reposo">Fondo de copa completa sin reposo</option>
+            <option value="Mezcla de los licores presentes en la mesa">Mezcla de licores presentes en la mesa</option>
+            <option value="Doble trago seco de aguardiente">Doble trago seco de aguardiente</option>
+            <option value="Brebaje ceremonial preparado por el Líder">Brebaje ceremonial del Líder</option>
+          </select>
+          <button class="btn-resolve btn-fail" style="width: 100%; padding: 10px;" onclick="resolveTripleCondone('force')">
+            Exigir Fondo Inmediato
+          </button>
+        </div>
+
+        <div style="text-align: center; font-family:'Cinzel',serif; font-size: 10px; font-weight: 800; color: var(--gold-dark); margin-bottom: 10px;">— O BIEN —</div>
+
+        <div>
+          <button class="btn-resolve" style="width: 100%; padding: 10px; background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark)); color: white;" onclick="resolveTripleCondone('leader_drink')">
+            El Líder Asume la Copa por Soberanía
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- MODAL: MARCADOR EN VIVO -->
   <div class="modal-overlay" id="scoresModal">
     <div class="modal-box">
-      <h2 class="modal-title">Marcador de la Corte</h2>
-      <p class="modal-desc">Así marcha la contienda de puntos, estrellas y tragos en tiempo real:</p>
-      <div id="liveScoresList" style="display: flex; flex-direction: column; gap: 8px; max-height: 380px; overflow-y: auto; margin-bottom: 15px;"></div>
-      <button class="btn-secondary" style="width: 100%; padding: 12px; font-weight:700;" onclick="closeScoresModal()">Volver al Juego</button>
+      <h2 class="modal-title">Escalafón de Honor</h2>
+      <p class="modal-desc">Registro ministerial de puntos, laureles y deudas:</p>
+      <div id="liveScoresList" style="display: flex; flex-direction: column; gap: 7px; max-height: 380px; overflow-y: auto; margin-bottom: 14px;"></div>
+      <button class="btn-rococo-nav" style="width: 100%; padding: 11px;" onclick="RococoAudio.playClick(); closeScoresModal()">Regresar al Certamen</button>
     </div>
   </div>
 
-  <!-- MODAL: REGISTRO INICIAL DE JUGADORES -->
+  <!-- MODAL: REGISTRO INICIAL DE JUGADORES (Con botón Reglamento) -->
   <div class="modal-overlay" id="registerModal">
     <div class="modal-box">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-        <h2 class="modal-title" style="margin-bottom: 0; text-align: left;">¿Quiénes van a jugar?</h2>
-        <button type="button" class="btn-secondary" style="font-size: 12px; padding: 6px 12px; font-weight: 700;" onclick="openRulesModal()">
-          📜 Ver Reglas
+        <h2 class="modal-title" style="margin-bottom: 0; text-align: left; font-size: 17px;">Inscripción de la Corte</h2>
+        <button type="button" class="btn-rococo-nav" style="font-size: 10.5px; padding: 5px 9px;" onclick="RococoAudio.playClick(); openRulesModal()">
+          Reglamento
         </button>
       </div>
-      <p class="modal-desc" style="text-align: left; margin-bottom: 14px;">Inscriban a los jugadores, elijan sus personajes y comiencen la ronda.</p>
+      <p class="modal-desc" style="text-align: left; margin-bottom: 12px;">Inscriban a los participantes, elijan su retrato oficial y den inicio a la sesión.</p>
 
       <div class="character-picker" id="characterPicker"></div>
 
       <div class="player-input-row">
-        <input type="text" id="inputPlayerName" class="player-input" placeholder="Nombre o apodo..." maxlength="18">
-        <button class="btn-secondary" style="background: var(--gold-light); font-weight:700;" onclick="addPlayerFromInput()">Agregar</button>
+        <input type="text" id="inputPlayerName" class="player-input" placeholder="Nombre o título cortesano..." maxlength="18">
+        <button class="btn-rococo-nav" style="background: var(--gold-light); font-weight:700;" onclick="addPlayerFromInput()">Inscribir</button>
       </div>
 
       <div class="registered-players-list" id="registeredPlayersList"></div>
 
-      <button class="spin-button" style="margin-top: 10px;" id="btnStartGame" onclick="startGame()" disabled>
-        COMENZAR LA RONDA (MÍN. 2)
+      <button class="spin-button" style="margin-top: 8px;" id="btnStartGame" onclick="startGame()" disabled>
+        COMENZAR LA SESIÓN (MÍN. 2)
       </button>
     </div>
   </div>
@@ -930,11 +1066,11 @@
   <!-- MODAL: CONFIRMACIÓN PARA TERMINAR PARTIDA -->
   <div class="modal-overlay" id="confirmEndModal">
     <div class="modal-box" style="text-align: center;">
-      <h2 class="modal-title">¿Cerrar la Partida?</h2>
-      <p class="modal-desc">Se suspenderán los giros de la pirinola y se coronará solemnemente al Gran Rey de la mesa.</p>
+      <h2 class="modal-title">¿Clausurar la Sesión?</h2>
+      <p class="modal-desc">Se suspenderán los giros y se procederá a la proclamación del Soberano de la mesa.</p>
       <div class="confirm-actions">
-        <button class="btn-secondary" style="padding: 12px;" onclick="closeConfirmEndModal()">Seguir Jugando</button>
-        <button class="btn-resolve btn-fail" style="padding: 12px;" onclick="executeEndGame()">Coronar al Rey</button>
+        <button class="btn-rococo-nav" style="padding: 11px;" onclick="RococoAudio.playClick(); closeConfirmEndModal()">Permanecer</button>
+        <button class="btn-resolve btn-fail" style="padding: 11px;" onclick="executeEndGame()">Proceder al Juicio</button>
       </div>
     </div>
   </div>
@@ -942,62 +1078,61 @@
   <!-- MODAL: CATÁLOGO DE RETOS Y CASTIGOS -->
   <div class="modal-overlay" id="catalogModal">
     <div class="modal-box">
-      <h2 class="modal-title">Compendio de Retos</h2>
-      <p class="modal-desc">Todas las opciones posibles que esconde la pirinola.</p>
-      <div id="catalogList" style="max-height: 380px; overflow-y: auto; margin-bottom: 15px;"></div>
-      <button class="btn-secondary" style="width: 100%; padding: 12px;" onclick="closeCatalogModal()">Cerrar</button>
+      <h2 class="modal-title">Compendio de Pruebas</h2>
+      <p class="modal-desc">Todas las opciones y comodines que depara la suerte:</p>
+      <div id="catalogList" style="max-height: 380px; overflow-y: auto; margin-bottom: 14px;"></div>
+      <button class="btn-rococo-nav" style="width: 100%; padding: 11px;" onclick="RococoAudio.playClick(); closeCatalogModal()">Cerrar</button>
     </div>
   </div>
 
-  <!-- MODAL: ROBO DE ESTRELLAS -->
+  <!-- MODAL: ROBO DE LAURELES -->
   <div class="modal-overlay" id="stealModal">
     <div class="modal-box">
-      <h2 class="modal-title">¡Racha Imparable! 🔥</h2>
-      <p class="modal-desc">Completaste 5 retos al hilo. Elige a qué jugador le vas a arrebatar una estrella:</p>
-      <div id="stealTargetList" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px;"></div>
+      <h2 class="modal-title">Prerrogativa Soberana</h2>
+      <p class="modal-desc">Has encadenado 5 pruebas victoriosas. Tienes el derecho de arrebatar 1 laurel a quien elijas:</p>
+      <div id="stealTargetList" style="display: flex; flex-direction: column; gap: 7px; margin-bottom: 14px;"></div>
     </div>
   </div>
 
-  <!-- MODAL: SENTENCIA POR 3 RAJADAS CONSECUTIVAS -->
+  <!-- MODAL: SENTENCIA POR FALTAS REITERADAS -->
   <div class="modal-overlay" id="tripleFailModal">
     <div class="modal-box" style="text-align: center;">
-      <div style="font-size: 38px; margin-bottom: 6px;">💀 🍺 💀</div>
-      <h2 class="modal-title" style="color: var(--crimson);">¡Sentencia al Triple Rajón!</h2>
+      <h2 class="modal-title" style="color: var(--carmin-velours);">Juicio por Cobardía Reiterada</h2>
       <p class="modal-desc" id="tripleFailDesc">
-        El jugador acumula 3 faltas consecutivas. La corte exige expiación inmediata.
+        El participante acumula 3 faltas consecutivas. La asamblea exige satisfacción inmediata.
       </p>
 
-      <div style="background: var(--bg-cream); border: 1px solid var(--border-gilded); border-radius: 14px; padding: 14px; margin-bottom: 14px; text-align: left;">
-        <h4 style="font-size: 13px; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 6px;">
-          Opción 1: Decretado por el Líder (<span id="leaderNameTag" style="color:var(--text-dark);">Líder</span>)
+      <div style="background: var(--bg-cream); border: 1px solid var(--border-gilded); border-radius: 12px; padding: 13px; margin-bottom: 12px; text-align: left;">
+        <h4 style="font-family:'Cinzel',serif; font-size: 11.5px; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 5px;">
+          Dictamen del Primer Rango (<span id="leaderNameTag" style="color:var(--text-dark);">Líder</span>)
         </h4>
-        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">
-          El primer lugar de la corte impone su castigo sobre el infractor:
+        <p style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 8px;">
+          El primer rango del escalafón determina la penitencia:
         </p>
-        <select id="leaderCustomPunishment" class="punishment-selector" style="margin-bottom: 10px;">
-          <option value="Tomarse 1 Shot Fuerte al seco">Tomarse 1 Shot Fuerte al seco</option>
-          <option value="Tomarse 2 Tragos Largos de golpe">Tomarse 2 Tragos Largos de golpe</option>
-          <option value="Confesar su secreto más oscuro">Confesar su secreto más oscuro a la mesa</option>
-          <option value="Bailar como bufón ridículo por 15 segundos">Bailar como bufón ridículo por 15 segundos</option>
-          <option value="Servirle los vasos a todos la siguiente ronda">Servirle los vasos a todos la siguiente ronda</option>
+        <select id="leaderCustomPunishment" class="punishment-selector" style="margin-bottom: 9px;">
+          <option value="Apurar 1 trago seco sin vacilación">Apurar 1 trago seco sin vacilación</option>
+          <option value="Ingerir 2 tragos largos seguidos">Ingerir 2 tragos largos seguidos</option>
+          <option value="Confesar un secreto íntimo ante la corte">Confesar un secreto íntimo ante la corte</option>
+          <option value="Ofrecer un baile bufo durante 15 segundos">Ofrecer un baile bufo durante 15 segundos</option>
+          <option value="Servir las copas de todos en la siguiente ronda">Servir las copas de todos en la siguiente ronda</option>
         </select>
         <button class="btn-resolve btn-fail" style="width: 100%; padding: 10px;" onclick="resolveTripleFail('leader')">
-          Acatar Voluntad del Líder
+          Acatar Voluntad
         </button>
       </div>
 
-      <div style="background: #FFF9E6; border: 1px solid var(--gold-primary); border-radius: 14px; padding: 14px; text-align: left;">
-        <h4 style="font-size: 13px; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 6px;">
-          Opción 2: Autocastigo Soberano 👑
+      <div style="background: #FFF9E6; border: 1px solid var(--gold-primary); border-radius: 12px; padding: 13px; text-align: left;">
+        <h4 style="font-family:'Cinzel',serif; font-size: 11.5px; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 5px;">
+          Expiación Soberana
         </h4>
-        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 6px;">
-          ¿Demasiado orgullo para arrodillarse? El rajón puede redimirse como soberano:
+        <p style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 5px;">
+          Para evitar someterse a la orden del líder, el infractor puede reclamar honor propio:
         </p>
-        <div style="font-size: 12px; font-weight: 700; color: var(--crimson); margin-bottom: 10px;">
-          Honor Real: ¡Fondo completo al vaso o Doble Shot directo!
+        <div style="font-size: 11.5px; font-weight: 700; color: var(--carmin-velours); margin-bottom: 9px;">
+          Doble trago directo para lavar su estatus cortesano.
         </div>
         <button class="btn-resolve" style="width: 100%; padding: 10px; background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark)); color: white;" onclick="resolveTripleFail('sovereign')">
-          Elegir Autocastigo Soberano
+          Reclamar Expiación Propia
         </button>
       </div>
     </div>
@@ -1007,15 +1142,14 @@
   <div class="modal-overlay" id="coronationModal">
     <div class="modal-box">
       <div class="coronation-header">
-        <div class="monarch-crown-badge">👑</div>
-        <h2 class="modal-title" id="monarchNameTitle">¡Habemus Rey!</h2>
-        <p class="modal-desc" style="margin-bottom: 8px;">Por tener más estrellas y victorias, eres el Monarca Absoluto. Juzga a cada vasallo de tu corte.</p>
+        <h2 class="modal-title" id="monarchNameTitle">Proclamación Real</h2>
+        <p class="modal-desc" style="margin-bottom: 7px;">Por méritos de laureles y constancia, asciendes al Trono. Resuelve el destino de cada vasallo:</p>
       </div>
 
       <div class="court-judgment-list" id="courtJudgmentList"></div>
 
-      <button class="spin-button" style="margin-top: 15px;" onclick="proclaimRoyalDecree()">
-        PROCLAMAR DECRETO REAL
+      <button class="spin-button" style="margin-top: 13px;" onclick="proclaimRoyalDecree()">
+        PROCLAMAR DECRETO REGIO
       </button>
     </div>
   </div>
@@ -1023,25 +1157,213 @@
   <!-- MODAL: DECRETO FINAL -->
   <div class="modal-overlay" id="decreeModal">
     <div class="modal-box" style="text-align: center;">
-      <div style="font-size: 36px; margin-bottom: 4px;">⚔️ 👑 🍷</div>
-      <h2 class="modal-title" style="font-size: 24px;">Decreto de la Corte</h2>
+      <h2 class="modal-title" style="font-size: 21px;">Acta Final de la Corte</h2>
       
       <div class="decree-box">
-        <div style="font-size: 11px; letter-spacing: 2px; color: var(--gold-dark); text-transform: uppercase; font-weight: 800;">Por la gracia de la pirinola se proclama a:</div>
+        <div style="font-family:'Cinzel',serif; font-size: 10px; letter-spacing: 1.5px; color: var(--gold-dark); text-transform: uppercase; font-weight: 800;">Por la gracia de la Pirinola se proclama a:</div>
         <div class="royal-title-display" id="proclaimedEpithet">Rey de los Condenados</div>
-        <p id="proclamationSummaryText" style="font-size: 13px; color: #5C4730; margin-top: 8px; line-height: 1.4;"></p>
+        <p id="proclamationSummaryText" style="font-size: 12.5px; color: #5C4730; margin-top: 7px; line-height: 1.4;"></p>
       </div>
 
-      <h4 style="text-align: left; font-size: 12px; text-transform: uppercase; color: var(--gold-dark); margin: 12px 0 6px;">Sentencias dictadas:</h4>
-      <div id="finalDecreeList" style="display: flex; flex-direction: column; gap: 6px; max-height: 180px; overflow-y: auto; margin-bottom: 15px;"></div>
+      <h4 style="text-align: left; font-family:'Cinzel',serif; font-size: 11px; text-transform: uppercase; color: var(--gold-dark); margin: 10px 0 5px; letter-spacing: 0.5px;">Sentencias Dictadas:</h4>
+      <div id="finalDecreeList" style="display: flex; flex-direction: column; gap: 5px; max-height: 170px; overflow-y: auto; margin-bottom: 13px;"></div>
 
-      <button class="spin-button" style="background: linear-gradient(135deg, #2B8A3E, #237032);" onclick="resetGameToNewParty()">
-        INICIAR NUEVA PARTIDA
+      <button class="spin-button" style="background: linear-gradient(135deg, var(--vert-celadon), #25402D);" onclick="resetGameToNewParty()">
+        INICIAR NUEVA SESIÓN
       </button>
     </div>
   </div>
 
   <script>
+    /* ========================================================
+       SISTEMA ACÚSTICO ROCOCÓ (WEB AUDIO API PROCEDIMENTAL)
+       ======================================================== */
+    const RococoAudio = {
+      ctx: null,
+      spinOsc: null,
+      spinGain: null,
+      spinFilter: null,
+      lastTapTime: 0,
+
+      init() {
+        if (!this.ctx) {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (AudioContextClass) {
+            this.ctx = new AudioContextClass();
+          }
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      },
+
+      playClick() {
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        const filter = this.ctx.createBiquadFilter();
+
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(587.33, now);
+        osc.frequency.exponentialRampToValueAtTime(580, now + 0.12);
+
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(2400, now);
+        filter.Q.setValueAtTime(3.5, now);
+
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.linearRampToValueAtTime(0.25, now + 0.006);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
+
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(this.ctx.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.17);
+      },
+
+      startSpin() {
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+
+        this.spinOsc = this.ctx.createOscillator();
+        this.spinGain = this.ctx.createGain();
+        this.spinFilter = this.ctx.createBiquadFilter();
+
+        this.spinOsc.type = 'triangle';
+        this.spinOsc.frequency.setValueAtTime(140, now);
+
+        this.spinFilter.type = 'lowpass';
+        this.spinFilter.frequency.setValueAtTime(320, now);
+
+        this.spinGain.gain.setValueAtTime(0.001, now);
+        this.spinGain.gain.linearRampToValueAtTime(0.18, now + 0.08);
+
+        this.spinOsc.connect(this.spinFilter);
+        this.spinFilter.connect(this.spinGain);
+        this.spinGain.connect(this.ctx.destination);
+
+        this.spinOsc.start(now);
+      },
+
+      updateSpin(vel) {
+        if (!this.ctx || !this.spinOsc || !this.spinGain) return;
+        const now = this.ctx.currentTime;
+        const targetFreq = Math.max(45, 60 + vel * 260);
+        const targetGain = Math.min(0.2, Math.max(0.001, vel * 0.22));
+        this.spinOsc.frequency.setTargetAtTime(targetFreq, now, 0.04);
+        this.spinGain.gain.setTargetAtTime(targetGain, now, 0.04);
+      },
+
+      playTap() {
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        if (now - this.lastTapTime < 0.07) return;
+        this.lastTapTime = now;
+
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(380 + Math.random() * 80, now);
+
+        gain.gain.setValueAtTime(0.09, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.035);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.04);
+      },
+
+      stopSpin() {
+        if (this.ctx && this.spinGain) {
+          const now = this.ctx.currentTime;
+          this.spinGain.gain.linearRampToValueAtTime(0.0001, now + 0.1);
+          setTimeout(() => {
+            if (this.spinOsc) {
+              try { this.spinOsc.stop(); } catch(e) {}
+              this.spinOsc = null;
+            }
+          }, 120);
+        }
+
+        this.playHarpsichordChord([523.25, 659.25, 783.99, 1046.50], 0.05, 0.45);
+      },
+
+      playSuccess() {
+        this.init();
+        if (!this.ctx) return;
+        this.playHarpsichordChord([659.25, 830.61, 987.77, 1318.51], 0.04, 0.6);
+      },
+
+      playFail() {
+        this.init();
+        if (!this.ctx) return;
+        this.playHarpsichordChord([440.00, 523.25, 622.25], 0.08, 0.5);
+      },
+
+      playCondone() {
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        const filter = this.ctx.createBiquadFilter();
+
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(440, now);
+
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(880, now);
+        filter.Q.setValueAtTime(4, now);
+
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.linearRampToValueAtTime(0.28, now + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.65);
+
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(this.ctx.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.7);
+      },
+
+      playHarpsichordChord(freqs, stagger = 0.04, duration = 0.5) {
+        if (!this.ctx) return;
+        const start = this.ctx.currentTime;
+
+        freqs.forEach((freq, idx) => {
+          const noteTime = start + idx * stagger;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          const filter = this.ctx.createBiquadFilter();
+
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(freq, noteTime);
+
+          filter.type = 'bandpass';
+          filter.frequency.setValueAtTime(freq * 2.2, noteTime);
+          filter.Q.setValueAtTime(2.5, noteTime);
+
+          gain.gain.setValueAtTime(0.001, noteTime);
+          gain.gain.linearRampToValueAtTime(0.18, noteTime + 0.005);
+          gain.gain.exponentialRampToValueAtTime(0.0001, noteTime + duration);
+
+          osc.connect(filter);
+          filter.connect(gain);
+          gain.connect(this.ctx.destination);
+
+          osc.start(noteTime);
+          osc.stop(noteTime + duration + 0.05);
+        });
+      }
+    };
+
     /* 1. PERSONAJES ILUSTRADOS */
     const CHARACTERS = [
       {
@@ -1140,7 +1462,7 @@
       },
       {
         id: 'mascota',
-        name: 'Sir Pedro Mayoneso',
+        name: 'Duque Firuláis',
         role: 'Mascota Imperial',
         svg: `<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="50" cy="50" r="50" fill="#E8F1F2"/>
@@ -1194,40 +1516,40 @@
       }
     ];
 
-    /* 2. RETOS DE FIESTA */
+    /* 2. CATÁLOGO DE RETOS Y SANCIONES */
     const CHALLENGES = [
-      { title: 'Indulto de la Suerte', cat: 'Comodín', text: '¡Te salvaste por pura suerte! Nadie bebe de tu parte esta ronda.', penalty: 'Descanso total. No hay castigo.' },
-      { title: 'El Francotirador', cat: 'Comodín', text: 'Apunta sin temblar la mano: escoge a quien quieras de la mesa y dale un trago directo.', penalty: 'Si dudas más de 5 segundos, te lo tomas tú.' },
-      { title: 'Fuego Cruzado', cat: 'Comodín', text: 'Pagan los vecinos: el de tu derecha y el de tu izquierda le dan un buen trago a su vaso.', penalty: 'Si alguno se niega, se echa 2 tragos seguidos.' },
-      { title: 'Salud General', cat: 'Comodín', text: '¡Salud por el reino! Todos en la mesa le dan un trago a su bebida, menos tú.', penalty: 'Fondo para el que se quede mirando.' },
-      { title: 'El Espejo Vengador', cat: 'Comodín', text: 'El jugador que tiró antes que tú tiene que beber por andarse riendo.', penalty: 'El anterior bebe 1 trago.' },
-      { title: 'Efecto Cascada', cat: 'Comodín', text: 'Tú empiezas a beber y todos en la mesa te siguen. Nadie puede bajar su vaso hasta que pares.', penalty: 'El que baje el vaso antes, trago de castigo.' },
-      { title: 'La Foto Incómoda', cat: 'Confesión', text: 'Muestra la última foto que tomaste con la cámara de tu celular a la mesa.', penalty: 'Si escondes el teléfono: bebes 2 tragos.' },
-      { title: 'El Peor Oso Borracho', cat: 'Confesión', text: 'Cuenta tu anécdota más chusca de borrachera o fiesta en menos de un minuto.', penalty: 'Si te da pena contarla: Fondo a tu vaso.' },
-      { title: 'Atracción Secreta', cat: 'Confesión', text: 'Di quién de los presentes te parece la persona más atractiva o de mejor estilo.', penalty: 'Si te da miedo responder: 2 tragos.' },
-      { title: 'El Historial Oscuro', cat: 'Confesión', text: 'Muestra a la persona a tu lado tu última búsqueda en Instagram o TikTok.', penalty: 'Si cierras la app: 2 tragos sin quejarte.' },
-      { title: 'Mentira Piadosa', cat: 'Confesión', text: 'Confiésale a alguien de la mesa una mentira que le hayas dicho alguna vez.', penalty: 'Si dices que nunca has mentido: bebes 2 tragos.' },
-      { title: 'Gusto Culposo', cat: 'Confesión', text: 'Canta o di cuál es esa rola culposa que amas pero te daría pena que suene en tu auto.', penalty: 'Si te niegas: bebes 1 trago.' },
-      { title: 'El Ex Innombrable', cat: 'Confesión', text: 'Menciona en 3 palabras cómo resumirías a tu peor ex pareja.', penalty: 'Si prefieres el silencio: 2 tragos.' },
-      { title: 'El Chisme Real', cat: 'Confesión', text: 'Suelta un buen chisme o secreto de alguien conocido que no esté aquí sentado.', penalty: 'Si te haces el santo: te tomas 2 tragos.' },
-      { title: 'Karaoke a Capela', cat: 'Reto Rápido', text: 'Canta el coro de una rola de reggaetón o despecho durante 10 segundos.', penalty: 'Si te da pena: 2 tragos.' },
-      { title: 'El Piropo Rococó', cat: 'Reto Rápido', text: 'Dile el piropo más exagerado, dramático y cursi a la persona que tengas enfrente.', penalty: 'Si te da risa antes de terminarlo: bebes 1 trago.' },
-      { title: 'Imitación de la Mesa', cat: 'Reto Rápido', text: 'Imita un gesto, frase o maña de alguien que esté jugando aquí hasta que adivinen.', penalty: 'Si tardan más de 20 segundos o te rajas: 2 tragos.' },
-      { title: 'Piedra, Papel o Tijera', cat: 'Duelo', text: 'Elige un rival de la mesa. Juegan un solo tiro rápido a muerte súbita.', penalty: 'El que pierda el tiro se empina su vaso.' },
-      { title: 'Duelo de Miradas', cat: 'Duelo', text: 'Clávale la mirada al jugador de tu izquierda sin pestañear ni reírte durante 15 segundos.', penalty: 'El primero en reírse o cerrar los ojos bebe 1 trago.' },
-      { title: 'El Rey de la Estatua', cat: 'Reto Rápido', text: 'Quédate inmóvil durante 15 segundos mientras los demás intentan hacerte reír sin tocarte.', penalty: 'Si te mueves o sonríes: 2 tragos.' },
-      { title: 'Audio Peligroso', cat: 'Reto Rápido', text: 'Manda un audio al tercer chat reciente de WhatsApp diciendo: "Tenemos que hablar de algo urgente".', penalty: 'Si te acobardas: te tomas 3 tragos.' },
-      { title: 'Baile Real', cat: 'Reto Rápido', text: 'Ponte de pie e inventa un paso de baile prohibido durante 8 segundos sin pena.', penalty: 'Si no te levantas: 2 tragos.' },
-      { title: 'Cultura Chupística: Marcas', cat: 'Grupo', text: 'Marcas de alcohol o cerveza en círculo. El que repita o tarde más de 3 segundos, pierde.', penalty: 'El perdedor de la ronda bebe 1 trago.' },
-      { title: 'Cultura Chupística: Excusas', cat: 'Grupo', text: 'Excusas típicas para dejar plantado a alguien o salirte temprano de un plan.', penalty: 'El que se quede mudo bebe 1 trago.' },
-      { title: 'Yo Nunca Nunca Picante', cat: 'Grupo', text: 'Di un "Yo nunca nunca" salseado. Todos los que sí lo hayan hecho tienen que tomar.', penalty: 'Si nadie en la mesa bebe, bebes tú solo por aburrido.' },
-      { title: 'El Pulgar Imperial', cat: 'Grupo', text: 'Pon tu pulgar discretamente en la mesa. Los demás deben imitarte en silencio.', penalty: 'El último distraído en poner el pulgar bebe 1 trago.' },
-      { title: 'Rima Callejera', cat: 'Reto Rápido', text: 'Di una frase rimada. El de al lado tiene 3 segundos para responder con otra rima.', penalty: 'El primero que se trabe bebe 1 trago.' },
-      { title: 'Votación Popular', cat: 'Grupo', text: 'A la cuenta de tres, todos apuntan con el dedo a quien crean que es más mala copa.', penalty: 'El más votado por la corte se echa 2 tragos.' },
-      { title: 'Contacto Falso', cat: 'Confesión', text: 'Di en voz alta la última persona a la que le dejaste de contestar un mensaje a propósito.', penalty: 'Si no quieres admitirlo: bebes 2 tragos.' },
-      { title: 'El Trago Amigo', cat: 'Comodín', text: 'Elige un compinche: cada vez que tú bebas en las próximas 2 rondas, él bebe contigo.', penalty: 'El compinche no puede rechazar la alianza.' },
-      { title: 'Cumplido con Veneno', cat: 'Reto Rápido', text: 'Dile un cumplido honesto pero chusco a quien esté sentado frente a ti.', penalty: 'Si no se te ocurre nada: 1 trago.' },
-      { title: 'Amnistía Falsa', cat: 'Comodín', text: 'Te perdonamos esta ronda, pero en tu siguiente tiro, cualquier castigo valdrá el doble.', penalty: 'Peligro aplazado: la deuda se cobra al doble.' }
+      { title: 'Indulto de la Suerte', text: 'Te salvaste por pura suerte: nadie bebe de tu parte esta ronda y respiras en paz.', penalty: 'Descanso total. No hay castigo.' },
+      { title: 'El Francotirador', text: 'Apunta sin temblar la mano: escoge a quien quieras de la mesa y dale un trago directo.', penalty: 'Si dudas más de 5 segundos, te lo tomas tú.' },
+      { title: 'Fuego Cruzado', text: 'Pagan los vecinos: el de tu derecha y el de tu izquierda le dan un buen trago a su vaso.', penalty: 'Si alguno se niega, se echa 2 tragos seguidos.' },
+      { title: 'Salud General', text: 'Salud por el reino: todos en la mesa le dan un trago a su bebida, menos tú.', penalty: 'Fondo para el que se quede mirando.' },
+      { title: 'El Espejo Vengador', text: 'El jugador que tiró antes que tú tiene que beber por andarse riendo.', penalty: 'El anterior bebe 1 trago.' },
+      { title: 'Efecto Cascada', text: 'Tú empiezas a beber y todos en la mesa te siguen. Nadie puede bajar su vaso hasta que pares.', penalty: 'El que baje el vaso antes, trago de castigo.' },
+      { title: 'La Foto Incómoda', text: 'Muestra la última foto que tomaste con la cámara de tu celular a la mesa.', penalty: 'Si escondes el teléfono: bebes 2 tragos.' },
+      { title: 'El Peor Oso Borracho', text: 'Cuenta tu anécdota más chusca de fiesta o borrachera en menos de un minuto.', penalty: 'Si te da pena contarla: Fondo a tu vaso.' },
+      { title: 'Atracción Secreta', text: 'Di quién de los presentes te parece la persona más atractiva o de mejor porte.', penalty: 'Si te da miedo responder: 2 tragos.' },
+      { title: 'El Historial Oscuro', text: 'Muestra a la persona a tu lado tu última búsqueda en redes sociales.', penalty: 'Si cierras la aplicación: 2 tragos sin quejarte.' },
+      { title: 'Mentira Piadosa', text: 'Confiésale a alguien de la mesa una mentira que le hayas dicho alguna vez.', penalty: 'Si juras que nunca has mentido: bebes 2 tragos.' },
+      { title: 'Gusto Culposo', text: 'Canta o revela cuál es esa rola culposa que amas pero te daría pena admitir en público.', penalty: 'Si te niegas: bebes 1 trago.' },
+      { title: 'El Ex Innombrable', text: 'Menciona en solo 3 palabras cómo resumirías a tu peor ex pareja.', penalty: 'Si prefieres el silencio: 2 tragos.' },
+      { title: 'El Chisme Real', text: 'Suelta un secreto sabroso de alguien conocido que no esté presente en la sala.', penalty: 'Si te haces el santo: te tomas 2 tragos.' },
+      { title: 'Karaoke a Capela', text: 'Canta el coro de una rola popular o de despecho durante 10 segundos sin música.', penalty: 'Si te da pena: 2 tragos.' },
+      { title: 'El Piropo Rococó', text: 'Dile el piropo más exagerado, dramático y cursi a la persona que tengas enfrente.', penalty: 'Si te da risa antes de terminarlo: bebes 1 trago.' },
+      { title: 'Imitación de la Mesa', text: 'Imita un gesto o maña de alguien que esté jugando aquí hasta que adivinen.', penalty: 'Si tardan más de 20 segundos o te rajas: 2 tragos.' },
+      { title: 'Piedra, Papel o Tijera', text: 'Elige un rival de la mesa. Juegan un solo tiro rápido a muerte súbita.', penalty: 'El perdedor del duelo apura su vaso.' },
+      { title: 'Duelo de Miradas', text: 'Clávale la mirada al jugador de tu izquierda sin pestañear ni reírte durante 15 segundos.', penalty: 'El primero en reírse o cerrar los ojos bebe 1 trago.' },
+      { title: 'El Rey de la Estatua', text: 'Quédate inmóvil durante 15 segundos mientras los demás intentan hacerte reír sin tocarte.', penalty: 'Si te mueves o sonríes: 2 tragos.' },
+      { title: 'Audio Peligroso', text: 'Manda un audio al tercer chat reciente diciendo: "Tenemos que hablar de algo urgente".', penalty: 'Si te acobardas: te tomas 3 tragos.' },
+      { title: 'Baile Real', text: 'Ponte de pie e inventa un paso de baile prohibido durante 8 segundos sin reparo.', penalty: 'Si no te levantas: 2 tragos.' },
+      { title: 'Cultura Chupística: Marcas', text: 'Marcas de alcohol o cerveza en círculo. El que repita o tarde más de 3 segundos, pierde.', penalty: 'El perdedor de la ronda bebe 1 trago.' },
+      { title: 'Cultura Chupística: Excusas', text: 'Excusas clásicas para no ir a un plan o salirse temprano. El que dude, pierde.', penalty: 'El que se quede mudo bebe 1 trago.' },
+      { title: 'Yo Nunca Nunca Picante', text: 'Di un "Yo nunca nunca" salseado. Todos los que sí lo hayan hecho tienen que tomar.', penalty: 'Si nadie en la mesa bebe, bebes tú solo por aburrido.' },
+      { title: 'El Pulgar Imperial', text: 'Pon tu pulgar discretamente en el borde de la mesa. Todos deben imitarte en silencio.', penalty: 'El último distraído en poner el pulgar bebe 1 trago.' },
+      { title: 'Rima Callejera', text: 'Di una frase rimada. El de al lado tiene 3 segundos para responder con otra rima.', penalty: 'El primero que se trabe bebe 1 trago.' },
+      { title: 'Votación Popular', text: 'A la cuenta de tres, todos apuntan con el dedo a quien crean que baila peor.', penalty: 'El más votado por la corte se echa 2 tragos.' },
+      { title: 'Contacto Falso', text: 'Di en voz alta la última persona a la que le dejaste de contestar un mensaje a propósito.', penalty: 'Si no quieres admitirlo: bebes 2 tragos.' },
+      { title: 'El Trago Amigo', text: 'Elige un cómplice: cada vez que tú bebas en las próximas 2 rondas, él bebe contigo.', penalty: 'El cómplice no puede rechazar la alianza.' },
+      { title: 'Cumplido con Veneno', text: 'Dile un cumplido honesto pero chusco a quien esté sentado frente a ti.', penalty: 'Si no se te ocurre nada: 1 trago.' },
+      { title: 'Amnistía Falsa', text: 'Te perdonamos esta ronda, pero en tu siguiente tiro, cualquier castigo valdrá el doble.', penalty: 'Peligro aplazado: la deuda se cobra al doble.' }
     ];
 
     /* 3. ESTADO */
@@ -1239,36 +1561,46 @@
     let judgmentDecisions = {};
     let currentTripleVictim = null;
     let currentTripleLeader = null;
+    let currentCondoneVictim = null;
+    let currentCondoneLeader = null;
     let isGameActive = false;
 
-    /* 4. PIRINOLA 3D */
+    /* 4. MOTOR 3D OPTIMIZADO (THREE.JS + DELTA CLOCK) */
     let scene, camera, renderer, pirinolaGroup;
     let spinVelocity = 0;
     let wobbleAngle = 0;
+    const clock = new THREE.Clock();
 
     function init3D() {
       const container = document.getElementById('pirinola-canvas-container');
-      const width = container.clientWidth || 320;
-      const height = container.clientHeight || 280;
+      const width = container.clientWidth || 300;
+      const height = container.clientHeight || 270;
 
       scene = new THREE.Scene();
-      camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 1000);
+      camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
       camera.position.set(0, 5, 8);
       camera.lookAt(0, 0, 0);
 
-      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        alpha: true,
+        powerPreference: 'high-performance',
+        precision: 'mediump'
+      });
       renderer.setSize(width, height);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      
+      const pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
+      renderer.setPixelRatio(pixelRatio);
       container.appendChild(renderer.domElement);
 
-      const ambientLight = new THREE.AmbientLight(0xfff5e6, 1.2);
+      const ambientLight = new THREE.AmbientLight(0xfff5e6, 1.3);
       scene.add(ambientLight);
 
-      const dirLight = new THREE.DirectionalLight(0xffeedd, 1.8);
+      const dirLight = new THREE.DirectionalLight(0xffeedd, 1.7);
       dirLight.position.set(5, 10, 7);
       scene.add(dirLight);
 
-      const pointLight = new THREE.PointLight(0xc5a059, 1.5, 15);
+      const pointLight = new THREE.PointLight(0xc5a059, 1.2, 12);
       pointLight.position.set(-3, 2, 2);
       scene.add(pointLight);
 
@@ -1282,7 +1614,7 @@
       const bodyMesh = new THREE.Mesh(new THREE.CylinderGeometry(1.6, 1.6, 1.4, 8), ivoryMat);
       pirinolaGroup.add(bodyMesh);
 
-      const ringGeo = new THREE.TorusGeometry(1.61, 0.05, 8, 8);
+      const ringGeo = new THREE.TorusGeometry(1.61, 0.05, 6, 8);
       const ringTop = new THREE.Mesh(ringGeo, goldMat);
       ringTop.rotation.x = Math.PI / 2;
       ringTop.position.y = 0.65;
@@ -1301,15 +1633,15 @@
       pivotMesh.position.y = -2.3;
       pirinolaGroup.add(pivotMesh);
 
-      const stemMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.32, 1.6, 12), woodMat);
+      const stemMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.32, 1.6, 10), woodMat);
       stemMesh.position.y = 1.4;
       pirinolaGroup.add(stemMesh);
 
-      const knobMesh = new THREE.Mesh(new THREE.SphereGeometry(0.42, 16, 16), goldMat);
+      const knobMesh = new THREE.Mesh(new THREE.SphereGeometry(0.42, 12, 12), goldMat);
       knobMesh.position.y = 2.2;
       pirinolaGroup.add(knobMesh);
 
-      const plateMesh = new THREE.Mesh(new THREE.CylinderGeometry(3.5, 3.8, 0.2, 32), new THREE.MeshStandardMaterial({ color: 0xdfd4c0, roughness: 0.8 }));
+      const plateMesh = new THREE.Mesh(new THREE.CylinderGeometry(3.5, 3.8, 0.2, 24), new THREE.MeshStandardMaterial({ color: 0xdfd4c0, roughness: 0.8 }));
       plateMesh.position.y = -2.45;
       scene.add(plateMesh);
 
@@ -1317,6 +1649,7 @@
       let prevX = 0;
 
       container.addEventListener('mousedown', (e) => {
+        RococoAudio.init();
         if (isSpinning) return;
         isDragging = true;
         prevX = e.clientX;
@@ -1325,33 +1658,38 @@
       window.addEventListener('mousemove', (e) => {
         if (!isDragging || isSpinning) return;
         const delta = e.clientX - prevX;
-        pirinolaGroup.rotation.y += delta * 0.03;
+        pirinolaGroup.rotation.y += delta * 0.025;
         prevX = e.clientX;
       });
 
       window.addEventListener('mouseup', () => { isDragging = false; });
 
       container.addEventListener('touchstart', (e) => {
+        RococoAudio.init();
         if (isSpinning) return;
         isDragging = true;
         prevX = e.touches[0].clientX;
       }, { passive: true });
 
-      window.addEventListener('touchmove', (e) => {
+      container.addEventListener('touchmove', (e) => {
         if (!isDragging || isSpinning) return;
         const delta = e.touches[0].clientX - prevX;
-        pirinolaGroup.rotation.y += delta * 0.04;
+        pirinolaGroup.rotation.y += delta * 0.035;
         prevX = e.touches[0].clientX;
       }, { passive: true });
 
       window.addEventListener('touchend', () => { isDragging = false; });
 
+      let resizeTimeout;
       window.addEventListener('resize', () => {
-        const w = container.clientWidth;
-        const h = container.clientHeight;
-        camera.aspect = w / h;
-        camera.updateProjectionMatrix();
-        renderer.setSize(w, h);
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+          const w = container.clientWidth;
+          const h = container.clientHeight;
+          camera.aspect = w / h;
+          camera.updateProjectionMatrix();
+          renderer.setSize(w, h);
+        }, 100);
       });
 
       animate();
@@ -1360,36 +1698,40 @@
     function animate() {
       requestAnimationFrame(animate);
 
-      // Giro veloz y dinámico con desaceleración corta (~2s) para no frenar la partida
-      if (spinVelocity > 0.005) {
-        pirinolaGroup.rotation.y += spinVelocity;
-        spinVelocity *= 0.965; // Fricción acelerada y enérgica
+      const delta = Math.min(clock.getDelta(), 0.08);
 
-        wobbleAngle += 0.35;
-        const wobbleIntensity = Math.min(0.24, (0.45 - spinVelocity) * 0.5);
-        if (spinVelocity < 0.38) {
+      if (spinVelocity > 0.005) {
+        const factor = delta * 60;
+        pirinolaGroup.rotation.y += spinVelocity * factor;
+        spinVelocity *= Math.pow(0.962, factor);
+
+        wobbleAngle += 18 * delta;
+        const wobbleIntensity = Math.min(0.22, (0.5 - spinVelocity) * 0.45);
+        if (spinVelocity < 0.4) {
           pirinolaGroup.rotation.z = Math.sin(wobbleAngle) * wobbleIntensity;
           pirinolaGroup.rotation.x = Math.cos(wobbleAngle) * wobbleIntensity;
+          RococoAudio.playTap();
         }
 
-        if (spinVelocity <= 0.009) {
+        RococoAudio.updateSpin(spinVelocity);
+
+        if (spinVelocity <= 0.008) {
           spinVelocity = 0;
-          pirinolaGroup.rotation.z = 0.05;
-          pirinolaGroup.rotation.x = 0.05;
+          pirinolaGroup.rotation.z = 0.04;
+          pirinolaGroup.rotation.x = 0.04;
           finishSpin();
         }
       } else {
-        pirinolaGroup.rotation.y += 0.003;
+        pirinolaGroup.rotation.y += 0.15 * delta;
       }
 
       renderer.render(scene, camera);
     }
 
-    /* 5. NOTIFICACIONES VISUALES */
+    /* 5. CARTELA DE ANUNCIOS */
     let toastTimeout = null;
-    function showVisualNotification(icon, text, duration = 1600) {
+    function showVisualNotification(text, duration = 1600) {
       const banner = document.getElementById('toastBanner');
-      document.getElementById('toastIcon').innerText = icon;
       document.getElementById('toastText').innerText = text;
 
       banner.classList.add('show');
@@ -1402,47 +1744,50 @@
     /* 6. GIRO Y EVALUACIÓN DE TURNOS */
     function triggerPirinolaSpin() {
       if (isSpinning || players.length === 0) return;
+      RococoAudio.playClick();
+      RococoAudio.startSpin();
+
       isSpinning = true;
       document.getElementById('btnSpin').disabled = true;
       document.getElementById('decisionActions').style.display = 'none';
 
-      document.getElementById('challengeTitle').innerText = 'Girando la suerte...';
-      document.getElementById('challengeDesc').innerText = 'La pirinola está decidiendo el destino de esta ronda.';
-      document.getElementById('challengePenalty').innerText = '¡Preparen sus copas!';
-      document.getElementById('challengeCategory').innerText = 'Sorteo';
+      document.getElementById('challengeTitle').innerText = 'Consultando a la suerte...';
+      document.getElementById('challengeDesc').innerText = 'La pirinola define el rumbo de la asamblea.';
+      document.getElementById('challengePenalty').innerText = 'Mantengan dispuestas sus copas.';
 
-      // Impulso inicial el doble de veloz para giro vertiginoso
       spinVelocity = 0.95 + Math.random() * 0.45;
     }
 
     function finishSpin() {
       isSpinning = false;
       document.getElementById('btnSpin').disabled = false;
+      RococoAudio.stopSpin();
 
       const randomIndex = Math.floor(Math.random() * CHALLENGES.length);
       currentChallenge = CHALLENGES[randomIndex];
 
-      document.getElementById('challengeCategory').innerText = currentChallenge.cat;
       document.getElementById('challengeTitle').innerText = currentChallenge.title;
       document.getElementById('challengeDesc').innerText = currentChallenge.text;
-      document.getElementById('challengePenalty').innerText = 'Castigo: ' + currentChallenge.penalty;
+      document.getElementById('challengePenalty').innerText = 'Sanción: ' + currentChallenge.penalty;
 
       document.getElementById('decisionActions').style.display = 'grid';
     }
 
-    function resolveTurn(success) {
+    function resolveTurn(action) {
       const player = players[currentPlayerIndex];
 
-      if (success) {
+      if (action === 'win') {
+        RococoAudio.playSuccess();
         player.wins += 1;
         player.streak += 1;
         player.consecutiveFails = 0;
+        player.condonedStreak = 0;
 
-        confetti({ particleCount: 35, spread: 50, origin: { y: 0.7 } });
+        confetti({ particleCount: 30, spread: 50, origin: { y: 0.7 } });
 
         if (player.streak % 3 === 0) {
           player.stars += 1;
-          showVisualNotification('⭐', `¡Bravísimo! ${player.name} logró 3 retos seguidos y gana 1 Estrella.`, 2000);
+          showVisualNotification(`Meritorio: ${player.name} alcanza 3 aciertos y recibe un Laurel de Honor.`, 2000);
         }
 
         if (player.streak >= 5 && player.streak % 5 === 0) {
@@ -1451,16 +1796,36 @@
         }
 
         nextTurn();
-      } else {
+
+      } else if (action === 'fail') {
+        RococoAudio.playFail();
         player.fails += 1;
         player.streak = 0;
+        player.condonedStreak = 0;
         player.consecutiveFails = (player.consecutiveFails || 0) + 1;
-        showVisualNotification('🍺', `${player.name} se rajó o falló. ¡A beber!`, 1600);
+        showVisualNotification(`${player.name} incurre en falta. Corresponde beber.`, 1600);
 
         if (player.consecutiveFails >= 3) {
           player.consecutiveFails = 0;
           openTripleFailModal(player);
           return;
+        }
+
+        nextTurn();
+
+      } else if (action === 'condone') {
+        RococoAudio.playCondone();
+        player.condonedStreak = (player.condonedStreak || 0) + 1;
+        player.totalCondoned = (player.totalCondoned || 0) + 1;
+        player.streak = 0;
+        player.consecutiveFails = 0;
+
+        if (player.condonedStreak >= 3) {
+          player.condonedStreak = 0;
+          openTripleCondoneModal(player);
+          return;
+        } else {
+          showVisualNotification(`${player.name} condona su compromiso (${player.condonedStreak}/3 en deuda).`, 1800);
         }
 
         nextTurn();
@@ -1471,10 +1836,9 @@
       currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
       updateTurnUI();
       document.getElementById('decisionActions').style.display = 'none';
-      document.getElementById('challengeTitle').innerText = 'Siguiente Turno';
-      document.getElementById('challengeDesc').innerText = 'Gira la pirinola para conocer tu reto.';
-      document.getElementById('challengeCategory').innerText = 'Listo';
-      document.getElementById('challengePenalty').innerText = 'Sanción: Atentos a las reglas.';
+      document.getElementById('challengeTitle').innerText = 'Turno Ministerial';
+      document.getElementById('challengeDesc').innerText = 'Hagan rodar la pirinola para conocer el dictamen.';
+      document.getElementById('challengePenalty').innerText = 'Sanción: Procedan según ordenanza.';
     }
 
     function updateTurnUI() {
@@ -1488,11 +1852,48 @@
       
       document.getElementById('activeWins').innerText = p.wins;
       document.getElementById('activeFails').innerText = p.fails;
+      document.getElementById('activeDebt').innerText = `${p.condonedStreak || 0}/3`;
       document.getElementById('activeStars').innerText = p.stars;
       document.getElementById('activeStreak').innerText = p.streak;
     }
 
-    /* 7. MODAL DE TRIPLE RAJADA */
+    /* 7. MODAL DE 3 CONDONACIONES (FONDO SUPREMO) */
+    function openTripleCondoneModal(victim) {
+      currentCondoneVictim = victim;
+
+      const sorted = [...players].sort((a, b) => {
+        const scoreA = (a.stars * 10) + a.wins - (a.fails * 0.5);
+        const scoreB = (b.stars * 10) + b.wins - (b.fails * 0.5);
+        return scoreB - scoreA;
+      });
+
+      currentCondoneLeader = sorted.find(p => p.id !== victim.id) || sorted[0];
+
+      document.getElementById('tripleCondoneDesc').innerHTML = `
+        <b>${victim.name}</b> ha condonado su compromiso 3 veces consecutivas.<br>
+        La ordenanza cortesana prescribe: <b>FONDO AL VASO OBLIGATORIO</b>.
+      `;
+      document.getElementById('condoneLeaderName').innerText = currentCondoneLeader.name;
+      document.getElementById('condoneVictimName').innerText = victim.name;
+
+      document.getElementById('tripleCondoneModal').classList.add('active');
+    }
+
+    function resolveTripleCondone(type) {
+      RococoAudio.playClick();
+      document.getElementById('tripleCondoneModal').classList.remove('active');
+
+      if (type === 'force') {
+        const drink = document.getElementById('condoneDrinkChoice').value;
+        showVisualNotification(`Sentencia: ${currentCondoneVictim.name} apura: ${drink}`, 2600);
+      } else {
+        showVisualNotification(`Soberanía: ${currentCondoneLeader.name} reclama la copa para sí.`, 2600);
+      }
+
+      nextTurn();
+    }
+
+    /* 8. MODAL DE JUICIO POR FALTAS REITERADAS */
     function openTripleFailModal(victim) {
       currentTripleVictim = victim;
 
@@ -1504,32 +1905,33 @@
 
       currentTripleLeader = sorted.find(p => p.id !== victim.id) || sorted[0];
 
-      document.getElementById('tripleFailDesc').innerHTML = `<b>${victim.name}</b> se ha rajado 3 veces consecutivas. La corte no tolera tanta cobardía: debe recibir un castigo ejemplar.`;
+      document.getElementById('tripleFailDesc').innerHTML = `<b>${victim.name}</b> ha incurrido en falta 3 veces seguidas. La asamblea no admite tal renuncia: debe satisfacer su pena.`;
       document.getElementById('leaderNameTag').innerText = currentTripleLeader.name;
 
       document.getElementById('tripleFailModal').classList.add('active');
     }
 
     function resolveTripleFail(type) {
+      RococoAudio.playClick();
       document.getElementById('tripleFailModal').classList.remove('active');
 
       if (type === 'leader') {
         const punishment = document.getElementById('leaderCustomPunishment').value;
-        showVisualNotification('⚖️', `${currentTripleVictim.name} acató el castigo de ${currentTripleLeader.name}: ${punishment}`, 2200);
+        showVisualNotification(`${currentTripleVictim.name} acata el dictamen: ${punishment}`, 2200);
       } else {
-        showVisualNotification('👑', `¡Honor Real! ${currentTripleVictim.name} no se arrodilló y pagó con Autocastigo Soberano (Doble Shot).`, 2200);
+        showVisualNotification(`Honor: ${currentTripleVictim.name} asume Doble Trago por expiación propia.`, 2200);
       }
 
       nextTurn();
     }
 
-    /* 8. MARCADOR EN TIEMPO REAL */
+    /* 9. MARCADOR EN TIEMPO REAL */
     function openScoresModal() {
       const list = document.getElementById('liveScoresList');
       list.innerHTML = '';
 
       if (players.length === 0) {
-        list.innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-muted);">No hay participantes activos aún.</div>`;
+        list.innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-muted); font-family:'Cinzel',serif;">No hay participantes inscritos aún.</div>`;
         document.getElementById('scoresModal').classList.add('active');
         return;
       }
@@ -1545,29 +1947,30 @@
         const isCurrentTurn = (players[currentPlayerIndex] && players[currentPlayerIndex].id === p.id);
         const row = document.createElement('div');
         row.style.background = isCurrentTurn ? '#FFF9E6' : 'var(--bg-cream)';
-        row.style.border = isCurrentTurn ? '2px solid var(--gold-primary)' : '1px solid var(--border-gilded)';
+        row.style.border = isCurrentTurn ? '1.5px solid var(--gold-primary)' : '1px solid var(--border-gilded)';
         row.style.borderRadius = '12px';
-        row.style.padding = '10px 14px';
+        row.style.padding = '9px 12px';
         row.style.display = 'flex';
         row.style.alignItems = 'center';
         row.style.justifyContent = 'space-between';
-        row.style.gap = '10px';
+        row.style.gap = '8px';
 
         row.innerHTML = `
-          <div style="display:flex; align-items:center; gap:10px;">
-            <span style="font-family:'Cinzel',serif; font-weight:900; color:var(--gold-dark); font-size:14px; min-width:22px;">#${idx + 1}</span>
-            <div style="width:36px; height:36px; border-radius:50%; overflow:hidden; border:1px solid var(--gold-primary); background:#fff;">${char.svg}</div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-family:'Cinzel',serif; font-weight:900; color:var(--gold-dark); font-size:12px; min-width:20px;">#${idx + 1}</span>
+            <div style="width:32px; height:32px; border-radius:50%; overflow:hidden; border:1px solid var(--gold-primary); background:#fff; flex-shrink:0;">${char.svg}</div>
             <div>
-              <div style="font-weight:700; font-size:14px; display:flex; align-items:center; gap:6px;">
-                ${p.name} ${isCurrentTurn ? '<span style="font-size:9px; background:var(--gold-primary); color:#fff; padding:2px 6px; border-radius:10px; font-weight:800;">TURNO</span>' : ''}
+              <div style="font-weight:700; font-size:13px; display:flex; align-items:center; gap:5px;">
+                ${p.name} ${isCurrentTurn ? '<span style="font-family:\'Cinzel\',serif; font-size:8px; background:var(--gold-primary); color:#fff; padding:1px 5px; border-radius:6px; font-weight:800;">TURNO</span>' : ''}
               </div>
-              <div style="font-size:11px; color:var(--text-muted);">${char.name}</div>
+              <div style="font-size:10px; color:var(--text-muted);">${char.name}</div>
             </div>
           </div>
-          <div style="display:flex; gap:6px; align-items:center; font-size:12px; font-weight:700;">
-            <span style="background:#F9F0FF; color:#9254DE; border:1px solid #D3ADF7; padding:4px 8px; border-radius:8px;" title="Estrellas">⭐ ${p.stars}</span>
-            <span style="background:var(--green-light); color:var(--green-success); border:1px solid #B7EB8F; padding:4px 8px; border-radius:8px;" title="Cumplidos">✅ ${p.wins}</span>
-            <span style="background:var(--crimson-light); color:var(--crimson); border:1px solid #FFA39E; padding:4px 8px; border-radius:8px;" title="Se rajó">🍺 ${p.fails}</span>
+          <div style="display:flex; gap:5px; align-items:center; font-size:10.5px; font-weight:700;">
+            <span style="background:#FFF9E6; color:var(--gold-dark); border:1px solid #F0D785; padding:3px 6px; border-radius:6px;" title="Laureles">Laureles: ${p.stars}</span>
+            <span style="background:var(--vert-light); color:var(--vert-celadon); border:1px solid var(--vert-border); padding:3px 6px; border-radius:6px;" title="Cumplidos">Aciertos: ${p.wins}</span>
+            <span style="background:var(--rose-light); color:var(--rose-pompadour); border:1px solid var(--rose-border); padding:3px 6px; border-radius:6px;" title="Faltas">Faltas: ${p.fails}</span>
+            <span style="background:var(--bleu-light); color:var(--bleu-celeste); border:1px solid var(--bleu-border); padding:3px 6px; border-radius:6px;" title="Deuda">Deuda: ${p.condonedStreak || 0}/3</span>
           </div>
         `;
         list.appendChild(row);
@@ -1580,7 +1983,7 @@
       document.getElementById('scoresModal').classList.remove('active');
     }
 
-    /* 9. MODAL DE REGLAS */
+    /* 10. MODAL DE REGLAMENTO */
     function openRulesModal() {
       document.getElementById('rulesModal').classList.add('active');
     }
@@ -1589,7 +1992,7 @@
       document.getElementById('rulesModal').classList.remove('active');
     }
 
-    /* 10. ROBO DE ESTRELLAS */
+    /* 11. EXPROPIACIÓN DE LAURELES */
     function openStealModal(stealer) {
       const modal = document.getElementById('stealModal');
       const list = document.getElementById('stealTargetList');
@@ -1599,24 +2002,25 @@
 
       if (victims.length === 0) {
         stealer.stars += 1;
-        showVisualNotification('👑', `🔥 ¡5 al hilo! Como nadie tiene estrellas, ${stealer.name} recibe una Estrella de Oro Real.`, 2200);
+        showVisualNotification(`Reconocimiento: Al no haber laureles ajenos, ${stealer.name} recibe 1 Laurel adicional.`, 2200);
         nextTurn();
         return;
       }
 
       victims.forEach(v => {
         const btn = document.createElement('button');
-        btn.className = 'btn-secondary';
-        btn.style.padding = '12px';
+        btn.className = 'btn-rococo-nav';
+        btn.style.padding = '11px';
         btn.style.textAlign = 'left';
         btn.style.display = 'flex';
         btn.style.justifyContent = 'space-between';
-        btn.innerHTML = `<span><strong>${v.name}</strong></span> <span>⭐ ${v.stars} estrellas</span>`;
+        btn.innerHTML = `<span><strong>${v.name}</strong></span> <span>${v.stars} Laureles</span>`;
         btn.onclick = () => {
+          RococoAudio.playClick();
           v.stars -= 1;
           stealer.stars += 1;
           modal.classList.remove('active');
-          showVisualNotification('⚔️', `¡Robo Real! ${stealer.name} le arrebató una estrella a ${v.name}.`, 2000);
+          showVisualNotification(`Expropiación: ${stealer.name} arrebata 1 laurel a ${v.name}.`, 2000);
           nextTurn();
         };
         list.appendChild(btn);
@@ -1625,7 +2029,7 @@
       modal.classList.add('active');
     }
 
-    /* 11. CORONACIÓN Y DECRETO */
+    /* 12. CORONACIÓN Y DECRETO */
     function promptEndGame() {
       if (players.length === 0) return;
       document.getElementById('confirmEndModal').classList.add('active');
@@ -1638,6 +2042,7 @@
     let crownedKing = null;
 
     function executeEndGame() {
+      RococoAudio.playClick();
       closeConfirmEndModal();
       isGameActive = false;
 
@@ -1652,12 +2057,12 @@
       courtList.innerHTML = '';
       judgmentDecisions = {};
 
-      document.getElementById('monarchNameTitle').innerText = `¡${crownedKing.name} es coronado Rey!`;
+      document.getElementById('monarchNameTitle').innerText = `${crownedKing.name} asciende al Trono`;
 
       const vassals = players.filter(p => p !== crownedKing);
 
       vassals.forEach(vas => {
-        judgmentDecisions[vas.id] = { type: 'punish', punishment: '1 Shot Fuerte' };
+        judgmentDecisions[vas.id] = { type: 'punish', punishment: '1 Trago Seco' };
 
         const char = CHARACTERS.find(c => c.id === vas.charId) || CHARACTERS[0];
         const card = document.createElement('div');
@@ -1667,24 +2072,24 @@
             <div class="subject-avatar">${char.svg}</div>
             <div>
               <div>${vas.name}</div>
-              <div style="font-size:11px; color:var(--text-muted); font-weight:normal;">⭐ ${vas.stars} estrellas | 🍺 ${vas.fails} tragos</div>
+              <div style="font-size:10px; color:var(--text-muted); font-weight:normal;">Laureles: ${vas.stars} | Faltas: ${vas.fails}</div>
             </div>
           </div>
           <div class="verdict-button-group">
             <button class="btn-verdict btn-punish active" id="btnPunish_${vas.id}" onclick="setJudgment('${vas.id}', 'punish')">
-              ⚔️ Castigar
+              Castigar
             </button>
             <button class="btn-verdict btn-pardon" id="btnPardon_${vas.id}" onclick="setJudgment('${vas.id}', 'pardon')">
-              🕊️ Indulto (Perdonar)
+              Indultar
             </button>
           </div>
           <div id="punishOptions_${vas.id}">
             <select class="punishment-selector" onchange="updatePunishmentCustom('${vas.id}', this.value)">
-              <option value="1 Shot de la Casa">1 Shot Fuerte</option>
-              <option value="2 Tragos Largos">2 Tragos Largos</option>
-              <option value="Fondo al Vaso">Fondo al Vaso</option>
-              <option value="Servir las bebidas de la mesa">Servir las bebidas la próxima ronda</option>
-              <option value="Reto vergonzoso a elección del Rey">Reto sorpresa a elección del Rey</option>
+              <option value="1 Trago Seco">1 Trago Seco</option>
+              <option value="2 Tragos Largos Seguidos">2 Tragos Largos Seguidos</option>
+              <option value="Fondo a la Copa">Fondo a la Copa</option>
+              <option value="Servir las copas en la próxima sesión">Servir las copas en la próxima sesión</option>
+              <option value="Penitencia a criterio Real">Penitencia a criterio Real</option>
             </select>
           </div>
         `;
@@ -1692,10 +2097,11 @@
       });
 
       document.getElementById('coronationModal').classList.add('active');
-      confetti({ particleCount: 120, spread: 80, origin: { y: 0.5 } });
+      confetti({ particleCount: 100, spread: 80, origin: { y: 0.5 } });
     }
 
     function setJudgment(vassalId, type) {
+      RococoAudio.playClick();
       const btnPunish = document.getElementById(`btnPunish_${vassalId}`);
       const btnPardon = document.getElementById(`btnPardon_${vassalId}`);
       const punishBox = document.getElementById(`punishOptions_${vassalId}`);
@@ -1720,6 +2126,7 @@
     }
 
     function proclaimRoyalDecree() {
+      RococoAudio.playSuccess();
       document.getElementById('coronationModal').classList.remove('active');
 
       const vassals = players.filter(p => p !== crownedKing);
@@ -1736,22 +2143,22 @@
 
       if (punishCount === vassals.length && vassals.length > 0) {
         royalTitle = `${crownedKing.name}, Rey de los Condenados`;
-        royalSummary = `Nadie escapó de tu ira imperial. Condenaste a toda la corte al castigo supremo sin mostrar piedad.`;
+        royalSummary = `Nadie escapó al rigor imperial. Condenaste a toda la asamblea al castigo supremo sin conceder tregua.`;
       } else if (pardonCount === vassals.length && vassals.length > 0) {
-        royalTitle = `${crownedKing.name}, El Santo y Absolvedor de Pecados`;
-        royalSummary = `La corte entera fue absuelta de sus faltas. Tu gracia infinita será recordada por siglos en las tabernas.`;
+        royalTitle = `${crownedKing.name}, El Santo y Absolvedor de Faltas`;
+        royalSummary = `La corte entera fue absuelta. Tu clemencia infinita será recordada por siglos en las veladas.`;
       } else if (pardonCount > 1 && punishCount > 0) {
         royalTitle = `${crownedKing.name}, Rey Misericordioso`;
-        royalSummary = `Perdonaste a varios cortesanos, administrando la clemencia con sabiduría regia.`;
+        royalSummary = `Perdonaste a varios cortesanos, administrando la clemencia con prudencia y sabiduría regia.`;
       } else if (pardonCount === 1) {
-        royalTitle = `${crownedKing.name}, El Tirano Seleccionador`;
-        royalSummary = `Solo un elegido conoció tu perdón, mientras descargaste el peso de la ley sobre todos los demás.`;
+        royalTitle = `${crownedKing.name}, El Tirano Selectivo`;
+        royalSummary = `Solo un elegido conoció tu indulgencia, mientras descargaste el peso del cetro sobre los demás.`;
       } else if (punishCount > pardonCount) {
-        royalTitle = `${crownedKing.name}, El Azote de Hígados y Señor del Hierro`;
-        royalSummary = `La balanza real se inclinó hacia el castigo. La corte teme tu reinado implacable.`;
+        royalTitle = `${crownedKing.name}, El Azote de Copas y Señor del Hierro`;
+        royalSummary = `La balanza real se inclinó hacia la severidad. La corte entera acata tu firmeza.`;
       } else {
         royalTitle = `${crownedKing.name}, El Justo y Señor del Equilibrio`;
-        royalSummary = `Castigaste con medida y perdonaste con templanza, guardando el orden del reino.`;
+        royalSummary = `Castigaste con medida y perdonaste con templanza, salvaguardando la concordia del reino.`;
       }
 
       document.getElementById('proclaimedEpithet').innerText = royalTitle;
@@ -1764,26 +2171,27 @@
         const dec = judgmentDecisions[vas.id];
         const row = document.createElement('div');
         row.style.background = '#FAF6EF';
-        row.style.padding = '8px 12px';
+        row.style.padding = '7px 11px';
         row.style.borderRadius = '8px';
-        row.style.fontSize = '13px';
+        row.style.fontSize = '12px';
         row.style.display = 'flex';
         row.style.justifyContent = 'space-between';
         row.style.alignItems = 'center';
 
         if (dec.type === 'pardon') {
-          row.innerHTML = `<span><strong>${vas.name}</strong></span> <span style="color:#2B8A3E; font-weight:700;">🕊️ Indulto Real (Perdonado)</span>`;
+          row.innerHTML = `<span><strong>${vas.name}</strong></span> <span style="color:var(--vert-celadon); font-family:'Cinzel',serif; font-weight:700;">Indulto Regio</span>`;
         } else {
-          row.innerHTML = `<span><strong>${vas.name}</strong></span> <span style="color:#C92A2A; font-weight:700;">🍺 ${dec.punishment}</span>`;
+          row.innerHTML = `<span><strong>${vas.name}</strong></span> <span style="color:var(--rose-pompadour); font-weight:700;">${dec.punishment}</span>`;
         }
         list.appendChild(row);
       });
 
       document.getElementById('decreeModal').classList.add('active');
-      confetti({ particleCount: 100, spread: 90, origin: { y: 0.6 } });
+      confetti({ particleCount: 90, spread: 80, origin: { y: 0.6 } });
     }
 
     function resetGameToNewParty() {
+      RococoAudio.playClick();
       document.getElementById('decreeModal').classList.remove('active');
       isGameActive = false;
       
@@ -1791,6 +2199,8 @@
         p.wins = 0;
         p.fails = 0;
         p.consecutiveFails = 0;
+        p.condonedStreak = 0;
+        p.totalCondoned = 0;
         p.streak = 0;
         p.stars = 0;
       });
@@ -1799,10 +2209,10 @@
       renderRegisteredPlayers();
       
       document.getElementById('registerModal').classList.add('active');
-      showVisualNotification('✨', '¡Nueva partida lista! Pueden sumar o cambiar jugadores.', 1600);
+      showVisualNotification('Nueva sesión preparada. Pueden incorporar participantes.', 1600);
     }
 
-    /* 12. INSCRIPCIONES */
+    /* 13. INSCRIPCIONES */
     function setupCharacterPicker() {
       const container = document.getElementById('characterPicker');
       container.innerHTML = '';
@@ -1811,6 +2221,7 @@
         const item = document.createElement('div');
         item.className = 'char-option' + (idx === 0 ? ' selected' : '');
         item.onclick = () => {
+          RococoAudio.playClick();
           document.querySelectorAll('.char-option').forEach(el => el.classList.remove('selected'));
           item.classList.add('selected');
           selectedCharId = c.id;
@@ -1830,10 +2241,11 @@
       if (!name) return;
 
       if (players.length >= 8) {
-        showVisualNotification('⚠️', 'Límite de 8 jugadores por mesa.', 1600);
+        showVisualNotification('Límite de 8 participantes por mesa.', 1600);
         return;
       }
 
+      RococoAudio.playClick();
       players.push({
         id: 'p_' + Date.now() + Math.random(),
         name: name,
@@ -1841,6 +2253,8 @@
         wins: 0,
         fails: 0,
         consecutiveFails: 0,
+        condonedStreak: 0,
+        totalCondoned: 0,
         streak: 0,
         stars: 0
       });
@@ -1873,7 +2287,7 @@
             <div class="badge-thumb">${char.svg}</div>
             <div>
               <strong>${p.name}</strong>
-              <div style="font-size:10px; color:var(--text-muted);">${char.name}</div>
+              <div style="font-size:9.5px; color:var(--text-muted);">${char.name}</div>
             </div>
           </div>
           <button class="btn-remove-player" onclick="removePlayer(${idx})">×</button>
@@ -1885,17 +2299,19 @@
     }
 
     function removePlayer(idx) {
+      RococoAudio.playClick();
       players.splice(idx, 1);
       renderRegisteredPlayers();
     }
 
     function startGame() {
       if (players.length < 2) return;
+      RococoAudio.playSuccess();
       document.getElementById('registerModal').classList.remove('active');
       currentPlayerIndex = 0;
       isGameActive = true;
       updateTurnUI();
-      showVisualNotification('🎲', '¡La partida ha comenzado! Que ruede la pirinola.', 1600);
+      showVisualNotification('La sesión ha comenzado. Ruede la pirinola.', 1600);
     }
 
     function openCatalogModal() {
@@ -1908,10 +2324,9 @@
         item.innerHTML = `
           <div class="catalog-item-header">
             <span>${idx + 1}. ${c.title}</span>
-            <span style="color:var(--gold-dark);">${c.cat}</span>
           </div>
           <div class="catalog-item-desc">${c.text}</div>
-          <div style="font-size:11px; color:var(--crimson); font-weight:600;">Castigo: ${c.penalty}</div>
+          <div style="font-size:10.5px; color:var(--rose-pompadour); font-weight:600;">Sanción: ${c.penalty}</div>
         `;
         list.appendChild(item);
       });
@@ -1923,19 +2338,20 @@
       document.getElementById('catalogModal').classList.remove('active');
     }
 
-    /* 13. CIERRE AL PRESIONAR AL VACÍO */
+    /* 14. CIERRE AL PRESIONAR AL VACÍO */
     function setupOutsideClickModals() {
       ['scoresModal', 'catalogModal', 'rulesModal'].forEach(modalId => {
         const modalEl = document.getElementById(modalId);
         modalEl.addEventListener('click', (e) => {
           if (e.target === modalEl) {
+            RococoAudio.playClick();
             modalEl.classList.remove('active');
           }
         });
       });
     }
 
-    /* 14. SISTEMA DE PROTECCIÓN CONTRA REFRESCADO INVOLUNTARIO */
+    /* 15. PROTECCIÓN CONTRA REFRESCADO INVOLUNTARIO */
     function setupRefreshProtection() {
       window.addEventListener('beforeunload', (e) => {
         if (isGameActive) {
@@ -1951,7 +2367,7 @@
 
           if (isCtrlR || isF5) {
             e.preventDefault();
-            showVisualNotification('⚠️', 'Partida en curso: debes terminar la partida antes de recargar.', 2000);
+            showVisualNotification('Sesión en curso: debe concluir la partida antes de recargar.', 2000);
           }
         }
       });
