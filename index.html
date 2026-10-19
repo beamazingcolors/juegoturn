@@ -546,7 +546,6 @@
       text-align: center;
     }
 
-    /* Listas para los modales de Créditos y Políticas */
     .modal-credits-list {
       list-style: none;
       display: flex;
@@ -1416,7 +1415,7 @@
       <div class="court-judgment-list" id="courtJudgmentList"></div>
 
       <button class="spin-button" style="margin-top: 13px;" onclick="proclaimRoyalDecree()">
-        PROCLAMAR DECRETO REGIO
+        PROCLAMAR DECRETO REAL
       </button>
     </div>
   </div>
@@ -1888,6 +1887,7 @@
     let currentCondoneLeader = null;
     let isGameActive = false;
 
+    // Configuración de Rondas
     let totalRounds = 10;
     let currentRound = 1;
 
@@ -2496,7 +2496,7 @@
         royalSummary = `La corte entera fue absuelta. Tu clemencia infinita será recordada por siglos en las veladas.`;
       } else if (pardonCount > 1 && punishCount > 0) {
         royalTitle = `${crownedKing.name}, Rey Misericordioso`;
-        royalSummary = `Perdonaste a varios cortesanos, administrando la clemencia con prudencia y sabiduría regia.`;
+        royalSummary = `Perdonaste a varios cortesanos, administrando la clemencia con prudencia y sabiduría real.`;
       } else if (pardonCount === 1) {
         royalTitle = `${crownedKing.name}, El Tirano Selectivo`;
         royalSummary = `Solo un elegido conoció tu indulgencia, mientras descargaste el peso del cetro sobre los demás.`;
