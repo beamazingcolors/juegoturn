@@ -50,7 +50,7 @@
       --carmin-light: #F6EAEC;
       --carmin-border: #D69CA3;
 
-      --shadow-rococo: 0 8px 24px rgba(70, 50, 20, 0.07);
+      --shadow-rococo: 0 6px 20px rgba(70, 50, 20, 0.06);
     }
 
     * {
@@ -79,66 +79,69 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 10px;
+      justify-content: center;
+      padding: 12px;
       overflow-x: hidden;
       overscroll-behavior-y: contain;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
 
+    /* CONTENEDOR PRINCIPAL: ARQUITECTURA DE ESCRITORIO */
     .app-container {
       width: 100%;
-      max-width: 900px;
+      max-width: 1240px;
       display: flex;
       flex-direction: column;
       gap: 12px;
       transform: translateZ(0);
     }
 
+    /* ENCABEZADO */
     header {
       background: var(--panel-bg);
       border: 1.5px solid var(--border-gilded);
-      border-radius: 16px;
-      padding: 10px 16px;
+      border-radius: 14px;
+      padding: 10px 22px;
       display: flex;
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       box-shadow: var(--shadow-rococo);
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
     }
 
     .brand-logo {
-      height: 52px;
+      height: 48px;
       width: auto;
-      max-width: 180px;
+      max-width: 170px;
       object-fit: contain;
       background: transparent;
-      filter: drop-shadow(0 3px 6px rgba(122, 91, 30, 0.25));
+      filter: drop-shadow(0 3px 6px rgba(122, 91, 30, 0.22));
       transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
     .brand-logo:hover {
-      transform: scale(1.03);
+      transform: scale(1.02);
     }
 
     .brand-title-fallback {
       font-family: 'Cinzel', serif;
       font-weight: 900;
       font-size: 22px;
-      letter-spacing: 2.5px;
+      letter-spacing: 2px;
       color: var(--gold-dark);
       text-transform: uppercase;
     }
 
     .header-actions {
       display: flex;
-      gap: 6px;
+      gap: 8px;
       flex-wrap: wrap;
       align-items: center;
     }
@@ -147,8 +150,8 @@
       background: var(--bg-cream);
       border: 1px solid var(--border-gilded);
       color: var(--text-dark);
-      padding: 7px 12px;
-      border-radius: 9px;
+      padding: 8px 14px;
+      border-radius: 8px;
       font-family: 'Cinzel', serif;
       font-size: 11px;
       font-weight: 700;
@@ -170,8 +173,8 @@
       background: var(--carmin-light);
       border: 1px solid var(--carmin-border);
       color: var(--carmin-velours);
-      padding: 7px 12px;
-      border-radius: 9px;
+      padding: 8px 14px;
+      border-radius: 8px;
       font-family: 'Cinzel', serif;
       font-size: 11px;
       font-weight: 700;
@@ -188,57 +191,18 @@
       background: #F0D5D8;
     }
 
-    @media (max-width: 640px) {
-      header {
-        flex-direction: column;
-        align-items: center;
-        padding: 10px 12px;
-        gap: 8px;
-      }
-      .brand {
-        justify-content: center;
-        width: 100%;
-      }
-      .brand-logo {
-        height: 60px;
-        max-width: 210px;
-      }
-      .header-actions {
-        width: 100%;
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        gap: 4px;
-      }
-      .btn-rococo-nav, .btn-rococo-danger {
-        padding: 8px 2px;
-        font-size: 10px;
-        letter-spacing: 0.2px;
-        text-align: center;
-      }
-    }
-
+    /* BARRA DE TURNO */
     .turn-bar {
       background: var(--panel-bg);
       border: 1.5px solid var(--border-gilded);
-      border-radius: 16px;
-      padding: 12px 16px;
+      border-radius: 14px;
+      padding: 10px 18px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
+      gap: 12px;
       box-shadow: var(--shadow-rococo);
-    }
-
-    @media (max-width: 640px) {
-      .turn-bar {
-        padding: 10px 12px;
-        gap: 8px;
-      }
-      .stats-pills {
-        width: 100%;
-        justify-content: center;
-      }
     }
 
     .active-player-info {
@@ -248,13 +212,13 @@
     }
 
     .player-avatar-frame {
-      width: 48px;
-      height: 48px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
       border: 2px solid var(--gold-primary);
       padding: 2px;
       background: #FFF;
-      box-shadow: 0 3px 8px rgba(197, 160, 89, 0.22);
+      box-shadow: 0 2px 6px rgba(197, 160, 89, 0.2);
       overflow: hidden;
       display: flex;
       align-items: center;
@@ -276,7 +240,7 @@
     }
 
     .player-role-tag {
-      font-size: 10.5px;
+      font-size: 10px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.8px;
@@ -291,16 +255,15 @@
     }
 
     .stat-pill {
-      padding: 5px 11px;
-      border-radius: 14px;
-      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 10.5px;
       font-weight: 700;
       letter-spacing: 0.5px;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       gap: 5px;
       text-transform: uppercase;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
     }
 
     .stat-round {
@@ -339,34 +302,31 @@
       border: 1px solid #F3CCA6;
     }
 
+    /* RETÍCULA DE JUEGO (ESCRITORIO: DISTRIBUCIÓN PARALELA EQUILIBRADA) */
     .gameplay-grid {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-    }
-
-    @media (min-width: 768px) {
-      .gameplay-grid {
-        grid-template-columns: 1.1fr 0.9fr;
-      }
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 16px;
+      align-items: stretch;
     }
 
     .stage-card {
       background: var(--panel-bg);
       border: 1.5px solid var(--border-gilded);
-      border-radius: 18px;
-      padding: 14px;
+      border-radius: 16px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: space-between;
       box-shadow: var(--shadow-rococo);
       transform: translateZ(0);
     }
 
     #pirinola-canvas-container {
       width: 100%;
-      height: 270px;
-      border-radius: 14px;
+      height: 340px;
+      border-radius: 12px;
       background: radial-gradient(circle at center, #FDF9F2 0%, #EFE7D8 100%);
       border: 1px solid var(--border-gilded);
       overflow: hidden;
@@ -389,17 +349,17 @@
     .spin-button {
       margin-top: 12px;
       width: 100%;
-      min-height: 50px;
+      min-height: 48px;
       background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
       color: #FFFFFF;
       font-family: 'Cinzel', serif;
       font-size: 14px;
       font-weight: 800;
       letter-spacing: 2px;
-      padding: 14px;
-      border-radius: 12px;
+      padding: 12px;
+      border-radius: 10px;
       border: 1px solid #E5C37A;
-      box-shadow: 0 4px 14px rgba(197, 160, 89, 0.35);
+      box-shadow: 0 4px 14px rgba(197, 160, 89, 0.32);
       cursor: pointer;
       transition: transform 0.12s ease, box-shadow 0.12s ease;
       will-change: transform;
@@ -407,7 +367,6 @@
 
     .spin-button:active:not(:disabled) {
       transform: scale(0.98);
-      box-shadow: 0 2px 8px rgba(197, 160, 89, 0.4);
     }
 
     .spin-button:disabled {
@@ -418,28 +377,28 @@
     .card-challenge {
       background: var(--panel-bg);
       border: 1.5px solid var(--border-gilded);
-      border-radius: 18px;
-      padding: 22px 20px;
+      border-radius: 16px;
+      padding: 24px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       box-shadow: var(--shadow-rococo);
-      min-height: 320px;
+      min-height: 400px;
       transform: translateZ(0);
     }
 
     .challenge-body {
-      margin: 8px 0 14px;
+      margin: auto 0;
       text-align: center;
     }
 
     .challenge-title {
       font-family: 'Cinzel', serif;
-      font-size: 20px;
+      font-size: 21px;
       font-weight: 800;
       color: var(--text-dark);
       margin-bottom: 12px;
-      line-height: 1.28;
+      line-height: 1.25;
       letter-spacing: 0.5px;
     }
 
@@ -450,9 +409,9 @@
       font-weight: 500;
     }
 
-    /* Caja de Cronómetro Integrado */
+    /* Cronómetro */
     .timer-container {
-      margin-top: 12px;
+      margin-top: 14px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -461,27 +420,27 @@
 
     .btn-timer {
       background: var(--gold-light);
-      border: 1.5px solid var(--gold-primary);
+      border: 1px solid var(--gold-primary);
       color: var(--gold-dark);
       font-family: 'Cinzel', serif;
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 800;
-      letter-spacing: 1px;
-      padding: 8px 16px;
-      border-radius: 10px;
+      letter-spacing: 0.8px;
+      padding: 7px 16px;
+      border-radius: 8px;
       cursor: pointer;
       text-transform: uppercase;
-      transition: all 0.15s ease;
+      transition: transform 0.1s ease;
     }
     .btn-timer:active {
-      transform: scale(0.97);
+      transform: scale(0.96);
     }
 
     .timer-display {
       font-family: 'Cinzel', serif;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 900;
-      letter-spacing: 1.5px;
+      letter-spacing: 1px;
       color: var(--carmin-velours);
       padding: 4px 12px;
       border-radius: 8px;
@@ -494,27 +453,28 @@
       background: var(--rose-light);
       border: 1px dashed var(--rose-border);
       border-radius: 10px;
-      padding: 11px;
+      padding: 10px 14px;
       margin-top: 14px;
       font-size: 12.5px;
       color: var(--rose-pompadour);
       font-weight: 600;
+      line-height: 1.4;
     }
 
     .decision-actions {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 8px;
-      margin-top: 12px;
+      margin-top: 14px;
     }
 
     .btn-resolve {
-      min-height: 46px;
+      min-height: 44px;
       padding: 10px;
-      border-radius: 10px;
+      border-radius: 8px;
       font-family: 'Cinzel', serif;
       font-weight: 700;
-      font-size: 12.5px;
+      font-size: 12px;
       letter-spacing: 0.5px;
       cursor: pointer;
       border: none;
@@ -538,15 +498,15 @@
 
     .btn-condone {
       grid-column: span 2;
-      min-height: 44px;
+      min-height: 40px;
       background: var(--bleu-light);
       color: var(--bleu-celeste);
-      border: 1.5px solid var(--bleu-border);
-      padding: 10px;
-      border-radius: 10px;
+      border: 1px solid var(--bleu-border);
+      padding: 8px;
+      border-radius: 8px;
       font-family: 'Cinzel', serif;
       font-weight: 700;
-      font-size: 12px;
+      font-size: 11.5px;
       letter-spacing: 0.5px;
       cursor: pointer;
       display: flex;
@@ -559,15 +519,16 @@
       background: #DCE7EB;
     }
 
+    /* PIE DE PÁGINA */
     .court-footer {
       background: var(--panel-bg);
       border: 1.5px solid var(--border-gilded);
-      border-radius: 16px;
-      padding: 14px 18px;
+      border-radius: 14px;
+      padding: 10px 18px;
       box-shadow: var(--shadow-rococo);
-      margin-top: 4px;
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
+      justify-content: space-between;
       align-items: center;
       gap: 10px;
     }
@@ -575,74 +536,303 @@
     .footer-actions {
       display: flex;
       gap: 8px;
-      justify-content: center;
-      flex-wrap: wrap;
     }
 
     .footer-bottom-bar {
       font-family: 'Cinzel', serif;
-      font-size: 10.5px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: var(--gold-dark);
-      text-align: center;
-    }
-
-    .modal-credits-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 9px;
-      padding: 0;
-      margin: 10px 0 16px;
-    }
-
-    .modal-credit-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: var(--bg-cream);
-      border: 1px solid var(--border-gilded);
-      border-radius: 10px;
-      padding: 10px 14px;
-      font-size: 13.5px;
-      color: var(--text-dark);
-    }
-
-    .modal-role-badge {
-      font-family: 'Cinzel', serif;
-      font-size: 10.5px;
-      font-weight: 800;
+      font-size: 10px;
       letter-spacing: 0.8px;
       text-transform: uppercase;
       color: var(--gold-dark);
-      background: #FFF9E6;
-      border: 1px solid #F0D785;
-      padding: 3px 8px;
-      border-radius: 6px;
+      text-align: right;
     }
 
-    .modal-legal-card {
-      background: var(--bg-cream);
-      border: 1px solid var(--border-gilded);
-      border-radius: 12px;
-      padding: 14px;
-      margin-bottom: 14px;
-      text-align: left;
-    }
-
-    .modal-legal-points {
-      margin: 8px 0 0;
-      padding-left: 18px;
+    /* MENSAJE EMERGENTE DESCARTABLE AL TOCAR */
+    .toast-banner {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translate3d(-50%, -120px, 0);
+      background: #FFFFFF;
+      border: 2px double var(--gold-primary);
+      border-radius: 20px;
+      padding: 10px 22px;
+      box-shadow: 0 8px 24px rgba(122, 91, 30, 0.28);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
       font-size: 12px;
-      line-height: 1.55;
+      letter-spacing: 0.5px;
+      color: var(--text-dark);
+      z-index: 1200;
+      transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      cursor: pointer;
+      pointer-events: auto;
+      will-change: transform;
+      max-width: 90vw;
+      text-align: center;
+    }
+
+    .toast-banner.show {
+      transform: translate3d(-50%, 0, 0);
+    }
+
+    /* ========================================================
+       ADAPTACIÓN ESPECÍFICA PARA MÓVIL (PANTALLA ÚNICA SIN SCROLL)
+       ======================================================== */
+    @media (max-width: 768px) {
+      body {
+        padding: 4px;
+        height: 100vh;
+        height: 100dvh;
+        overflow: hidden;
+      }
+
+      .app-container {
+        height: 100%;
+        max-height: 100dvh;
+        justify-content: space-between;
+        gap: 4px;
+      }
+
+      header {
+        padding: 4px 8px;
+        border-radius: 10px;
+        gap: 6px;
+      }
+
+      .brand-logo {
+        height: 34px;
+        max-width: 120px;
+      }
+
+      .header-actions {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 3px;
+        flex: 1;
+      }
+
+      .btn-rococo-nav, .btn-rococo-danger {
+        padding: 5px 2px;
+        font-size: 8.5px;
+        letter-spacing: 0.2px;
+        border-radius: 6px;
+      }
+
+      .turn-bar {
+        padding: 4px 8px;
+        border-radius: 10px;
+        gap: 4px;
+      }
+
+      .active-player-info {
+        gap: 8px;
+      }
+
+      .player-avatar-frame {
+        width: 30px;
+        height: 30px;
+      }
+
+      .player-details h3 {
+        font-size: 12.5px;
+      }
+
+      .player-role-tag {
+        font-size: 8px;
+      }
+
+      .stats-pills {
+        gap: 3px;
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .stat-pill {
+        font-size: 8px;
+        padding: 2px 4px;
+        border-radius: 4px;
+      }
+
+      .gameplay-grid {
+        grid-template-columns: 1fr;
+        gap: 4px;
+        flex: 1;
+        overflow: hidden;
+      }
+
+      .stage-card {
+        padding: 6px;
+        border-radius: 10px;
+      }
+
+      #pirinola-canvas-container {
+        height: 140px;
+      }
+
+      .spin-button {
+        min-height: 36px;
+        font-size: 11.5px;
+        padding: 6px;
+        margin-top: 4px;
+        letter-spacing: 1px;
+      }
+
+      .card-challenge {
+        min-height: auto;
+        padding: 8px 10px;
+        border-radius: 10px;
+        flex: 1;
+        justify-content: space-around;
+      }
+
+      .challenge-body {
+        margin: 2px 0;
+      }
+
+      .challenge-title {
+        font-size: 14px;
+        margin-bottom: 2px;
+        line-height: 1.15;
+      }
+
+      .challenge-text {
+        font-size: 12px;
+        line-height: 1.35;
+      }
+
+      .timer-container {
+        margin-top: 4px;
+        gap: 2px;
+      }
+
+      .btn-timer {
+        font-size: 9.5px;
+        padding: 4px 10px;
+      }
+
+      .timer-display {
+        font-size: 11.5px;
+        padding: 2px 8px;
+      }
+
+      .penalty-box {
+        padding: 4px 8px;
+        margin-top: 4px;
+        font-size: 10.5px;
+        line-height: 1.25;
+      }
+
+      .decision-actions {
+        gap: 4px;
+        margin-top: 4px;
+      }
+
+      .btn-resolve {
+        min-height: 34px;
+        font-size: 10.5px;
+        padding: 5px;
+      }
+
+      .btn-condone {
+        min-height: 30px;
+        font-size: 9.5px;
+        padding: 4px;
+      }
+
+      .court-footer {
+        padding: 4px 8px;
+        border-radius: 8px;
+        gap: 4px;
+      }
+
+      .footer-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4px;
+      }
+
+      .footer-actions .btn-rococo-nav {
+        padding: 4px;
+        font-size: 9px;
+      }
+
+      .footer-bottom-bar {
+        display: none;
+      }
+    }
+
+    /* MODAL DE RACHA */
+    .laurel-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(35, 27, 20, 0.72);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 1300;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      will-change: opacity;
+    }
+
+    .laurel-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .laurel-box {
+      background: #FFFFFF;
+      border: 2px double var(--gold-primary);
+      border-radius: 20px;
+      padding: 22px 28px;
+      text-align: center;
+      box-shadow: 0 16px 45px rgba(122, 91, 30, 0.35);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      max-width: 90vw;
+      transform: scale(0.85);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .laurel-overlay.active .laurel-box {
+      transform: scale(1);
+    }
+
+    .laurel-wreath-svg {
+      width: 76px;
+      height: 76px;
+      filter: drop-shadow(0 3px 8px rgba(197, 160, 89, 0.4));
+    }
+
+    .laurel-title {
+      font-family: 'Cinzel', serif;
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--gold-dark);
+      margin: 0;
+    }
+
+    .laurel-subtitle {
+      font-size: 12.5px;
       color: var(--text-muted);
+      line-height: 1.4;
+      margin: 0;
     }
 
-    .modal-legal-points li {
-      margin-bottom: 6px;
-    }
-
+    /* MODALES GENERALES */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -672,14 +862,14 @@
     .modal-box {
       background: #FFFFFF;
       border: 2px double var(--gold-primary);
-      border-radius: 20px;
+      border-radius: 16px;
       width: 100%;
       max-width: 520px;
       max-height: 86vh;
       max-height: 86dvh;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
-      padding: 22px;
+      padding: 18px;
       box-shadow: 0 16px 36px rgba(0,0,0,0.22);
       transform: translate3d(0, 8px, 0);
       transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -692,9 +882,9 @@
 
     .modal-title {
       font-family: 'Cinzel', serif;
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 800;
-      letter-spacing: 1px;
+      letter-spacing: 0.8px;
       color: var(--gold-dark);
       margin-bottom: 6px;
       text-align: center;
@@ -702,70 +892,40 @@
     }
 
     .modal-desc {
-      font-size: 13.5px;
+      font-size: 12.5px;
       color: var(--text-muted);
       text-align: center;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       line-height: 1.4;
-    }
-
-    .toast-banner {
-      position: fixed;
-      top: 14px;
-      left: 50%;
-      transform: translate3d(-50%, -100px, 0);
-      background: #FFFFFF;
-      border: 2px double var(--gold-primary);
-      border-radius: 24px;
-      padding: 9px 20px;
-      box-shadow: 0 6px 18px rgba(122, 91, 30, 0.25);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-family: 'Cinzel', serif;
-      font-weight: 700;
-      font-size: 12.5px;
-      letter-spacing: 0.5px;
-      color: var(--text-dark);
-      z-index: 1200;
-      transition: transform 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      pointer-events: none;
-      will-change: transform;
-      max-width: 90vw;
-      text-align: center;
-    }
-
-    .toast-banner.show {
-      transform: translate3d(-50%, 0, 0);
     }
 
     .confirm-actions {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
-      margin-top: 18px;
+      margin-top: 14px;
     }
 
     .rule-card {
       background: var(--bg-cream);
       border: 1px solid var(--border-gilded);
-      border-radius: 12px;
-      padding: 12px 14px;
-      margin-bottom: 9px;
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
     }
 
     .rule-card-header {
       font-family: 'Cinzel', serif;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 800;
-      letter-spacing: 0.8px;
+      letter-spacing: 0.6px;
       color: var(--gold-dark);
       text-transform: uppercase;
-      margin-bottom: 5px;
+      margin-bottom: 4px;
     }
 
     .rule-card-body {
-      font-size: 12.5px;
+      font-size: 11.5px;
       line-height: 1.45;
       color: #3D352E;
     }
@@ -775,38 +935,38 @@
     }
 
     .rounds-picker-container {
-      margin: 12px 0 16px;
+      margin: 8px 0 12px;
       text-align: left;
     }
 
     .rounds-label {
       font-family: 'Cinzel', serif;
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.8px;
+      letter-spacing: 0.6px;
       color: var(--gold-dark);
-      margin-bottom: 7px;
+      margin-bottom: 6px;
       display: block;
     }
 
     .rounds-options-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 6px;
+      gap: 5px;
     }
 
     .round-option-btn {
       background: var(--bg-cream);
       border: 1px solid var(--border-gilded);
       color: var(--text-dark);
-      padding: 9px 0;
-      border-radius: 10px;
+      padding: 7px 0;
+      border-radius: 8px;
       font-family: 'Cinzel', serif;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 800;
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: all 0.12s ease;
       text-align: center;
     }
 
@@ -814,20 +974,20 @@
       background: var(--gold-primary);
       color: #FFFFFF;
       border-color: var(--gold-dark);
-      box-shadow: 0 2px 8px rgba(122, 91, 30, 0.3);
+      box-shadow: 0 2px 6px rgba(122, 91, 30, 0.25);
     }
 
     .character-picker {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      margin: 12px 0;
+      gap: 6px;
+      margin: 10px 0;
     }
 
     .char-option {
       border: 1.5px solid var(--border-gilded);
-      border-radius: 12px;
-      padding: 8px 4px;
+      border-radius: 10px;
+      padding: 6px 3px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -846,10 +1006,10 @@
     }
 
     .char-avatar-mini {
-      width: 42px;
-      height: 42px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
-      margin-bottom: 5px;
+      margin-bottom: 4px;
       overflow: hidden;
       background: #FFF;
       display: flex;
@@ -860,7 +1020,7 @@
     .char-avatar-mini svg { width: 100%; height: 100%; }
 
     .char-label {
-      font-size: 9.5px;
+      font-size: 9px;
       font-weight: 700;
       text-align: center;
       color: var(--text-dark);
@@ -869,16 +1029,16 @@
 
     .player-input-row {
       display: flex;
-      gap: 8px;
-      margin-bottom: 10px;
+      gap: 6px;
+      margin-bottom: 8px;
     }
 
     .player-input {
       flex: 1;
-      padding: 10px 14px;
+      padding: 8px 12px;
       border: 1px solid var(--border-gilded);
-      border-radius: 10px;
-      font-size: 14px;
+      border-radius: 8px;
+      font-size: 13px;
       outline: none;
       font-family: inherit;
     }
@@ -886,11 +1046,11 @@
     .player-input:focus { border-color: var(--gold-primary); }
 
     .registered-players-list {
-      margin: 12px 0;
+      margin: 8px 0;
       display: flex;
       flex-direction: column;
-      gap: 7px;
-      max-height: 160px;
+      gap: 5px;
+      max-height: 140px;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
     }
@@ -900,20 +1060,20 @@
       align-items: center;
       justify-content: space-between;
       background: var(--bg-cream);
-      padding: 7px 11px;
-      border-radius: 10px;
+      padding: 6px 10px;
+      border-radius: 8px;
       border: 1px solid var(--border-gilded);
     }
 
     .badge-info {
       display: flex;
       align-items: center;
-      gap: 9px;
+      gap: 8px;
     }
 
     .badge-thumb {
-      width: 30px;
-      height: 30px;
+      width: 26px;
+      height: 26px;
       border-radius: 50%;
       overflow: hidden;
     }
@@ -924,16 +1084,16 @@
       color: var(--rose-pompadour);
       font-weight: bold;
       cursor: pointer;
-      font-size: 18px;
-      padding: 4px 8px;
+      font-size: 16px;
+      padding: 2px 6px;
     }
 
     .catalog-item {
-      padding: 9px 12px;
+      padding: 8px 10px;
       border-bottom: 1px solid var(--border-gilded);
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 3px;
     }
     .catalog-item:last-child { border-bottom: none; }
     .catalog-item-header {
@@ -941,58 +1101,58 @@
       justify-content: space-between;
       font-family: 'Cinzel', serif;
       font-weight: 700;
-      font-size: 12px;
-      letter-spacing: 0.5px;
+      font-size: 11.5px;
+      letter-spacing: 0.4px;
     }
     .catalog-item-desc {
-      font-size: 12px;
+      font-size: 11.5px;
       color: var(--text-muted);
     }
 
     .coronation-header {
       text-align: center;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     .royal-title-display {
       font-family: 'Cinzel', serif;
-      font-size: 19px;
+      font-size: 17.5px;
       font-weight: 900;
       color: var(--carmin-velours);
       text-transform: uppercase;
       letter-spacing: 0.8px;
-      margin-top: 5px;
-      line-height: 1.25;
+      margin-top: 4px;
+      line-height: 1.22;
     }
 
     .court-judgment-list {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin: 14px 0;
+      gap: 8px;
+      margin: 10px 0;
     }
 
     .subject-judgment-card {
       background: var(--bg-cream);
       border: 1px solid var(--border-gilded);
-      border-radius: 12px;
-      padding: 11px;
+      border-radius: 10px;
+      padding: 9px;
       display: flex;
       flex-direction: column;
-      gap: 7px;
+      gap: 6px;
     }
 
     .subject-info {
       display: flex;
       align-items: center;
-      gap: 9px;
+      gap: 8px;
       font-weight: 700;
-      font-size: 13.5px;
+      font-size: 12.5px;
     }
 
     .subject-avatar {
-      width: 34px;
-      height: 34px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
       overflow: hidden;
       flex-shrink: 0;
@@ -1001,17 +1161,17 @@
     .verdict-button-group {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 7px;
+      gap: 6px;
     }
 
     .btn-verdict {
-      min-height: 40px;
-      padding: 7px 9px;
-      border-radius: 8px;
+      min-height: 36px;
+      padding: 6px 8px;
+      border-radius: 6px;
       font-family: 'Cinzel', serif;
-      font-size: 11.5px;
+      font-size: 10.5px;
       font-weight: 700;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.4px;
       border: 1.5px solid transparent;
       cursor: pointer;
       display: flex;
@@ -1043,10 +1203,10 @@
     }
 
     .punishment-selector {
-      margin-top: 4px;
+      margin-top: 3px;
       width: 100%;
-      padding: 7px 10px;
-      font-size: 12px;
+      padding: 6px 8px;
+      font-size: 11.5px;
       border: 1px solid var(--border-gilded);
       border-radius: 6px;
       background: #FFF;
@@ -1056,11 +1216,66 @@
     .decree-box {
       background: radial-gradient(circle at center, #FFFDF9 0%, #F5ECE0 100%);
       border: 2px double var(--gold-primary);
-      border-radius: 14px;
-      padding: 14px;
-      margin: 14px 0;
+      border-radius: 12px;
+      padding: 12px;
+      margin: 12px 0;
       text-align: center;
-      box-shadow: 0 4px 14px rgba(197, 160, 89, 0.18);
+      box-shadow: 0 3px 12px rgba(197, 160, 89, 0.16);
+    }
+
+    .modal-credits-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 0;
+      margin: 8px 0 14px;
+    }
+
+    .modal-credit-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-cream);
+      border: 1px solid var(--border-gilded);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 12.5px;
+      color: var(--text-dark);
+    }
+
+    .modal-role-badge {
+      font-family: 'Cinzel', serif;
+      font-size: 9.5px;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: var(--gold-dark);
+      background: #FFF9E6;
+      border: 1px solid #F0D785;
+      padding: 2px 6px;
+      border-radius: 5px;
+    }
+
+    .modal-legal-card {
+      background: var(--bg-cream);
+      border: 1px solid var(--border-gilded);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 12px;
+      text-align: left;
+    }
+
+    .modal-legal-points {
+      margin: 6px 0 0;
+      padding-left: 16px;
+      font-size: 11.5px;
+      line-height: 1.5;
+      color: var(--text-muted);
+    }
+
+    .modal-legal-points li {
+      margin-bottom: 5px;
     }
   </style>
 </head>
@@ -1069,15 +1284,47 @@
   <!-- Reproductor de música de fondo (Flow Music) -->
   <audio id="bgMusic" src="musica.mp3" loop preload="auto"></audio>
 
-  <!-- Cartela de Notificación Cortesana -->
-  <div class="toast-banner" id="toastBanner">
+  <!-- Cartela de Notificación Cortesana (Clic o tap para descartar de inmediato) -->
+  <div class="toast-banner" id="toastBanner" onclick="dismissToast()">
     <span id="toastText">Decreto de la Corte</span>
+  </div>
+
+  <!-- POPUP / ANIMACIÓN DEL LAUREL EN RACHA -->
+  <div class="laurel-overlay" id="laurelStreakModal" onclick="closeLaurelStreak()">
+    <div class="laurel-box">
+      <svg class="laurel-wreath-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M50 12 C44 22, 28 32, 24 50 C20 66, 30 82, 46 88 C40 82, 36 74, 38 64 C40 52, 46 38, 50 12 Z" fill="url(#goldGradL)"/>
+        <path d="M50 12 C56 22, 72 32, 76 50 C80 66, 70 82, 54 88 C60 82, 64 74, 62 64 C60 52, 54 38, 50 12 Z" fill="url(#goldGradR)"/>
+        <ellipse cx="25" cy="40" rx="6" ry="3.5" transform="rotate(-30 25 40)" fill="url(#goldGradL)"/>
+        <ellipse cx="22" cy="54" rx="6" ry="3.5" transform="rotate(-15 22 54)" fill="url(#goldGradL)"/>
+        <ellipse cx="27" cy="68" rx="6" ry="3.5" transform="rotate(15 27 68)" fill="url(#goldGradL)"/>
+        <ellipse cx="75" cy="40" rx="6" ry="3.5" transform="rotate(30 75 40)" fill="url(#goldGradR)"/>
+        <ellipse cx="78" cy="54" rx="6" ry="3.5" transform="rotate(15 78 54)" fill="url(#goldGradR)"/>
+        <ellipse cx="73" cy="68" rx="6" ry="3.5" transform="rotate(-15 73 68)" fill="url(#goldGradR)"/>
+        <circle cx="50" cy="88" r="5" fill="#7A5B1E"/>
+        <circle cx="50" cy="88" r="3" fill="#E5C37A"/>
+        <defs>
+          <linearGradient id="goldGradL" x1="20" y1="12" x2="50" y2="88" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#F4EBD9"/>
+            <stop offset="0.5" stop-color="#C5A059"/>
+            <stop offset="1" stop-color="#7A5B1E"/>
+          </linearGradient>
+          <linearGradient id="goldGradR" x1="80" y1="12" x2="50" y2="88" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#F4EBD9"/>
+            <stop offset="0.5" stop-color="#C5A059"/>
+            <stop offset="1" stop-color="#7A5B1E"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <h3 class="laurel-title" id="laurelModalTitle">Laurel de Honor</h3>
+      <p class="laurel-subtitle" id="laurelModalSubtitle">Racha de victorias consecutivas alcanzada.</p>
+    </div>
   </div>
 
   <div class="app-container">
     <header>
       <div class="brand">
-        <!-- Logo PNG oficial con fondo transparente -->
+        <!-- Logo PNG con fondo transparente -->
         <img
           src="turn-logo.png"
           alt="Turn"
@@ -1114,7 +1361,7 @@
         <div class="stat-pill stat-fail" title="Veces que se negó o bebió">
           Faltas: <b id="activeFails">0</b>
         </div>
-        <div class="stat-pill stat-debt" title="Racha de tragos condonados (a los 3 consecutivos: Fondo Supremo)">
+        <div class="stat-pill stat-debt" title="Racha de tragos condonados">
           Deuda: <b id="activeDebt">0/3</b>
         </div>
         <div class="stat-pill stat-stars" title="Laureles de mérito">
@@ -1168,7 +1415,7 @@
       </div>
     </div>
 
-    <!-- PIE DE PÁGINA LIMPIO CON BOTONES A POPUPS -->
+    <!-- PIE DE PÁGINA COMPACTO -->
     <footer class="court-footer">
       <div class="footer-actions">
         <button class="btn-rococo-nav" onclick="RococoAudio.playClick('do'); openCreditsModal()">Créditos</button>
@@ -1201,23 +1448,21 @@
         </li>
       </ul>
 
-      <button class="btn-rococo-nav" style="width: 100%; padding: 11px; background: var(--gold-light); border-color: var(--gold-primary);" onclick="RococoAudio.playClick('do'); closeCreditsModal()">Cerrar Créditos</button>
+      <button class="btn-rococo-nav" style="width: 100%; padding: 10px; background: var(--gold-light); border-color: var(--gold-primary);" onclick="RococoAudio.playClick('do'); closeCreditsModal()">Cerrar Créditos</button>
     </div>
   </div>
 
   <!-- MODAL POPUP: POLÍTICAS Y RESTRICCIONES -->
   <div class="modal-overlay" id="policiesModal">
     <div class="modal-box">
-      <div style="display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 6px;">
-        <h2 class="modal-title" style="margin-bottom: 0;">Políticas y Restricciones</h2>
-      </div>
+      <h2 class="modal-title">Políticas y Restricciones</h2>
       <p class="modal-desc">Ordenanza de seguridad y consumo responsable:</p>
 
       <div class="modal-legal-card">
-        <div style="display: inline-block; font-family: 'Cinzel', serif; font-size: 10.5px; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; color: var(--carmin-velours); background: var(--carmin-light); border: 1px solid var(--carmin-border); padding: 3px 8px; border-radius: 6px; margin-bottom: 8px;">
+        <div style="display: inline-block; font-family: 'Cinzel', serif; font-size: 10px; font-weight: 800; letter-spacing: 0.6px; text-transform: uppercase; color: var(--carmin-velours); background: var(--carmin-light); border: 1px solid var(--carmin-border); padding: 2px 7px; border-radius: 5px; margin-bottom: 6px;">
           +18 Años Exclusivo
         </div>
-        <p class="footer-legal-text" style="font-size: 12.5px; margin-bottom: 8px;">
+        <p class="footer-legal-text" style="font-size: 12px; margin-bottom: 6px;">
           Este juego ha sido concebido única y exclusivamente como entretenimiento de convivencia social para <strong>mayores de 18 años</strong>.
         </p>
         <ul class="modal-legal-points">
@@ -1227,7 +1472,7 @@
         </ul>
       </div>
 
-      <button class="btn-rococo-nav" style="width: 100%; padding: 11px; background: var(--gold-light); border-color: var(--gold-primary);" onclick="RococoAudio.playClick('mi'); closePoliciesModal()">Comprendido y Aceptado</button>
+      <button class="btn-rococo-nav" style="width: 100%; padding: 10px; background: var(--gold-light); border-color: var(--gold-primary);" onclick="RococoAudio.playClick('mi'); closePoliciesModal()">Comprendido y Aceptado</button>
     </div>
   </div>
 
@@ -1237,7 +1482,7 @@
       <h2 class="modal-title">Reglamento Oficial</h2>
       <p class="modal-desc">Ordenanzas y leyes que rigen a la corte:</p>
       
-      <div style="max-height: 400px; overflow-y: auto; padding-right: 2px; margin-bottom: 14px;">
+      <div style="max-height: 380px; overflow-y: auto; padding-right: 2px; margin-bottom: 12px;">
         <div class="rule-card">
           <div class="rule-card-header">1. Duración y Rondas</div>
           <div class="rule-card-body">
@@ -1265,7 +1510,7 @@
         <div class="rule-card">
           <div class="rule-card-header">4. Laureles y Expropiación de Mérito</div>
           <div class="rule-card-body">
-            • <b>3 Victorias Consecutivas:</b> Otorgan 1 Laurel de Oro de inmediato.<br>
+            • <b>3 Victorias Consecutivas:</b> Otorgan 1 Laurel de Oro de inmediato y despliegan la Corona de Honor.<br>
             • <b>5 Victorias Consecutivas:</b> Activan el derecho de <b>Expropiación Soberana</b>, permitiendo arrebatar 1 laurel a cualquier rival.<br>
             • En caso de cometer falta o condonar, la racha consecutiva vuelve a cero.
           </div>
@@ -1288,7 +1533,7 @@
         </div>
       </div>
 
-      <button class="btn-rococo-nav" style="width: 100%; padding: 11px; background: var(--gold-light); border-color: var(--gold-primary);" onclick="RococoAudio.playClick('mi'); closeRulesModal()">Comprendido</button>
+      <button class="btn-rococo-nav" style="width: 100%; padding: 10px; background: var(--gold-light); border-color: var(--gold-primary);" onclick="RococoAudio.playClick('mi'); closeRulesModal()">Comprendido</button>
     </div>
   </div>
 
@@ -1300,33 +1545,33 @@
         El participante ha condonado su compromiso 3 veces consecutivas. La deuda cortesana exige su cobro inmediato.
       </p>
 
-      <div style="background: var(--bg-cream); border: 1.5px solid var(--gold-primary); border-radius: 14px; padding: 14px; margin-bottom: 12px; text-align: left;">
-        <h4 style="font-family:'Cinzel',serif; font-size: 12px; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 5px;">
+      <div style="background: var(--bg-cream); border: 1.5px solid var(--gold-primary); border-radius: 12px; padding: 12px; margin-bottom: 10px; text-align: left;">
+        <h4 style="font-family:'Cinzel',serif; font-size: 11.5px; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 4px;">
           Resolución del Líder (<span id="condoneLeaderName" style="color:var(--text-dark); font-weight:800;">Líder</span>)
         </h4>
-        <p style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 9px;">
+        <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">
           Por hallarte en el primer escaño del reino, dictas el destino de esta copa:
         </p>
 
-        <div style="margin-bottom: 12px;">
-          <label style="font-size: 10.5px; font-weight: 700; text-transform: uppercase; color: var(--text-dark); display: block; margin-bottom: 4px;">
+        <div style="margin-bottom: 10px;">
+          <label style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-dark); display: block; margin-bottom: 3px;">
             Prescribir brebaje para <span id="condoneVictimName">el deudor</span>:
           </label>
-          <select id="condoneDrinkChoice" class="punishment-selector" style="margin-bottom: 8px;">
+          <select id="condoneDrinkChoice" class="punishment-selector" style="margin-bottom: 6px;">
             <option value="Fondo de copa completa sin reposo">Fondo de copa completa sin reposo</option>
             <option value="Mezcla de los licores presentes en la mesa">Mezcla de licores presentes en la mesa</option>
             <option value="Doble trago seco de aguardiente">Doble trago seco de aguardiente</option>
             <option value="Brebaje ceremonial preparado por el Líder">Brebaje ceremonial del Líder</option>
           </select>
-          <button class="btn-resolve btn-fail" style="width: 100%; padding: 10px;" onclick="resolveTripleCondone('force')">
+          <button class="btn-resolve btn-fail" style="width: 100%; padding: 8px;" onclick="resolveTripleCondone('force')">
             Exigir Fondo Inmediato
           </button>
         </div>
 
-        <div style="text-align: center; font-family:'Cinzel',serif; font-size: 10px; font-weight: 800; color: var(--gold-dark); margin-bottom: 10px;">— O BIEN —</div>
+        <div style="text-align: center; font-family:'Cinzel',serif; font-size: 9.5px; font-weight: 800; color: var(--gold-dark); margin-bottom: 8px;">— O BIEN —</div>
 
         <div>
-          <button class="btn-resolve" style="width: 100%; padding: 10px; background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark)); color: white;" onclick="resolveTripleCondone('leader_drink')">
+          <button class="btn-resolve" style="width: 100%; padding: 8px; background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark)); color: white;" onclick="resolveTripleCondone('leader_drink')">
             El Líder Asume la Copa por Soberanía
           </button>
         </div>
@@ -1339,8 +1584,8 @@
     <div class="modal-box">
       <h2 class="modal-title">Escalafón de Honor</h2>
       <p class="modal-desc">Registro ministerial de puntos, laureles y deudas:</p>
-      <div id="liveScoresList" style="display: flex; flex-direction: column; gap: 7px; max-height: 380px; overflow-y: auto; margin-bottom: 14px;"></div>
-      <button class="btn-rococo-nav" style="width: 100%; padding: 11px;" onclick="RococoAudio.playClick('do'); closeScoresModal()">Regresar al Certamen</button>
+      <div id="liveScoresList" style="display: flex; flex-direction: column; gap: 6px; max-height: 380px; overflow-y: auto; margin-bottom: 12px;"></div>
+      <button class="btn-rococo-nav" style="width: 100%; padding: 10px;" onclick="RococoAudio.playClick('do'); closeScoresModal()">Regresar al Certamen</button>
     </div>
   </div>
 
@@ -1348,12 +1593,12 @@
   <div class="modal-overlay" id="registerModal">
     <div class="modal-box">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-        <h2 class="modal-title" style="margin-bottom: 0; text-align: left; font-size: 17px;">Inscripción de la Corte</h2>
-        <button type="button" class="btn-rococo-nav" style="font-size: 10.5px; padding: 5px 9px;" onclick="RococoAudio.playClick('mi'); openRulesModal()">
+        <h2 class="modal-title" style="margin-bottom: 0; text-align: left; font-size: 16px;">Inscripción de la Corte</h2>
+        <button type="button" class="btn-rococo-nav" style="font-size: 10px; padding: 4px 8px;" onclick="RococoAudio.playClick('mi'); openRulesModal()">
           Reglamento
         </button>
       </div>
-      <p class="modal-desc" style="text-align: left; margin-bottom: 12px;">Definan la cantidad de rondas, inscriban comensales y comiencen la velada.</p>
+      <p class="modal-desc" style="text-align: left; margin-bottom: 10px;">Definan la cantidad de rondas, inscriban comensales y comiencen la velada.</p>
 
       <div class="rounds-picker-container">
         <span class="rounds-label">Duración del Certamen (Rondas):</span>
@@ -1375,7 +1620,7 @@
 
       <div class="registered-players-list" id="registeredPlayersList"></div>
 
-      <button class="spin-button" style="margin-top: 8px;" id="btnStartGame" onclick="startGame()" disabled>
+      <button class="spin-button" style="margin-top: 6px;" id="btnStartGame" onclick="startGame()" disabled>
         COMENZAR LA SESIÓN (MÍN. 2)
       </button>
     </div>
@@ -1387,8 +1632,8 @@
       <h2 class="modal-title">¿Clausurar la Sesión?</h2>
       <p class="modal-desc">Se suspenderán los giros y se procederá a la proclamación del Soberano de la mesa.</p>
       <div class="confirm-actions">
-        <button class="btn-rococo-nav" style="padding: 11px;" onclick="RococoAudio.playClick('arpeggio'); closeConfirmEndModal()">Permanecer</button>
-        <button class="btn-resolve btn-fail" style="padding: 11px;" onclick="executeEndGame()">Proceder al Juicio</button>
+        <button class="btn-rococo-nav" style="padding: 10px;" onclick="RococoAudio.playClick('arpeggio'); closeConfirmEndModal()">Permanecer</button>
+        <button class="btn-resolve btn-fail" style="padding: 10px;" onclick="executeEndGame()">Proceder al Juicio</button>
       </div>
     </div>
   </div>
@@ -1398,8 +1643,8 @@
     <div class="modal-box">
       <h2 class="modal-title">Compendio de Pruebas</h2>
       <p class="modal-desc">Todas las opciones y comodines que depara la suerte:</p>
-      <div id="catalogList" style="max-height: 380px; overflow-y: auto; margin-bottom: 14px;"></div>
-      <button class="btn-rococo-nav" style="width: 100%; padding: 11px;" onclick="RococoAudio.playClick('re'); closeCatalogModal()">Cerrar</button>
+      <div id="catalogList" style="max-height: 380px; overflow-y: auto; margin-bottom: 12px;"></div>
+      <button class="btn-rococo-nav" style="width: 100%; padding: 10px;" onclick="RococoAudio.playClick('re'); closeCatalogModal()">Cerrar</button>
     </div>
   </div>
 
@@ -1408,7 +1653,7 @@
     <div class="modal-box">
       <h2 class="modal-title">Prerrogativa Soberana</h2>
       <p class="modal-desc">Has encadenado 5 pruebas victoriosas. Tienes el derecho de arrebatar 1 laurel a quien elijas:</p>
-      <div id="stealTargetList" style="display: flex; flex-direction: column; gap: 7px; margin-bottom: 14px;"></div>
+      <div id="stealTargetList" style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px;"></div>
     </div>
   </div>
 
@@ -1420,36 +1665,36 @@
         El participante acumula 3 faltas consecutivas. La asamblea exige satisfacción inmediata.
       </p>
 
-      <div style="background: var(--bg-cream); border: 1px solid var(--border-gilded); border-radius: 12px; padding: 13px; margin-bottom: 12px; text-align: left;">
-        <h4 style="font-family:'Cinzel',serif; font-size: 11.5px; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 5px;">
+      <div style="background: var(--bg-cream); border: 1px solid var(--border-gilded); border-radius: 10px; padding: 11px; margin-bottom: 10px; text-align: left;">
+        <h4 style="font-family:'Cinzel',serif; font-size: 11px; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 4px;">
           Dictamen del Primer Rango (<span id="leaderNameTag" style="color:var(--text-dark);">Líder</span>)
         </h4>
-        <p style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 8px;">
+        <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px;">
           El primer rango del escalafón determina la penitencia:
         </p>
-        <select id="leaderCustomPunishment" class="punishment-selector" style="margin-bottom: 9px;">
+        <select id="leaderCustomPunishment" class="punishment-selector" style="margin-bottom: 8px;">
           <option value="Apurar 1 trago seco sin vacilación">Apurar 1 trago seco sin vacilación</option>
           <option value="Ingerir 2 tragos largos seguidos">Ingerir 2 tragos largos seguidos</option>
           <option value="Confesar un secreto íntimo ante la corte">Confesar un secreto íntimo ante la corte</option>
           <option value="Ofrecer un baile bufo durante 15 segundos">Ofrecer un baile bufo durante 15 segundos</option>
           <option value="Servir las copas de todos en la siguiente ronda">Servir las copas de todos en la siguiente ronda</option>
         </select>
-        <button class="btn-resolve btn-fail" style="width: 100%; padding: 10px;" onclick="resolveTripleFail('leader')">
+        <button class="btn-resolve btn-fail" style="width: 100%; padding: 8px;" onclick="resolveTripleFail('leader')">
           Acatar Voluntad
         </button>
       </div>
 
-      <div style="background: #FFF9E6; border: 1px solid var(--gold-primary); border-radius: 12px; padding: 13px; text-align: left;">
-        <h4 style="font-family:'Cinzel',serif; font-size: 11.5px; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 5px;">
+      <div style="background: #FFF9E6; border: 1px solid var(--gold-primary); border-radius: 10px; padding: 11px; text-align: left;">
+        <h4 style="font-family:'Cinzel',serif; font-size: 11px; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 4px;">
           Expiación Soberana
         </h4>
-        <p style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 5px;">
+        <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">
           Para evitar someterse a la orden del líder, el infractor puede reclamar honor propio:
         </p>
-        <div style="font-size: 11.5px; font-weight: 700; color: var(--carmin-velours); margin-bottom: 9px;">
+        <div style="font-size: 11px; font-weight: 700; color: var(--carmin-velours); margin-bottom: 8px;">
           Doble trago directo para lavar su estatus cortesano.
         </div>
-        <button class="btn-resolve" style="width: 100%; padding: 10px; background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark)); color: white;" onclick="resolveTripleFail('sovereign')">
+        <button class="btn-resolve" style="width: 100%; padding: 8px; background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark)); color: white;" onclick="resolveTripleFail('sovereign')">
           Reclamar Expiación Propia
         </button>
       </div>
@@ -1461,12 +1706,12 @@
     <div class="modal-box">
       <div class="coronation-header">
         <h2 class="modal-title" id="monarchNameTitle">Proclamación Real</h2>
-        <p class="modal-desc" style="margin-bottom: 7px;">Por méritos de laureles y constancia, asciendes al Trono. Resuelve el destino de cada vasallo:</p>
+        <p class="modal-desc" style="margin-bottom: 6px;">Por méritos de laureles y constancia, asciendes al Trono. Resuelve el destino de cada vasallo:</p>
       </div>
 
       <div class="court-judgment-list" id="courtJudgmentList"></div>
 
-      <button class="spin-button" style="margin-top: 13px;" onclick="proclaimRoyalDecree()">
+      <button class="spin-button" style="margin-top: 10px;" onclick="proclaimRoyalDecree()">
         PROCLAMAR DECRETO REAL
       </button>
     </div>
@@ -1475,16 +1720,16 @@
   <!-- MODAL: DECRETO FINAL -->
   <div class="modal-overlay" id="decreeModal">
     <div class="modal-box" style="text-align: center;">
-      <h2 class="modal-title" style="font-size: 21px;">Acta Final de la Corte</h2>
+      <h2 class="modal-title" style="font-size: 19px;">Acta Final de la Corte</h2>
       
       <div class="decree-box">
-        <div style="font-family:'Cinzel',serif; font-size: 10px; letter-spacing: 1.5px; color: var(--gold-dark); text-transform: uppercase; font-weight: 800;">Por la gracia de la Pirinola se proclama a:</div>
+        <div style="font-family:'Cinzel',serif; font-size: 9.5px; letter-spacing: 1.2px; color: var(--gold-dark); text-transform: uppercase; font-weight: 800;">Por la gracia de la Pirinola se proclama a:</div>
         <div class="royal-title-display" id="proclaimedEpithet">Rey de los Condenados</div>
-        <p id="proclamationSummaryText" style="font-size: 12.5px; color: #5C4730; margin-top: 7px; line-height: 1.4;"></p>
+        <p id="proclamationSummaryText" style="font-size: 11.5px; color: #5C4730; margin-top: 6px; line-height: 1.4;"></p>
       </div>
 
-      <h4 style="text-align: left; font-family:'Cinzel',serif; font-size: 11px; text-transform: uppercase; color: var(--gold-dark); margin: 10px 0 5px; letter-spacing: 0.5px;">Sentencias Dictadas:</h4>
-      <div id="finalDecreeList" style="display: flex; flex-direction: column; gap: 5px; max-height: 170px; overflow-y: auto; margin-bottom: 13px;"></div>
+      <h4 style="text-align: left; font-family:'Cinzel',serif; font-size: 10.5px; text-transform: uppercase; color: var(--gold-dark); margin: 8px 0 4px; letter-spacing: 0.4px;">Sentencias Dictadas:</h4>
+      <div id="finalDecreeList" style="display: flex; flex-direction: column; gap: 4px; max-height: 160px; overflow-y: auto; margin-bottom: 10px;"></div>
 
       <button class="spin-button" style="background: linear-gradient(135deg, var(--vert-celadon), #25402D);" onclick="resetGameToNewParty()">
         INICIAR NUEVA SESIÓN
@@ -1694,6 +1939,7 @@
       }
     };
 
+    /* Control de Música de Fondo (Flow Music) */
     let isMusicPlaying = false;
     function toggleBackgroundMusic() {
       const musicEl = document.getElementById('bgMusic');
@@ -1716,12 +1962,23 @@
             btn.innerText = 'Música: On';
             btn.style.borderColor = 'var(--gold-primary)';
           }).catch(() => {
-            showVisualNotification('Coloca musica.mp3 junto a turn.html para oír tu tema.', 2400);
+            showVisualNotification('Coloca musica.mp3 junto a turn.html para oír tu tema.', 3800);
           });
         }
       }
     }
 
+    /* DESCARTAR NOTIFICACIÓN EMERGENTE AL TOCARLA */
+    function dismissToast() {
+      const banner = document.getElementById('toastBanner');
+      banner.classList.remove('show');
+      if (toastTimeout) {
+        clearTimeout(toastTimeout);
+        toastTimeout = null;
+      }
+    }
+
+    /* Modales de Créditos y Políticas */
     function openCreditsModal() {
       document.getElementById('creditsModal').classList.add('active');
     }
@@ -1734,6 +1991,26 @@
     }
     function closePoliciesModal() {
       document.getElementById('policiesModal').classList.remove('active');
+    }
+
+    /* Animación del Laurel en Racha */
+    let laurelAutoCloseTimeout = null;
+    function showLaurelStreak(title, subtitle) {
+      document.getElementById('laurelModalTitle').innerText = title;
+      document.getElementById('laurelModalSubtitle').innerText = subtitle;
+      document.getElementById('laurelStreakModal').classList.add('active');
+
+      confetti({ particleCount: 45, spread: 60, origin: { y: 0.5 } });
+
+      if (laurelAutoCloseTimeout) clearTimeout(laurelAutoCloseTimeout);
+      laurelAutoCloseTimeout = setTimeout(() => {
+        closeLaurelStreak();
+      }, 2400);
+    }
+
+    function closeLaurelStreak() {
+      if (laurelAutoCloseTimeout) clearTimeout(laurelAutoCloseTimeout);
+      document.getElementById('laurelStreakModal').classList.remove('active');
     }
 
     /* 1. PERSONAJES ILUSTRADOS */
@@ -1898,7 +2175,7 @@
       { title: 'Efecto Cascada', text: 'Tú empiezas a beber y todos en la mesa te siguen. Nadie puede bajar su vaso hasta que pares.', penalty: 'El que baje el vaso antes, trago de castigo.' },
       { title: 'El Trago Amigo', text: 'Elige un cómplice: cada vez que tú bebas en las próximas 2 rondas, él bebe contigo.', penalty: 'El cómplice no puede rechazar la alianza.' },
       { title: 'Amnistía Falsa', text: 'Te perdonamos esta ronda, pero en tu siguiente tiro, cualquier castigo valdrá el doble.', penalty: 'Peligro aplazado: la deuda se cobra al doble.' },
-      { title: 'El Silencio Real', text: 'Durante las próximas dos rondas completas, no puedes pronunciar las palabra. Quien te escuche te sanciona.', penalty: '1 trago por cada infracción cometida.' },
+      { title: 'El Silencio Real', text: 'Durante las próximas dos rondas completas, no puedes pronunciar palabra. Quien te escuche te sanciona.', penalty: '1 trago por cada infracción cometida.' },
       { title: 'El Guardián del Vaso', text: 'Nadie en la mesa puede tocar su propio vaso a menos que tú toques el tuyo primero. Dura hasta tu siguiente turno.', penalty: 'El distraído que beba sin permiso toma 2 tragos.' },
       { title: 'Prohibido Apuntar', text: 'Queda estrictamente prohibido señalar con el dedo a cualquier persona de la mesa durante una ronda entera. Solo se permite con el codo o mentón.', penalty: '1 trago cada vez que se señale con el dedo.' },
       { title: 'La Foto Incómoda', text: 'Muestra la última foto que tomaste con la cámara de tu celular a la mesa.', penalty: 'Si escondes el teléfono: bebes 2 tragos.' },
@@ -1921,7 +2198,7 @@
       { title: 'El Testamento Inmediato', text: 'Di a qué persona de esta mesa le confiarías tu celular desbloqueado durante todo un fin de semana sin borrar nada.', penalty: 'Si dices que a nadie: 1 trago de desconfianza.' },
       { title: 'El Descarte', text: 'Señala a quién de los presentes invitarías a un viaje descontrolado y a quién llevarías a una cena familiar formal.', penalty: 'Si cambias de tema: 2 tragos.' },
       { title: 'Karaoke a Capela', text: 'Canta el coro de una rola popular o de despecho durante 10 segundos sin música de fondo.', penalty: 'Si te da pena: 2 tragos.', timer: 10 },
-      { title: 'El Piropo Ñero', text: 'Dile el piropo más exagerado, dramático y cursi a la persona que tengas enfrente.', penalty: 'Si te da risa antes de terminarlo: bebés 1 trago.' },
+      { title: 'El Piropo Ñero', text: 'Dile el piropo más exagerado, dramático y cursi a la persona que tengas enfrente.', penalty: 'Si te da risa antes de terminarlo: bebes 1 trago.' },
       { title: 'Imitación de la Mesa', text: 'Imita un gesto, tono o manía de alguien que esté jugando aquí hasta que los demás adivinen.', penalty: 'Si tardan más de 20 segundos o te rajas: 2 tragos.', timer: 20 },
       { title: 'El Rey de la Estatua', text: 'Quédate inmóvil durante 15 segundos mientras los demás intentan hacerte reír sin tocarte.', penalty: 'Si te mueves o sonríes: 2 tragos.', timer: 15 },
       { title: 'Audio Peligroso', text: 'Manda una nota de voz al tercer chat reciente diciendo: "Tenemos que hablar de algo urgente" y bloquea la pantalla.', penalty: 'Si te acobardas: te tomas 3 tragos.' },
@@ -1929,7 +2206,7 @@
       { title: 'Cumplido con Veneno', text: 'Dile un cumplido honesto pero ñero a quien esté sentado frente a ti.', penalty: 'Si no se te ocurre nada: 1 trago.' },
       { title: 'Cinco Segundos', text: 'Tienes 5 segundos cronometrados por la mesa para nombrar 3 pretextos comunes para terminar una relación.', penalty: 'Si no logras decir las 3 a tiempo: 2 tragos.', timer: 5 },
       { title: 'Melón y Melames', text: 'Di una frase ingeniosa en doble sentido de Melón y Melames. El de tu derecha tiene 4 segundos para responder con otra similar.', penalty: 'El primero que se quede mudo bebe 1 trago.' },
-      { title: 'Bailarín Inmóvil', text: 'Te paras y bailar cualquier ritmo; en el instante en que alguien de la mesa dé una palmada, debes congelarte 10 segundos.', penalty: 'Si pierdes el equilibrio o te ríes: 1 trago.', timer: 10 },
+      { title: 'Bailarín Inmóvil', text: 'Te paras y bailas cualquier ritmo; en el instante en que alguien de la mesa dé una palmada, debes congelarte 10 segundos.', penalty: 'Si pierdes el equilibrio o te ríes: 1 trago.', timer: 10 },
       { title: 'Cultura General: Marcas', text: 'Marcas de licor o cerveza en círculo. El que repita o tarde más de 3 segundos, pierde.', penalty: 'El perdedor de la ronda bebe 1 trago.' },
       { title: 'Agilidad Mental: Excusas', text: 'Excusas típicas para cancelar un plan a última hora. El que dude o repita, pierde.', penalty: 'El que se quede mudo bebe 1 trago.' },
       { title: 'Yo Nunca Nunca', text: 'Di un "Yo nunca nunca" comprometedor. Todos los que sí lo hayan hecho tienen que tomar.', penalty: 'Si nadie en la mesa bebe, bebes tú solo por aburrido.' },
@@ -1954,11 +2231,9 @@
     let currentCondoneLeader = null;
     let isGameActive = false;
 
-    // Configuración de Rondas
     let totalRounds = 10;
     let currentRound = 1;
 
-    // Control del Cronómetro
     let timerInterval = null;
     let timerSecondsRemaining = 0;
 
@@ -1978,7 +2253,7 @@
     function init3D() {
       const container = document.getElementById('pirinola-canvas-container');
       const width = container.clientWidth || 300;
-      const height = container.clientHeight || 270;
+      const height = container.clientHeight || 200;
 
       scene = new THREE.Scene();
       camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
@@ -2134,7 +2409,7 @@
 
     /* 5. CARTELA DE ANUNCIOS */
     let toastTimeout = null;
-    function showVisualNotification(text, duration = 1600) {
+    function showVisualNotification(text, duration = 3800) {
       const banner = document.getElementById('toastBanner');
       document.getElementById('toastText').innerText = text;
 
@@ -2143,6 +2418,15 @@
       toastTimeout = setTimeout(() => {
         banner.classList.remove('show');
       }, duration);
+    }
+
+    function dismissToast() {
+      const banner = document.getElementById('toastBanner');
+      banner.classList.remove('show');
+      if (toastTimeout) {
+        clearTimeout(toastTimeout);
+        toastTimeout = null;
+      }
     }
 
     /* 6. GIRO Y EVALUACIÓN DE TURNOS */
@@ -2176,7 +2460,6 @@
       document.getElementById('challengeDesc').innerText = currentChallenge.text;
       document.getElementById('challengePenalty').innerText = 'Sanción: ' + currentChallenge.penalty;
 
-      // Configuración de cronómetro si el reto lo incluye
       const timerBox = document.getElementById('timerBox');
       if (currentChallenge.timer && currentChallenge.timer > 0) {
         timerSecondsRemaining = currentChallenge.timer;
@@ -2208,7 +2491,7 @@
         if (timerSecondsRemaining <= 0) {
           clearInterval(timerInterval);
           RococoAudio.playFail();
-          display.innerText = '¡Tiempo expirado!';
+          display.innerText = 'Tiempo expirado';
         }
       }, 1000);
     }
@@ -2236,11 +2519,15 @@
 
         if (player.streak % 3 === 0) {
           player.stars += 1;
-          showVisualNotification(`Meritorio: ${player.name} alcanza 3 aciertos y recibe un Laurel de Honor.`, 2000);
+          showLaurelStreak('Laurel de Honor Concedido', `${player.name} alcanza ${player.streak} victorias consecutivas.`);
+          showVisualNotification(`Meritorio: ${player.name} alcanza ${player.streak} aciertos y recibe un Laurel de Honor.`, 3800);
         }
 
         if (player.streak >= 5 && player.streak % 5 === 0) {
-          openStealModal(player);
+          showLaurelStreak('Expropiación Concedida', `Racha de ${player.streak} aciertos: tienes derecho a reclamar un laurel ajeno.`);
+          setTimeout(() => {
+            openStealModal(player);
+          }, 1400);
           return;
         }
 
@@ -2252,7 +2539,7 @@
         player.streak = 0;
         player.condonedStreak = 0;
         player.consecutiveFails = (player.consecutiveFails || 0) + 1;
-        showVisualNotification(`${player.name} incurre en falta. Corresponde beber.`, 1600);
+        showVisualNotification(`${player.name} incurre en falta. Corresponde beber.`, 3800);
 
         if (player.consecutiveFails >= 3) {
           player.consecutiveFails = 0;
@@ -2274,7 +2561,7 @@
           openTripleCondoneModal(player);
           return;
         } else {
-          showVisualNotification(`${player.name} condona su compromiso (${player.condonedStreak}/3 en deuda).`, 1800);
+          showVisualNotification(`${player.name} condona su compromiso (${player.condonedStreak}/3 en deuda).`, 3800);
         }
 
         nextTurn();
@@ -2287,7 +2574,7 @@
       if (nextIndex === 0) {
         currentRound++;
         if (currentRound > totalRounds) {
-          showVisualNotification('¡La última ronda ha concluido! Proclamemos al Soberano.', 2400);
+          showVisualNotification('La última ronda ha concluido. Proclamemos al Soberano.', 3800);
           setTimeout(() => {
             executeEndGame();
           }, 800);
@@ -2349,9 +2636,9 @@
 
       if (type === 'force') {
         const drink = document.getElementById('condoneDrinkChoice').value;
-        showVisualNotification(`Sentencia: ${currentCondoneVictim.name} apura: ${drink}`, 2600);
+        showVisualNotification(`Sentencia: ${currentCondoneVictim.name} apura: ${drink}`, 3800);
       } else {
-        showVisualNotification(`Soberanía: ${currentCondoneLeader.name} reclama la copa para sí.`, 2600);
+        showVisualNotification(`Soberanía: ${currentCondoneLeader.name} reclama la copa para sí.`, 3800);
       }
 
       nextTurn();
@@ -2381,9 +2668,9 @@
 
       if (type === 'leader') {
         const punishment = document.getElementById('leaderCustomPunishment').value;
-        showVisualNotification(`${currentTripleVictim.name} acata el dictamen: ${punishment}`, 2200);
+        showVisualNotification(`${currentTripleVictim.name} acata el dictamen: ${punishment}`, 3800);
       } else {
-        showVisualNotification(`Honor: ${currentTripleVictim.name} asume Doble Trago por expiación propia.`, 2200);
+        showVisualNotification(`Honor: ${currentTripleVictim.name} asume Doble Trago por expiación propia.`, 3800);
       }
 
       nextTurn();
@@ -2412,29 +2699,29 @@
         const row = document.createElement('div');
         row.style.background = isCurrentTurn ? '#FFF9E6' : 'var(--bg-cream)';
         row.style.border = isCurrentTurn ? '1.5px solid var(--gold-primary)' : '1px solid var(--border-gilded)';
-        row.style.borderRadius = '12px';
-        row.style.padding = '9px 12px';
+        row.style.borderRadius = '8px';
+        row.style.padding = '8px 10px';
         row.style.display = 'flex';
         row.style.alignItems = 'center';
         row.style.justifyContent = 'space-between';
-        row.style.gap = '8px';
+        row.style.gap = '6px';
 
         row.innerHTML = `
           <div style="display:flex; align-items:center; gap:8px;">
-            <span style="font-family:'Cinzel',serif; font-weight:900; color:var(--gold-dark); font-size:12px; min-width:20px;">#${idx + 1}</span>
-            <div style="width:32px; height:32px; border-radius:50%; overflow:hidden; border:1px solid var(--gold-primary); background:#fff; flex-shrink:0;">${char.svg}</div>
+            <span style="font-family:'Cinzel',serif; font-weight:900; color:var(--gold-dark); font-size:11.5px; min-width:18px;">#${idx + 1}</span>
+            <div style="width:28px; height:28px; border-radius:50%; overflow:hidden; border:1px solid var(--gold-primary); background:#fff; flex-shrink:0;">${char.svg}</div>
             <div>
-              <div style="font-weight:700; font-size:13px; display:flex; align-items:center; gap:5px;">
-                ${p.name} ${isCurrentTurn ? '<span style="font-family:\'Cinzel\',serif; font-size:8px; background:var(--gold-primary); color:#fff; padding:1px 5px; border-radius:6px; font-weight:800;">TURNO</span>' : ''}
+              <div style="font-weight:700; font-size:12px; display:flex; align-items:center; gap:4px;">
+                ${p.name} ${isCurrentTurn ? '<span style="font-family:\'Cinzel\',serif; font-size:7.5px; background:var(--gold-primary); color:#fff; padding:1px 4px; border-radius:4px; font-weight:800;">TURNO</span>' : ''}
               </div>
-              <div style="font-size:10px; color:var(--text-muted);">${char.name}</div>
+              <div style="font-size:9.5px; color:var(--text-muted);">${char.name}</div>
             </div>
           </div>
-          <div style="display:flex; gap:5px; align-items:center; font-size:10.5px; font-weight:700;">
-            <span style="background:#FFF9E6; color:var(--gold-dark); border:1px solid #F0D785; padding:3px 6px; border-radius:6px;" title="Laureles">Laureles: ${p.stars}</span>
-            <span style="background:var(--vert-light); color:var(--vert-celadon); border:1px solid var(--vert-border); padding:3px 6px; border-radius:6px;" title="Cumplidos">Aciertos: ${p.wins}</span>
-            <span style="background:var(--rose-light); color:var(--rose-pompadour); border:1px solid var(--rose-border); padding:3px 6px; border-radius:6px;" title="Faltas">Faltas: ${p.fails}</span>
-            <span style="background:var(--bleu-light); color:var(--bleu-celeste); border:1px solid var(--bleu-border); padding:3px 6px; border-radius:6px;" title="Deuda">Deuda: ${p.condonedStreak || 0}/3</span>
+          <div style="display:flex; gap:4px; align-items:center; font-size:9.5px; font-weight:700;">
+            <span style="background:#FFF9E6; color:var(--gold-dark); border:1px solid #F0D785; padding:2px 5px; border-radius:4px;" title="Laureles">Laureles: ${p.stars}</span>
+            <span style="background:var(--vert-light); color:var(--vert-celadon); border:1px solid var(--vert-border); padding:2px 5px; border-radius:4px;" title="Cumplidos">Aciertos: ${p.wins}</span>
+            <span style="background:var(--rose-light); color:var(--rose-pompadour); border:1px solid var(--rose-border); padding:2px 5px; border-radius:4px;" title="Faltas">Faltas: ${p.fails}</span>
+            <span style="background:var(--bleu-light); color:var(--bleu-celeste); border:1px solid var(--bleu-border); padding:2px 5px; border-radius:4px;" title="Deuda">Deuda: ${p.condonedStreak || 0}/3</span>
           </div>
         `;
         list.appendChild(row);
@@ -2466,7 +2753,7 @@
 
       if (victims.length === 0) {
         stealer.stars += 1;
-        showVisualNotification(`Reconocimiento: Al no haber laureles ajenos, ${stealer.name} recibe 1 Laurel adicional.`, 2200);
+        showVisualNotification(`Reconocimiento: Al no haber laureles ajenos, ${stealer.name} recibe 1 Laurel adicional.`, 3800);
         nextTurn();
         return;
       }
@@ -2474,7 +2761,7 @@
       victims.forEach(v => {
         const btn = document.createElement('button');
         btn.className = 'btn-rococo-nav';
-        btn.style.padding = '11px';
+        btn.style.padding = '10px';
         btn.style.textAlign = 'left';
         btn.style.display = 'flex';
         btn.style.justifyContent = 'space-between';
@@ -2484,7 +2771,7 @@
           v.stars -= 1;
           stealer.stars += 1;
           modal.classList.remove('active');
-          showVisualNotification(`Expropiación: ${stealer.name} arrebata 1 laurel a ${v.name}.`, 2000);
+          showVisualNotification(`Expropiación: ${stealer.name} arrebata 1 laurel a ${v.name}.`, 3800);
           nextTurn();
         };
         list.appendChild(btn);
@@ -2506,6 +2793,7 @@
     let crownedKing = null;
 
     function executeEndGame() {
+      stopChallengeTimer();
       RococoAudio.playClick('do');
       closeConfirmEndModal();
       isGameActive = false;
@@ -2536,7 +2824,7 @@
             <div class="subject-avatar">${char.svg}</div>
             <div>
               <div>${vas.name}</div>
-              <div style="font-size:10px; color:var(--text-muted); font-weight:normal;">Laureles: ${vas.stars} | Faltas: ${vas.fails}</div>
+              <div style="font-size:9.5px; color:var(--text-muted); font-weight:normal;">Laureles: ${vas.stars} | Faltas: ${vas.fails}</div>
             </div>
           </div>
           <div class="verdict-button-group">
@@ -2635,9 +2923,9 @@
         const dec = judgmentDecisions[vas.id];
         const row = document.createElement('div');
         row.style.background = '#FAF6EF';
-        row.style.padding = '7px 11px';
-        row.style.borderRadius = '8px';
-        row.style.fontSize = '12px';
+        row.style.padding = '6px 10px';
+        row.style.borderRadius = '6px';
+        row.style.fontSize = '11.5px';
         row.style.display = 'flex';
         row.style.justifyContent = 'space-between';
         row.style.alignItems = 'center';
@@ -2655,6 +2943,7 @@
     }
 
     function resetGameToNewParty() {
+      stopChallengeTimer();
       RococoAudio.playClick('do');
       document.getElementById('decreeModal').classList.remove('active');
       isGameActive = false;
@@ -2674,7 +2963,7 @@
       renderRegisteredPlayers();
       
       document.getElementById('registerModal').classList.add('active');
-      showVisualNotification('Nueva sesión preparada. Pueden incorporar participantes.', 1600);
+      showVisualNotification('Nueva sesión preparada. Pueden incorporar participantes.', 3800);
     }
 
     /* 13. INSCRIPCIONES */
@@ -2706,7 +2995,7 @@
       if (!name) return;
 
       if (players.length >= 8) {
-        showVisualNotification('Límite de 8 participantes por mesa.', 1600);
+        showVisualNotification('Límite de 8 participantes por mesa.', 3800);
         return;
       }
 
@@ -2752,7 +3041,7 @@
             <div class="badge-thumb">${char.svg}</div>
             <div>
               <strong>${p.name}</strong>
-              <div style="font-size:9.5px; color:var(--text-muted);">${char.name}</div>
+              <div style="font-size:9px; color:var(--text-muted);">${char.name}</div>
             </div>
           </div>
           <button class="btn-remove-player" onclick="removePlayer(${idx})">×</button>
@@ -2791,7 +3080,7 @@
       currentRound = 1;
       isGameActive = true;
       updateTurnUI();
-      showVisualNotification('La sesión ha comenzado. Ruede la pirinola.', 1600);
+      showVisualNotification('La sesión ha comenzado. Ruede la pirinola.', 3800);
     }
 
     function openCatalogModal() {
@@ -2806,7 +3095,7 @@
             <span>${idx + 1}. ${c.title}</span>
           </div>
           <div class="catalog-item-desc">${c.text}</div>
-          <div style="font-size:10.5px; color:var(--rose-pompadour); font-weight:600;">Sanción: ${c.penalty}</div>
+          <div style="font-size:10px; color:var(--rose-pompadour); font-weight:600;">Sanción: ${c.penalty}</div>
         `;
         list.appendChild(item);
       });
@@ -2820,7 +3109,7 @@
 
     /* 14. CIERRE AL PRESIONAR AL VACÍO */
     function setupOutsideClickModals() {
-      ['scoresModal', 'catalogModal', 'rulesModal', 'creditsModal', 'policiesModal'].forEach(modalId => {
+      ['scoresModal', 'catalogModal', 'rulesModal', 'creditsModal', 'policiesModal', 'laurelStreakModal'].forEach(modalId => {
         const modalEl = document.getElementById(modalId);
         if (modalEl) {
           modalEl.addEventListener('click', (e) => {
@@ -2849,7 +3138,7 @@
 
           if (isCtrlR || isF5) {
             e.preventDefault();
-            showVisualNotification('Sesión en curso: debe concluir la partida antes de recargar.', 2000);
+            showVisualNotification('Sesión en curso: debe concluir la partida antes de recargar.', 3800);
           }
         }
       });
