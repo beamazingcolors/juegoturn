@@ -123,6 +123,9 @@
       filter: drop-shadow(0 3px 6px rgba(122, 91, 30, 0.25));
       transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
+    .brand-logo:hover {
+      transform: scale(1.03);
+    }
 
     .brand-title-fallback {
       font-family: 'Cinzel', serif;
@@ -426,7 +429,7 @@
     }
 
     .challenge-body {
-      margin: 8px 0 16px;
+      margin: 8px 0 14px;
       text-align: center;
     }
 
@@ -445,6 +448,46 @@
       line-height: 1.55;
       color: #3B332B;
       font-weight: 500;
+    }
+
+    /* Caja de Cronómetro Integrado */
+    .timer-container {
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-timer {
+      background: var(--gold-light);
+      border: 1.5px solid var(--gold-primary);
+      color: var(--gold-dark);
+      font-family: 'Cinzel', serif;
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      padding: 8px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.15s ease;
+    }
+    .btn-timer:active {
+      transform: scale(0.97);
+    }
+
+    .timer-display {
+      font-family: 'Cinzel', serif;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      color: var(--carmin-velours);
+      padding: 4px 12px;
+      border-radius: 8px;
+      background: var(--carmin-light);
+      border: 1px solid var(--carmin-border);
+      display: none;
     }
 
     .penalty-box {
@@ -516,7 +559,6 @@
       background: #DCE7EB;
     }
 
-    /* PIE DE PÁGINA ROCOCÓ LIMPIO CON BOTONES */
     .court-footer {
       background: var(--panel-bg);
       border: 1.5px solid var(--border-gilded);
@@ -1045,7 +1087,6 @@
         <span id="brandFallback" class="brand-title-fallback" style="display:none;">Turn</span>
       </div>
       <div class="header-actions">
-        <!-- Botones con notas y acordes de clavicordio -->
         <button class="btn-rococo-nav" id="btnToggleMusic" onclick="toggleBackgroundMusic()">Música</button>
         <button class="btn-rococo-nav" onclick="RococoAudio.playClick('do'); openScoresModal()">Marcador</button>
         <button class="btn-rococo-nav" onclick="RococoAudio.playClick('mi'); openRulesModal()">Reglamento</button>
@@ -1097,6 +1138,17 @@
         <div class="challenge-body">
           <h2 class="challenge-title" id="challengeTitle">¿Quién inicia el certamen?</h2>
           <p class="challenge-text" id="challengeDesc">Hagan rodar la pirinola para dar comienzo a la contienda cortesana.</p>
+          
+          <!-- Bloque de Cronómetro Integrado -->
+          <div class="timer-container" id="timerBox" style="display: none;">
+            <button type="button" class="btn-timer" id="btnStartTimer" onclick="startChallengeTimer()">
+              Iniciar Cronómetro (<span id="timerDurationLabel">0</span>s)
+            </button>
+            <div class="timer-display" id="timerDisplay">
+              Tiempo: <span id="timerSecondsLeft">0</span>s
+            </div>
+          </div>
+
           <div class="penalty-box" id="challengePenalty">
             Sanción: Si vacilas o te niegas al reto, habrás de apurar tu copa.
           </div>
@@ -1196,7 +1248,7 @@
         <div class="rule-card">
           <div class="rule-card-header">2. Dinámica de Turno</div>
           <div class="rule-card-body">
-            Cada comensal acciona el giro de la pirinola en su turno. Al cesar su inercia, se revela el desafío o comodín. La asamblea resuelve si la prueba fue <b>Superada</b>, si hubo <b>Falta</b> o si el comensal decide <b>Condonar</b>.
+            Cada comensal acciona el giro de la pirinola en su turno. Al cesar su inercia, se revela el desafío o comodín. La asamblea resuelve si la prueba fue <b>Superada</b>, si hubo <b>Falta</b> o si el comensal decide <b>Condonar</b>. Si el reto cuenta con cronómetro, este debe iniciarse antes de resolver.
           </div>
         </div>
 
@@ -1642,7 +1694,6 @@
       }
     };
 
-    /* Control de Música de Fondo (Flow Music) */
     let isMusicPlaying = false;
     function toggleBackgroundMusic() {
       const musicEl = document.getElementById('bgMusic');
@@ -1671,7 +1722,6 @@
       }
     }
 
-    /* Modales de Créditos y Políticas */
     function openCreditsModal() {
       document.getElementById('creditsModal').classList.add('active');
     }
@@ -1838,7 +1888,7 @@
       }
     ];
 
-    /* 2. CATÁLOGO DE RETOS Y SANCIONES */
+    /* 2. CATÁLOGO EXACTO DE LOS 49 RETOS CON CRONÓMETROS */
     const CHALLENGES = [
       { title: 'Indulto de la Suerte', text: 'Te salvaste por pura suerte: nadie bebe de tu parte esta ronda y respiras en paz.', penalty: 'Descanso total. No hay castigo.' },
       { title: 'El Francotirador', text: 'Apunta sin temblar la mano: escoge a quien quieras de la mesa y dale un trago directo.', penalty: 'Si dudas más de 5 segundos, te lo tomas tú.' },
@@ -1846,32 +1896,49 @@
       { title: 'Salud General', text: 'Salud por el reino: todos en la mesa le dan un trago a su bebida, menos tú.', penalty: 'Fondo para el que se quede mirando.' },
       { title: 'El Espejo Vengador', text: 'El jugador que tiró antes que tú tiene que beber por andarse riendo.', penalty: 'El anterior bebe 1 trago.' },
       { title: 'Efecto Cascada', text: 'Tú empiezas a beber y todos en la mesa te siguen. Nadie puede bajar su vaso hasta que pares.', penalty: 'El que baje el vaso antes, trago de castigo.' },
-      { title: 'La Foto Incómoda', text: 'Muestra la última foto que tomaste con la cámara de tu celular a la mesa.', penalty: 'Si escondes el teléfono: bebes 2 tragos.' },
-      { title: 'El Peor Oso Borracho', text: 'Cuenta tu anécdota más chusca de fiesta o borrachera en menos de un minuto.', penalty: 'Si te da pena contarla: Fondo a tu vaso.' },
-      { title: 'Atracción Secreta', text: 'Di quién de los presentes te parece la persona más atractiva o de mejor porte.', penalty: 'Si te da miedo responder: 2 tragos.' },
-      { title: 'El Historial Oscuro', text: 'Muestra a la persona a tu lado tu última búsqueda en redes sociales.', penalty: 'Si cierras la aplicación: 2 tragos sin quejarte.' },
-      { title: 'Mentira Piadosa', text: 'Confiésale a alguien de la mesa una mentira que le hayas dicho alguna vez.', penalty: 'Si juras que nunca has mentido: bebes 2 tragos.' },
-      { title: 'Gusto Culposo', text: 'Canta o revela cuál es esa rola culposa que amas pero te daría pena admitir en público.', penalty: 'Si te niegas: bebes 1 trago.' },
-      { title: 'El Ex Innombrable', text: 'Menciona en solo 3 palabras cómo resumirías a tu peor ex pareja.', penalty: 'Si prefieres el silencio: 2 tragos.' },
-      { title: 'El Chisme Real', text: 'Suelta un secreto sabroso de alguien conocido que no esté presente en la sala.', penalty: 'Si te haces el santo: te tomas 2 tragos.' },
-      { title: 'Karaoke a Capela', text: 'Canta el coro de una rola popular o de despecho durante 10 segundos sin música.', penalty: 'Si te da pena: 2 tragos.' },
-      { title: 'El Piropo Rococó', text: 'Dile el piropo más exagerado, dramático y cursi a la persona que tengas enfrente.', penalty: 'Si te da risa antes de terminarlo: bebes 1 trago.' },
-      { title: 'Imitación de la Mesa', text: 'Imita un gesto o maña de alguien que esté jugando aquí hasta que adivinen.', penalty: 'Si tardan más de 20 segundos o te rajas: 2 tragos.' },
-      { title: 'Piedra, Papel o Tijera', text: 'Elige un rival de la mesa. Juegan un solo tiro rápido a muerte súbita.', penalty: 'El perdedor del duelo apura su vaso.' },
-      { title: 'Duelo de Miradas', text: 'Clávale la mirada al jugador de tu izquierda sin pestañear ni reírte durante 15 segundos.', penalty: 'El primero en reírse o cerrar los ojos bebe 1 trago.' },
-      { title: 'El Rey de la Estatua', text: 'Quédate inmóvil durante 15 segundos mientras los demás intentan hacerte reír sin tocarte.', penalty: 'Si te mueves o sonríes: 2 tragos.' },
-      { title: 'Audio Peligroso', text: 'Manda un audio al tercer chat reciente diciendo: "Tenemos que hablar de algo urgente".', penalty: 'Si te acobardas: te tomas 3 tragos.' },
-      { title: 'Baile Real', text: 'Ponte de pie e inventa un paso de baile prohibido durante 8 segundos sin reparo.', penalty: 'Si no te levantas: 2 tragos.' },
-      { title: 'Cultura Chupística: Marcas', text: 'Marcas de alcohol o cerveza en círculo. El que repita o tarde más de 3 segundos, pierde.', penalty: 'El perdedor de la ronda bebe 1 trago.' },
-      { title: 'Cultura Chupística: Excusas', text: 'Excusas clásicas para no ir a un plan o salirse temprano. El que dude, pierde.', penalty: 'El que se quede mudo bebe 1 trago.' },
-      { title: 'Yo Nunca Nunca Picante', text: 'Di un "Yo nunca nunca" salseado. Todos los que sí lo hayan hecho tienen que tomar.', penalty: 'Si nadie en la mesa bebe, bebes tú solo por aburrido.' },
-      { title: 'El Pulgar Imperial', text: 'Pon tu pulgar discretamente en el borde de la mesa. Todos deben imitarte en silencio.', penalty: 'El último distraído en poner el pulgar bebe 1 trago.' },
-      { title: 'Rima Callejera', text: 'Di una frase rimada. El de al lado tiene 3 segundos para responder con otra rima.', penalty: 'El primero que se trabe bebe 1 trago.' },
-      { title: 'Votación Popular', text: 'A la cuenta de tres, todos apuntan con el dedo a quien crean que baila peor.', penalty: 'El más votado por la corte se echa 2 tragos.' },
-      { title: 'Contacto Falso', text: 'Di en voz alta la última persona a la que le dejaste de contestar un mensaje a propósito.', penalty: 'Si no quieres admitirlo: bebes 2 tragos.' },
       { title: 'El Trago Amigo', text: 'Elige un cómplice: cada vez que tú bebas en las próximas 2 rondas, él bebe contigo.', penalty: 'El cómplice no puede rechazar la alianza.' },
-      { title: 'Cumplido con Veneno', text: 'Dile un cumplido honesto pero chusco a quien esté sentado frente a ti.', penalty: 'Si no se te ocurre nada: 1 trago.' },
-      { title: 'Amnistía Falsa', text: 'Te perdonamos esta ronda, pero en tu siguiente tiro, cualquier castigo valdrá el doble.', penalty: 'Peligro aplazado: la deuda se cobra al doble.' }
+      { title: 'Amnistía Falsa', text: 'Te perdonamos esta ronda, pero en tu siguiente tiro, cualquier castigo valdrá el doble.', penalty: 'Peligro aplazado: la deuda se cobra al doble.' },
+      { title: 'El Silencio Real', text: 'Durante las próximas dos rondas completas, no puedes pronunciar las palabra. Quien te escuche te sanciona.', penalty: '1 trago por cada infracción cometida.' },
+      { title: 'El Guardián del Vaso', text: 'Nadie en la mesa puede tocar su propio vaso a menos que tú toques el tuyo primero. Dura hasta tu siguiente turno.', penalty: 'El distraído que beba sin permiso toma 2 tragos.' },
+      { title: 'Prohibido Apuntar', text: 'Queda estrictamente prohibido señalar con el dedo a cualquier persona de la mesa durante una ronda entera. Solo se permite con el codo o mentón.', penalty: '1 trago cada vez que se señale con el dedo.' },
+      { title: 'La Foto Incómoda', text: 'Muestra la última foto que tomaste con la cámara de tu celular a la mesa.', penalty: 'Si escondes el teléfono: bebes 2 tragos.' },
+      { title: 'El Peor Oso Borracho', text: 'Cuenta tu anécdota más vergonzosa de fiesta o borrachera en menos de un minuto.', penalty: 'Si te da pena contarla: Fondo a tu vaso.', timer: 60 },
+      { title: 'Atracción Secreta', text: 'Di quién de los presentes te parece la persona más atractiva o de mejor porte.', penalty: 'Si te da miedo responder: 2 tragos.' },
+      { title: 'El Historial Oscuro', text: 'Muestra a la persona a tu lado tu última búsqueda en redes sociales o internet.', penalty: 'Si cierras la aplicación: 2 tragos sin quejarte.' },
+      { title: 'Mentira Piadosa', text: 'Confiésale a alguien de la mesa una mentira que le hayas dicho alguna vez en persona.', penalty: 'Si juras que nunca has mentido: bebes 2 tragos por hipócrita.' },
+      { title: 'Gusto Culposo', text: 'Canta o revela cuál es esa rola o gusto musical culposo que amas pero te daría pena admitir en público.', penalty: 'Si te niegas: bebes 1 trago.' },
+      { title: 'El Ex Innombrable', text: 'Menciona en solo 3 palabras exactas cómo resumirías a tu peor ex pareja.', penalty: 'Si prefieres el silencio: 2 tragos.' },
+      { title: 'El Chisme Real', text: 'Suelta un secreto o chisme comprobable de alguien conocido que no esté presente en la sala.', penalty: 'Si te haces el santo: te tomas 2 tragos.' },
+      { title: 'Contacto Falso', text: 'Di en voz alta la última persona a la que le dejaste de contestar un mensaje a propósito.', penalty: 'Si no quieres admitirlo: bebes 2 tragos.' },
+      { title: 'El Mensaje Borrado', text: 'Revela a quién fue la última persona a la que le borraste una conversación de chat o archivaste para que nadie la viera.', penalty: 'Si rehúsas admitirlo: 2 tragos directos.' },
+      { title: 'El Crush Inconfesable', text: 'Revela un gusto culposo sobre una persona famosa o personaje que a los demás les parezca desconcertante o cuestionable.', penalty: 'Si dices que no tienes ninguno: fondo al vaso por fingir.' },
+      { title: 'Cita Catastrófica', text: 'Narra en 30 segundos el peor error o la peor cita a la que hayas ido en tu vida.', penalty: 'Si decides guardártelo: 2 tragos.', timer: 30 },
+      { title: 'Contacto Bloqueado', text: 'Muestra cuántas personas tienes bloqueadas en WhatsApp o llamadas y explica el motivo del último bloqueo.', penalty: 'Si no abres la lista: 2 tragos.' },
+      { title: 'El Precio de la Dignidad', text: 'Di qué ha sido lo más arrastrado o ridículo que hiciste para que una persona no te dejara de hablar.', penalty: 'Si finges ser intachable: 2 tragos.' },
+      { title: 'Votación Popular', text: 'A la cuenta de tres, todos apuntan con el dedo a quien crean que es peor para aguantar la fiesta.', penalty: 'El más votado por la corte se echa 2 tragos.' },
+      { title: 'Dilema de Naufragio', text: 'Si el barco se hunde y solo puedes salvar a una de las dos personas que tienes a tus lados, di a cuál salvas y da una razón honesta.', penalty: 'Si evades diciendo "a los dos": 2 tragos.' },
+      { title: 'Voto a Ciegas', text: 'Cierren los ojos. A la de tres, apunten a quien crean que oculta el secreto más turbio. Al abrir los ojos, el más señalado se descubre.', penalty: 'El jugador más señalado se toma 2 tragos.' },
+      { title: 'El Testamento Inmediato', text: 'Di a qué persona de esta mesa le confiarías tu celular desbloqueado durante todo un fin de semana sin borrar nada.', penalty: 'Si dices que a nadie: 1 trago de desconfianza.' },
+      { title: 'El Descarte', text: 'Señala a quién de los presentes invitarías a un viaje descontrolado y a quién llevarías a una cena familiar formal.', penalty: 'Si cambias de tema: 2 tragos.' },
+      { title: 'Karaoke a Capela', text: 'Canta el coro de una rola popular o de despecho durante 10 segundos sin música de fondo.', penalty: 'Si te da pena: 2 tragos.', timer: 10 },
+      { title: 'El Piropo Ñero', text: 'Dile el piropo más exagerado, dramático y cursi a la persona que tengas enfrente.', penalty: 'Si te da risa antes de terminarlo: bebés 1 trago.' },
+      { title: 'Imitación de la Mesa', text: 'Imita un gesto, tono o manía de alguien que esté jugando aquí hasta que los demás adivinen.', penalty: 'Si tardan más de 20 segundos o te rajas: 2 tragos.', timer: 20 },
+      { title: 'El Rey de la Estatua', text: 'Quédate inmóvil durante 15 segundos mientras los demás intentan hacerte reír sin tocarte.', penalty: 'Si te mueves o sonríes: 2 tragos.', timer: 15 },
+      { title: 'Audio Peligroso', text: 'Manda una nota de voz al tercer chat reciente diciendo: "Tenemos que hablar de algo urgente" y bloquea la pantalla.', penalty: 'Si te acobardas: te tomas 3 tragos.' },
+      { title: 'Baile Real', text: 'Ponte de pie e inventa un paso de baile prohibido durante 8 segundos sin mostrar vergüenza.', penalty: 'Si no te levantas: 2 tragos.', timer: 8 },
+      { title: 'Cumplido con Veneno', text: 'Dile un cumplido honesto pero ñero a quien esté sentado frente a ti.', penalty: 'Si no se te ocurre nada: 1 trago.' },
+      { title: 'Cinco Segundos', text: 'Tienes 5 segundos cronometrados por la mesa para nombrar 3 pretextos comunes para terminar una relación.', penalty: 'Si no logras decir las 3 a tiempo: 2 tragos.', timer: 5 },
+      { title: 'Melón y Melames', text: 'Di una frase ingeniosa en doble sentido de Melón y Melames. El de tu derecha tiene 4 segundos para responder con otra similar.', penalty: 'El primero que se quede mudo bebe 1 trago.' },
+      { title: 'Bailarín Inmóvil', text: 'Te paras y bailar cualquier ritmo; en el instante en que alguien de la mesa dé una palmada, debes congelarte 10 segundos.', penalty: 'Si pierdes el equilibrio o te ríes: 1 trago.', timer: 10 },
+      { title: 'Cultura General: Marcas', text: 'Marcas de licor o cerveza en círculo. El que repita o tarde más de 3 segundos, pierde.', penalty: 'El perdedor de la ronda bebe 1 trago.' },
+      { title: 'Agilidad Mental: Excusas', text: 'Excusas típicas para cancelar un plan a última hora. El que dude o repita, pierde.', penalty: 'El que se quede mudo bebe 1 trago.' },
+      { title: 'Yo Nunca Nunca', text: 'Di un "Yo nunca nunca" comprometedor. Todos los que sí lo hayan hecho tienen que tomar.', penalty: 'Si nadie en la mesa bebe, bebes tú solo por aburrido.' },
+      { title: 'El Pulgar Imperial', text: 'Pon tu pulgar discretamente en el borde de la mesa; todos deben imitarte en silencio.', penalty: 'El último distraído en poner el pulgar bebe 1 trago.' },
+      { title: 'Letra Prohibida', text: 'Elige una vocal. En orden, cada jugador debe nombrar un país o ciudad sin usar esa vocal en absoluto.', penalty: 'El que se equivoque bebe 1 trago.' },
+      { title: 'Piedra, Papel o Tijera', text: 'Elige un rival de la mesa. Juegan un solo tiro rápido a muerte súbita.', penalty: 'El perdedor del duelo apura su vaso.' },
+      { title: 'Duelo de Miradas', text: 'Clávale la mirada al jugador de tu izquierda sin pestañear ni reírte durante 15 segundos.', penalty: 'El primero en reírse o parpadear bebe 1 trago.', timer: 15 },
+      { title: 'La Subasta de Tragos', text: 'Elige un reto físico o de equilibrio; la mesa subasta cuántos tragos te obligarán a beber si fallas o ellos si ganas.', penalty: 'Si fallas el reto, bebes la cifra pactada.' },
+      { title: 'El Pulso Chino', text: 'Retas al jugador frente a ti a un duelo de pulgares o piedra, papel o tijera al mejor de 3 rondas sin tregua.', penalty: 'El perdedor definitivo toma 2 tragos seguidos.' }
     ];
 
     /* 3. ESTADO */
@@ -1890,6 +1957,10 @@
     // Configuración de Rondas
     let totalRounds = 10;
     let currentRound = 1;
+
+    // Control del Cronómetro
+    let timerInterval = null;
+    let timerSecondsRemaining = 0;
 
     function selectGameRounds(num, btn) {
       RococoAudio.playClick('arpeggio');
@@ -2077,6 +2148,7 @@
     /* 6. GIRO Y EVALUACIÓN DE TURNOS */
     function triggerPirinolaSpin() {
       if (isSpinning || players.length === 0) return;
+      stopChallengeTimer();
       RococoAudio.playClavichordFlourish();
       RococoAudio.startSpin();
 
@@ -2087,6 +2159,7 @@
       document.getElementById('challengeTitle').innerText = 'Consultando a la suerte...';
       document.getElementById('challengeDesc').innerText = 'La pirinola define el rumbo de la asamblea.';
       document.getElementById('challengePenalty').innerText = 'Mantengan dispuestas sus copas.';
+      document.getElementById('timerBox').style.display = 'none';
 
       spinVelocity = 0.95 + Math.random() * 0.45;
     }
@@ -2103,10 +2176,53 @@
       document.getElementById('challengeDesc').innerText = currentChallenge.text;
       document.getElementById('challengePenalty').innerText = 'Sanción: ' + currentChallenge.penalty;
 
+      // Configuración de cronómetro si el reto lo incluye
+      const timerBox = document.getElementById('timerBox');
+      if (currentChallenge.timer && currentChallenge.timer > 0) {
+        timerSecondsRemaining = currentChallenge.timer;
+        document.getElementById('timerDurationLabel').innerText = currentChallenge.timer;
+        document.getElementById('timerSecondsLeft').innerText = currentChallenge.timer;
+        document.getElementById('btnStartTimer').style.display = 'inline-block';
+        document.getElementById('timerDisplay').style.display = 'none';
+        timerBox.style.display = 'flex';
+      } else {
+        timerBox.style.display = 'none';
+      }
+
       document.getElementById('decisionActions').style.display = 'grid';
     }
 
+    function startChallengeTimer() {
+      RococoAudio.playClick('mi');
+      document.getElementById('btnStartTimer').style.display = 'none';
+      const display = document.getElementById('timerDisplay');
+      display.style.display = 'inline-block';
+      display.style.color = 'var(--carmin-velours)';
+
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timerSecondsRemaining--;
+        document.getElementById('timerSecondsLeft').innerText = timerSecondsRemaining;
+        RococoAudio.playTap();
+
+        if (timerSecondsRemaining <= 0) {
+          clearInterval(timerInterval);
+          RococoAudio.playFail();
+          display.innerText = '¡Tiempo expirado!';
+        }
+      }, 1000);
+    }
+
+    function stopChallengeTimer() {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+      document.getElementById('timerBox').style.display = 'none';
+    }
+
     function resolveTurn(action) {
+      stopChallengeTimer();
       const player = players[currentPlayerIndex];
 
       if (action === 'win') {
@@ -2185,6 +2301,7 @@
       document.getElementById('challengeTitle').innerText = 'Turno Ministerial';
       document.getElementById('challengeDesc').innerText = 'Hagan rodar la pirinola para conocer el dictamen.';
       document.getElementById('challengePenalty').innerText = 'Sanción: Procedan según ordenanza.';
+      document.getElementById('timerBox').style.display = 'none';
     }
 
     function updateTurnUI() {
