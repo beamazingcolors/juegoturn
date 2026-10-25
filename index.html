@@ -2,24 +2,20 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
   <title>Turn</title>
   
-  <!-- Favicon e Icono en formato PNG transparente -->
   <link rel="icon" type="image/png" href="turn-logo.png">
   <link rel="apple-touch-icon" href="turn-logo.png">
   
-  <!-- Tipografía cortesana de época -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   
-  <!-- Three.js para la escena 3D y Canvas Confetti -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <style>
-    /* PALETA HISTÓRICA ROCOCÓ (SIGLO XVIII) */
     :root {
       --bg-cream: #FAF6EE;
       --panel-bg: #FFFFFF;
@@ -30,22 +26,18 @@
       --text-dark: #2B2118;
       --text-muted: #6B5E52;
       
-      /* Vert Céladon */
       --vert-celadon: #385E42;
       --vert-light: #EEF4F0;
       --vert-border: #B2D1BA;
       
-      /* Rose Pompadour */
       --rose-pompadour: #A84859;
       --rose-light: #F8EDEF;
       --rose-border: #E4B4BD;
       
-      /* Bleu Céleste */
       --bleu-celeste: #3D6875;
       --bleu-light: #EBF2F5;
       --bleu-border: #A7C5D0;
       
-      /* Velours Carmin */
       --carmin-velours: #631B22;
       --carmin-light: #F6EAEC;
       --carmin-border: #D69CA3;
@@ -82,7 +74,6 @@
       justify-content: center;
       padding: 12px;
       overflow-x: hidden;
-      overscroll-behavior-y: contain;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
@@ -157,6 +148,7 @@
       justify-content: center;
       transition: background 0.12s ease, transform 0.1s ease;
     }
+
     .btn-rococo-nav:active {
       transform: scale(0.96);
       background: var(--gold-light);
@@ -180,6 +172,7 @@
       justify-content: center;
       transition: background 0.12s ease, transform 0.1s ease;
     }
+
     .btn-rococo-danger:active {
       transform: scale(0.96);
       background: #F0D5D8;
@@ -266,7 +259,6 @@
     .stat-stars { color: var(--gold-dark); background: #FFF9E6; border: 1px solid #F0D785; }
     .stat-streak { color: #9A5B27; background: #FFF3E6; border: 1px solid #F3CCA6; }
 
-    /* ESCENARIO DEL RETO 3D: PALETA PASTEL ROCOCÓ IDÉNTICA EN MÓVIL Y ESCRITORIO */
     .mystic-stage-card {
       background: linear-gradient(145deg, #FFFDF8 0%, #F5ECE0 100%);
       border: 1.5px solid var(--border-gilded);
@@ -282,8 +274,8 @@
 
     #challenge-3d-container {
       width: 100%;
-      height: 480px;
-      min-height: 230px;
+      height: 440px;
+      min-height: 220px;
       border-radius: 10px;
       background: #F5EFEB;
       cursor: grab;
@@ -301,7 +293,6 @@
       display: block;
     }
 
-    /* CONTROLES */
     .controls-panel {
       width: 100%;
       max-width: 600px;
@@ -334,8 +325,9 @@
     }
 
     .spin-button:disabled {
-      opacity: 0.6;
+      opacity: 0.55;
       cursor: not-allowed;
+      filter: grayscale(0.2);
     }
 
     .timer-container {
@@ -389,8 +381,14 @@
       cursor: pointer;
       border: none;
     }
+
     .btn-resolve:active {
       transform: scale(0.97);
+    }
+
+    .btn-resolve:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
     }
 
     .btn-success { background: var(--vert-celadon); color: white; border: 1px solid #2B4E34; }
@@ -413,6 +411,7 @@
       align-items: center;
       justify-content: center;
     }
+
     .btn-condone:active {
       transform: scale(0.98);
       background: #DCE7EB;
@@ -476,7 +475,6 @@
       transform: translate3d(-50%, 0, 0);
     }
 
-    /* SISTEMA DE TORMENTA CON RELÁMPAGOS Y LLUVIA REALISTA */
     .storm-overlay {
       position: fixed;
       inset: 0;
@@ -513,20 +511,15 @@
       100% { background-color: rgba(10, 12, 20, 0); }
     }
 
-    /* ADAPTACIÓN MÓVIL EN PANTALLA ÚNICA */
     @media (max-width: 768px) {
       body {
         padding: 4px;
-        height: 100vh;
-        height: 100dvh;
-        overflow: hidden;
+        min-height: 100vh;
+        overflow-y: auto;
       }
 
       .app-container {
-        height: 100%;
-        max-height: 100dvh;
-        justify-content: space-between;
-        gap: 4px;
+        gap: 6px;
       }
 
       header {
@@ -588,16 +581,11 @@
       .mystic-stage-card {
         padding: 6px;
         border-radius: 12px;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
       }
 
       #challenge-3d-container {
-        height: 100%;
-        min-height: 220px;
-        flex: 1;
+        height: 260px;
+        min-height: 200px;
       }
 
       .controls-panel {
@@ -663,7 +651,6 @@
       }
     }
 
-    /* MODAL DE RACHA */
     .laurel-overlay {
       position: fixed;
       inset: 0;
@@ -729,7 +716,6 @@
       margin: 0;
     }
 
-    /* MODALES GENERALES */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -752,7 +738,7 @@
       pointer-events: auto;
     }
 
-    #rulesModal, #tripleCondoneModal, #creditsModal, #policiesModal {
+    #rulesModal, #tripleCondoneModal, #creditsModal, #policiesModal, #confirmEndModal, #scoresModal, #catalogModal, #stealModal, #tripleFailModal, #coronationModal, #decreeModal {
       z-index: 1050;
     }
 
@@ -892,6 +878,7 @@
       background: var(--bg-cream);
       transition: transform 0.1s ease, border-color 0.1s ease;
     }
+
     .char-option:active {
       transform: scale(0.95);
     }
@@ -992,7 +979,9 @@
       flex-direction: column;
       gap: 3px;
     }
+
     .catalog-item:last-child { border-bottom: none; }
+
     .catalog-item-header {
       display: flex;
       justify-content: space-between;
@@ -1001,6 +990,7 @@
       font-size: 11.5px;
       letter-spacing: 0.4px;
     }
+
     .catalog-item-desc {
       font-size: 11.5px;
       color: var(--text-muted);
@@ -1082,6 +1072,7 @@
       color: var(--vert-celadon);
       border-color: var(--vert-border);
     }
+
     .btn-pardon.active {
       background: var(--vert-celadon);
       color: #FFF;
@@ -1093,6 +1084,7 @@
       color: var(--rose-pompadour);
       border-color: var(--rose-border);
     }
+
     .btn-punish.active {
       background: var(--rose-pompadour);
       color: #FFF;
@@ -1178,20 +1170,16 @@
 </head>
 <body>
 
-  <!-- Reproductor de música de fondo (Flow Music) -->
   <audio id="bgMusic" src="musica.mp3" loop preload="auto"></audio>
 
-  <!-- Capa de Tormenta Realista al recibir Falta o Castigo -->
   <div class="storm-overlay" id="stormOverlay">
     <canvas id="rainCanvas"></canvas>
   </div>
 
-  <!-- Cartela de Notificación Cortesana (Clic/tap para descartar al instante) -->
   <div class="toast-banner" id="toastBanner" onclick="dismissToast()">
     <span id="toastText">Decreto de la Corte</span>
   </div>
 
-  <!-- POPUP / ANIMACIÓN DEL LAUREL EN RACHA -->
   <div class="laurel-overlay" id="laurelStreakModal" onclick="closeLaurelStreak()">
     <div class="laurel-box">
       <svg class="laurel-wreath-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1226,7 +1214,6 @@
   <div class="app-container">
     <header>
       <div class="brand">
-        <!-- Logo PNG con fondo transparente -->
         <img
           src="turn-logo.png"
           alt="Turn"
@@ -1275,7 +1262,6 @@
       </div>
     </div>
 
-    <!-- ESCENARIO PRINCIPAL: RETO 3D EN LÁMINA ROCOCÓ -->
     <div class="mystic-stage-card">
       <div id="challenge-3d-container"></div>
       
@@ -1284,7 +1270,6 @@
           GIRAR RETO
         </button>
 
-        <!-- Cronómetro integrado -->
         <div class="timer-container" id="timerBox" style="display: none;">
           <button type="button" class="btn-timer" id="btnStartTimer" onclick="startChallengeTimer()">
             Iniciar Cronómetro (<span id="timerDurationLabel">0</span>s)
@@ -1295,20 +1280,19 @@
         </div>
 
         <div class="decision-actions" id="decisionActions" style="display: none;">
-          <button class="btn-resolve btn-success" onclick="resolveTurn('win')">
+          <button class="btn-resolve btn-success" id="btnWin" onclick="resolveTurn('win')">
             Superado
           </button>
-          <button class="btn-resolve btn-fail" onclick="resolveTurn('fail')">
+          <button class="btn-resolve btn-fail" id="btnFail" onclick="resolveTurn('fail')">
             Falta (Bebe)
           </button>
-          <button class="btn-condone" onclick="resolveTurn('condone')">
+          <button class="btn-condone" id="btnCondone" onclick="resolveTurn('condone')">
             Condonar por esta ronda (Aplazar)
           </button>
         </div>
       </div>
     </div>
 
-    <!-- PIE DE PÁGINA COMPACTO -->
     <footer class="court-footer">
       <div class="footer-actions">
         <button class="btn-rococo-nav" onclick="RococoAudio.playClick('do'); openCreditsModal()">Créditos</button>
@@ -1320,7 +1304,6 @@
     </footer>
   </div>
 
-  <!-- MODAL POPUP: CRÉDITOS DE LA CORTE -->
   <div class="modal-overlay" id="creditsModal">
     <div class="modal-box">
       <h2 class="modal-title">Créditos de la Corte</h2>
@@ -1345,7 +1328,6 @@
     </div>
   </div>
 
-  <!-- MODAL POPUP: POLÍTICAS Y RESTRICCIONES -->
   <div class="modal-overlay" id="policiesModal">
     <div class="modal-box">
       <h2 class="modal-title">Políticas y Restricciones</h2>
@@ -1369,7 +1351,6 @@
     </div>
   </div>
 
-  <!-- MODAL: REGLAMENTO OFICIAL -->
   <div class="modal-overlay" id="rulesModal">
     <div class="modal-box">
       <h2 class="modal-title">Reglamento Oficial</h2>
@@ -1379,14 +1360,14 @@
         <div class="rule-card">
           <div class="rule-card-header">1. Duración y Rondas</div>
           <div class="rule-card-body">
-            La sesión se pacta a <b>5, 10, 15, 20 o 25 rondas</b>. Una ronda concluye cuando cada participante inscrito ha tomado su turno con la pirinola. Al expirar la última ronda, la sesión finaliza y se procede de inmediato al juicio del soberano.
+            La sesión se pacta a <b>5, 10, 15, 20 o 25 rondas</b>. Una ronda concluye cuando cada participante inscrito ha tomado su turno. Al expirar la última ronda, la sesión finaliza y se procede al juicio real.
           </div>
         </div>
 
         <div class="rule-card">
           <div class="rule-card-header">2. Dinámica de Turno</div>
           <div class="rule-card-body">
-            Cada comensal acciona el giro del reto en su turno (o da <b>doble clic / doble toque</b> a la carta). Al cesar su inercia, la lámina 3D revela el desafío. La asamblea resuelve si la prueba fue <b>Superada</b>, si hubo <b>Falta</b> o si el comensal decide <b>Condonar</b>. Si el reto cuenta con cronómetro, este debe iniciarse antes de resolver.
+            Cada comensal acciona el giro del reto en su turno (o da <b>doble clic / doble toque</b> a la carta). Al cesar su inercia, la lámina 3D revela el desafío. La asamblea resuelve si la prueba fue <b>Superada</b>, si hubo <b>Falta</b> o si el comensal decide <b>Condonar</b>. Si el reto cuenta con cronómetro, este debe completarse para poder marcar victoria.
           </div>
         </div>
 
@@ -1421,7 +1402,7 @@
         <div class="rule-card">
           <div class="rule-card-header">6. Coronación y Juicio Real</div>
           <div class="rule-card-body">
-            Al concluir las rondas pactadas o pulsar Terminar, quien reúna el mayor balance de laureles y aciertos asciende al trono. El nuevo Rey somete a cada vasallo a juicio individual con <b>Castigo</b> o <b>Indulto Real</b>, ganando títulos dinámicos acordes a su temple.
+            Al concluir las rondas pactadas o pulsar Terminar, quien reúna el mayor balance asciende al trono. El nuevo Rey somete a cada vasallo a juicio con <b>Castigo</b> (tormenta) o <b>Indulto Real</b> (laureles).
           </div>
         </div>
       </div>
@@ -1430,7 +1411,6 @@
     </div>
   </div>
 
-  <!-- MODAL: SENTENCIA POR 3 CONDONACIONES (FONDO SUPREMO) -->
   <div class="modal-overlay" id="tripleCondoneModal">
     <div class="modal-box" style="text-align: center;">
       <h2 class="modal-title" style="color: var(--carmin-velours);">Deuda Vencida: Fondo al Vaso</h2>
@@ -1472,7 +1452,6 @@
     </div>
   </div>
 
-  <!-- MODAL: MARCADOR EN VIVO -->
   <div class="modal-overlay" id="scoresModal">
     <div class="modal-box">
       <h2 class="modal-title">Escalafón de Honor</h2>
@@ -1482,7 +1461,6 @@
     </div>
   </div>
 
-  <!-- MODAL: REGISTRO INICIAL DE JUGADORES Y CONFIGURACIÓN DE RONDAS -->
   <div class="modal-overlay" id="registerModal">
     <div class="modal-box">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
@@ -1519,7 +1497,6 @@
     </div>
   </div>
 
-  <!-- MODAL: CONFIRMACIÓN PARA TERMINAR PARTIDA -->
   <div class="modal-overlay" id="confirmEndModal">
     <div class="modal-box" style="text-align: center;">
       <h2 class="modal-title">¿Clausurar la Sesión?</h2>
@@ -1531,7 +1508,6 @@
     </div>
   </div>
 
-  <!-- MODAL: CATÁLOGO DE RETOS Y CASTIGOS -->
   <div class="modal-overlay" id="catalogModal">
     <div class="modal-box">
       <h2 class="modal-title">Compendio de Pruebas</h2>
@@ -1541,7 +1517,6 @@
     </div>
   </div>
 
-  <!-- MODAL: ROBO DE LAURELES -->
   <div class="modal-overlay" id="stealModal">
     <div class="modal-box">
       <h2 class="modal-title">Prerrogativa Soberana</h2>
@@ -1550,7 +1525,6 @@
     </div>
   </div>
 
-  <!-- MODAL: SENTENCIA POR FALTAS REITERADAS -->
   <div class="modal-overlay" id="tripleFailModal">
     <div class="modal-box" style="text-align: center;">
       <h2 class="modal-title" style="color: var(--carmin-velours);">Juicio por Cobardía Reiterada</h2>
@@ -1594,7 +1568,6 @@
     </div>
   </div>
 
-  <!-- MODAL: CORONACIÓN Y JUICIO REAL -->
   <div class="modal-overlay" id="coronationModal">
     <div class="modal-box">
       <div class="coronation-header">
@@ -1610,7 +1583,6 @@
     </div>
   </div>
 
-  <!-- MODAL: DECRETO FINAL -->
   <div class="modal-overlay" id="decreeModal">
     <div class="modal-box" style="text-align: center;">
       <h2 class="modal-title" style="font-size: 19px;">Acta Final de la Corte</h2>
@@ -1632,7 +1604,7 @@
 
   <script>
     /* ========================================================
-       VARIABLES DE ESTADO GLOBALES (DECLARADAS UNA SOLA VEZ)
+       VARIABLES DE ESTADO Y CONTROL
        ======================================================== */
     let players = [];
     let currentPlayerIndex = 0;
@@ -1650,8 +1622,20 @@
     let currentRound = 1;
 
     let timerInterval = null;
-    let timerSecondsRemaining = 0;
+    let timerTargetEnd = 0;
+    let timerState = 'IDLE'; // IDLE | RUNNING | EXPIRED
     let toastTimeout = null;
+    let laurelAutoCloseTimeout = null;
+    let pendingStealTimeout = null;
+
+    function escapeHtml(str) {
+      if (typeof str !== 'string') return '';
+      return str.replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+    }
 
     /* 1. PERSONAJES ILUSTRADOS */
     const CHARACTERS = [
@@ -2121,7 +2105,6 @@
     function closeConfirmEndModal() { document.getElementById('confirmEndModal').classList.remove('active'); }
 
     /* ANIMACIÓN DEL LAUREL EN RACHA */
-    let laurelAutoCloseTimeout = null;
     function showLaurelStreak(title, subtitle) {
       document.getElementById('laurelModalTitle').innerText = title;
       document.getElementById('laurelModalSubtitle').innerText = subtitle;
@@ -2130,6 +2113,7 @@
       if (laurelAutoCloseTimeout) clearTimeout(laurelAutoCloseTimeout);
       laurelAutoCloseTimeout = setTimeout(closeLaurelStreak, 2400);
     }
+
     function closeLaurelStreak() {
       if (laurelAutoCloseTimeout) clearTimeout(laurelAutoCloseTimeout);
       document.getElementById('laurelStreakModal').classList.remove('active');
@@ -2179,7 +2163,6 @@
       const w = dynamicCanvas.width;
       const h = dynamicCanvas.height;
 
-      // Fondo porcelana marfil pastel
       const bgGrad = ctx.createLinearGradient(0, 0, w, h);
       bgGrad.addColorStop(0, '#FFFDF8');
       bgGrad.addColorStop(0.5, '#FAF4E8');
@@ -2187,7 +2170,6 @@
       ctx.fillStyle = bgGrad;
       ctx.fillRect(0, 0, w, h);
 
-      // Marco rococó dorado exterior
       ctx.lineWidth = 14;
       ctx.strokeStyle = '#C5A059';
       ctx.strokeRect(36, 36, w - 72, h - 72);
@@ -2196,7 +2178,6 @@
       ctx.strokeStyle = '#7A5B1E';
       ctx.strokeRect(52, 52, w - 104, h - 104);
 
-      // Esquineros
       ctx.strokeStyle = '#C5A059';
       ctx.lineWidth = 5;
       [[52, 52], [w-52, 52], [52, h-52], [w-52, h-52]].forEach(([cx, cy]) => {
@@ -2205,7 +2186,6 @@
         ctx.stroke();
       });
 
-      // Encabezado
       ctx.textAlign = 'center';
       ctx.font = 'bold 42px "Cinzel", serif';
       ctx.fillStyle = '#7A5B1E';
@@ -2215,7 +2195,6 @@
       ctx.fillStyle = '#8F7B5E';
       ctx.fillText('ORDENANZA REAL', w / 2, 175);
 
-      // Línea divisoria
       ctx.beginPath();
       ctx.moveTo(w / 2 - 200, 205);
       ctx.lineTo(w / 2 + 200, 205);
@@ -2223,18 +2202,15 @@
       ctx.strokeStyle = '#C5A059';
       ctx.stroke();
 
-      // TÍTULO DEL RETO (Grande y legible)
       ctx.font = 'bold 54px "Cinzel", serif';
       ctx.fillStyle = '#261A12';
       const endTitleY = wrapText(ctx, title, w / 2, 310, w - 140, 66);
 
-      // CUERPO DEL RETO
       ctx.font = '600 44px "Plus Jakarta Sans", sans-serif';
       ctx.fillStyle = '#382A1E';
       const bodyStartY = Math.max(endTitleY + 30, 480);
       wrapText(ctx, text, w / 2, bodyStartY, w - 160, 62);
 
-      // CAJA DE SANCIÓN PASTEL (Rose Pompadour)
       const boxY = h - 330;
       ctx.fillStyle = '#F8EDEF';
       ctx.strokeStyle = '#D69CA3';
@@ -2292,7 +2268,7 @@
       const container = document.getElementById('challenge-3d-container');
       if (!container) return;
       const width = Math.max(container.clientWidth || 0, 320);
-      const height = Math.max(container.clientHeight || 0, window.innerWidth <= 768 ? 220 : 480);
+      const height = Math.max(container.clientHeight || 0, window.innerWidth <= 768 ? 220 : 440);
 
       scene = new THREE.Scene();
       scene.background = new THREE.Color(0xF5EFEB);
@@ -2318,7 +2294,6 @@
       mysticLight.position.set(0, 1.8, 3.8);
       scene.add(mysticLight);
 
-      // Partículas de humo místico pastel
       const smokeTex = createSmokeParticleTexture();
       const smokeGeo = new THREE.PlaneGeometry(6.2, 6.2);
 
@@ -2360,7 +2335,6 @@
         roughness: 0.3
       });
 
-      // Material mate difuso sin reflejos para legibilidad perfecta
       const frontFaceMat = new THREE.MeshBasicMaterial({
         map: dynamicTexture
       });
@@ -2397,7 +2371,6 @@
       cardMesh = new THREE.Mesh(cardGeo, materials);
       cardGroup.add(cardMesh);
 
-      // Movimiento y rotación interactiva con ratón y dedo
       container.addEventListener('mousedown', (e) => {
         RococoAudio.init();
         if (isSpinning) return;
@@ -2443,7 +2416,7 @@
 
       window.addEventListener('resize', () => {
         const w = Math.max(container.clientWidth || 0, 320);
-        const h = Math.max(container.clientHeight || 0, window.innerWidth <= 768 ? 220 : 480);
+        const h = Math.max(container.clientHeight || 0, window.innerWidth <= 768 ? 220 : 440);
         camera.aspect = w / h;
         camera.updateProjectionMatrix();
         renderer.setSize(w, h);
@@ -2458,7 +2431,6 @@
       const delta = Math.min(clock.getDelta(), 0.08);
       const time = clock.getElapsedTime();
 
-      // Transición cromática suave en tonos pastel
       const hue = (time * 0.03) % 1.0;
       const pastelMysticColor = new THREE.Color().setHSL(hue, 0.45, 0.78);
       if (mysticLight) mysticLight.color.copy(pastelMysticColor);
@@ -2505,7 +2477,9 @@
       }
     }
 
-    /* GIRO Y EVALUACIÓN DE TURNOS */
+    /* ========================================================
+       GIRO Y EVALUACIÓN DE TURNOS
+       ======================================================== */
     function triggerPirinolaSpin() {
       if (isSpinning || players.length === 0) return;
       stopChallengeTimer();
@@ -2522,7 +2496,6 @@
 
     function finishSpin() {
       isSpinning = false;
-      document.getElementById('btnSpin').disabled = false;
       RococoAudio.stopSpin();
 
       const randomIndex = Math.floor(Math.random() * CHALLENGES.length);
@@ -2535,17 +2508,23 @@
       );
 
       const timerBox = document.getElementById('timerBox');
+      const btnWin = document.getElementById('btnWin');
+
       if (currentChallenge.timer && currentChallenge.timer > 0) {
-        timerSecondsRemaining = currentChallenge.timer;
-        document.getElementById('timerDurationLabel').innerText = currentChallenge.timer;
-        document.getElementById('timerSecondsLeft').innerText = currentChallenge.timer;
+        timerState = 'IDLE';
+        document.getElementById('timerDurationLabel').textContent = currentChallenge.timer;
+        document.getElementById('timerSecondsLeft').textContent = currentChallenge.timer;
         document.getElementById('btnStartTimer').style.display = 'inline-block';
         document.getElementById('timerDisplay').style.display = 'none';
         timerBox.style.display = 'flex';
+        btnWin.disabled = true;
       } else {
+        timerState = 'EXPIRED';
         timerBox.style.display = 'none';
+        btnWin.disabled = false;
       }
 
+      document.getElementById('btnSpin').disabled = true;
       document.getElementById('decisionActions').style.display = 'grid';
     }
 
@@ -2556,18 +2535,28 @@
       display.style.display = 'inline-block';
       display.style.color = 'var(--carmin-velours)';
 
-      clearInterval(timerInterval);
+      timerState = 'RUNNING';
+      const totalSec = currentChallenge.timer;
+      timerTargetEnd = Date.now() + (totalSec * 1000);
+
+      if (timerInterval) clearInterval(timerInterval);
+
       timerInterval = setInterval(() => {
-        timerSecondsRemaining--;
-        document.getElementById('timerSecondsLeft').innerText = timerSecondsRemaining;
+        const remainingMs = timerTargetEnd - Date.now();
+        const remainingSec = Math.max(0, Math.ceil(remainingMs / 1000));
+        
+        document.getElementById('timerSecondsLeft').textContent = remainingSec;
         RococoAudio.playTap();
 
-        if (timerSecondsRemaining <= 0) {
+        if (remainingSec <= 0) {
           clearInterval(timerInterval);
+          timerInterval = null;
+          timerState = 'EXPIRED';
           RococoAudio.playFail();
-          display.innerText = 'Tiempo expirado';
+          document.getElementById('btnWin').disabled = false;
+          showVisualNotification('Tiempo expirado', 2500);
         }
-      }, 1000);
+      }, 250);
     }
 
     function stopChallengeTimer() {
@@ -2575,16 +2564,22 @@
         clearInterval(timerInterval);
         timerInterval = null;
       }
+      timerState = 'IDLE';
       const box = document.getElementById('timerBox');
       if (box) box.style.display = 'none';
     }
 
     function resolveTurn(action) {
-      stopChallengeTimer();
-      if (players.length === 0) return;
+      if (players.length === 0 || isSpinning) return;
       const player = players[currentPlayerIndex];
 
       if (action === 'win') {
+        if (currentChallenge && currentChallenge.timer > 0 && timerState !== 'EXPIRED') {
+          showVisualNotification('Debes iniciar y completar el cronómetro para superar este reto.', 3000);
+          return;
+        }
+
+        stopChallengeTimer();
         RococoAudio.playSuccess();
         player.wins += 1;
         player.streak += 1;
@@ -2595,21 +2590,23 @@
 
         if (player.streak % 3 === 0) {
           player.stars += 1;
-          showLaurelStreak('Laurel de Honor Concedido', `${player.name} alcanza ${player.streak} victorias consecutivas.`);
+          showLaurelStreak('Laurel de Honor Concedido', `${escapeHtml(player.name)} alcanza ${player.streak} victorias consecutivas.`);
           showVisualNotification(`Meritorio: ${player.name} alcanza ${player.streak} aciertos y recibe un Laurel de Honor.`, 3800);
         }
 
         if (player.streak >= 5 && player.streak % 5 === 0) {
           showLaurelStreak('Expropiación Concedida', `Racha de ${player.streak} aciertos: tienes derecho a reclamar un laurel ajeno.`);
-          setTimeout(() => openStealModal(player), 1400);
+          if (pendingStealTimeout) clearTimeout(pendingStealTimeout);
+          pendingStealTimeout = setTimeout(() => openStealModal(player), 1400);
           return;
         }
 
         nextTurn();
 
       } else if (action === 'fail') {
+        stopChallengeTimer();
         RococoAudio.playFail();
-        triggerStorm(); // Tormenta con relámpagos y truenos
+        triggerStorm();
         player.fails += 1;
         player.streak = 0;
         player.condonedStreak = 0;
@@ -2625,6 +2622,7 @@
         nextTurn();
 
       } else if (action === 'condone') {
+        stopChallengeTimer();
         RococoAudio.playCondone();
         player.condonedStreak = (player.condonedStreak || 0) + 1;
         player.totalCondoned = (player.totalCondoned || 0) + 1;
@@ -2650,6 +2648,8 @@
       if (nextIndex === 0) {
         currentRound++;
         if (currentRound > totalRounds) {
+          document.getElementById('decisionActions').style.display = 'none';
+          document.getElementById('btnSpin').disabled = true;
           showVisualNotification('La última ronda ha concluido. Proclamemos al Soberano.', 3800);
           setTimeout(executeEndGame, 800);
           return;
@@ -2660,6 +2660,7 @@
       updateTurnUI();
       document.getElementById('decisionActions').style.display = 'none';
       document.getElementById('timerBox').style.display = 'none';
+      document.getElementById('btnSpin').disabled = false;
     }
 
     function updateTurnUI() {
@@ -2667,35 +2668,42 @@
       const p = players[currentPlayerIndex];
       const char = CHARACTERS.find(c => c.id === p.charId) || CHARACTERS[0];
 
-      document.getElementById('activePlayerName').innerText = p.name;
-      document.getElementById('activeRole').innerText = char.name + ' (' + char.role + ')';
+      document.getElementById('activePlayerName').textContent = p.name;
+      document.getElementById('activeRole').textContent = char.name + ' (' + char.role + ')';
       document.getElementById('activeAvatar').innerHTML = char.svg;
       
-      document.getElementById('activeRound').innerText = `${currentRound}/${totalRounds}`;
-      document.getElementById('activeWins').innerText = p.wins;
-      document.getElementById('activeFails').innerText = p.fails;
-      document.getElementById('activeDebt').innerText = `${p.condonedStreak || 0}/3`;
-      document.getElementById('activeStars').innerText = p.stars;
-      document.getElementById('activeStreak').innerText = p.streak;
+      document.getElementById('activeRound').textContent = `${currentRound}/${totalRounds}`;
+      document.getElementById('activeWins').textContent = p.wins;
+      document.getElementById('activeFails').textContent = p.fails;
+      document.getElementById('activeDebt').textContent = `${p.condonedStreak || 0}/3`;
+      document.getElementById('activeStars').textContent = p.stars;
+      document.getElementById('activeStreak').textContent = p.streak;
+    }
+
+    function sortPlayersRanked() {
+      return [...players].sort((a, b) => {
+        const scoreA = (a.stars * 10) + a.wins - (a.fails * 0.5);
+        const scoreB = (b.stars * 10) + b.wins - (b.fails * 0.5);
+        if (scoreB !== scoreA) return scoreB - scoreA;
+        if (b.stars !== a.stars) return b.stars - a.stars;
+        if (b.wins !== a.wins) return b.wins - a.wins;
+        if (a.fails !== b.fails) return a.fails - b.fails;
+        return (a.condonedStreak || 0) - (b.condonedStreak || 0);
+      });
     }
 
     /* MODAL DE CONDONACIONES */
     function openTripleCondoneModal(victim) {
       currentCondoneVictim = victim;
-      const sorted = [...players].sort((a, b) => {
-        const scoreA = (a.stars * 10) + a.wins - (a.fails * 0.5);
-        const scoreB = (b.stars * 10) + b.wins - (b.fails * 0.5);
-        return scoreB - scoreA;
-      });
-
+      const sorted = sortPlayersRanked();
       currentCondoneLeader = sorted.find(p => p.id !== victim.id) || sorted[0];
 
       document.getElementById('tripleCondoneDesc').innerHTML = `
-        <b>${victim.name}</b> ha condonado su compromiso 3 veces consecutivas.<br>
+        <b>${escapeHtml(victim.name)}</b> ha condonado su compromiso 3 veces consecutivas.<br>
         La ordenanza cortesana prescribe: <b>FONDO AL VASO OBLIGATORIO</b>.
       `;
-      document.getElementById('condoneLeaderName').innerText = currentCondoneLeader.name;
-      document.getElementById('condoneVictimName').innerText = victim.name;
+      document.getElementById('condoneLeaderName').textContent = currentCondoneLeader.name;
+      document.getElementById('condoneVictimName').textContent = victim.name;
       document.getElementById('tripleCondoneModal').classList.add('active');
     }
 
@@ -2716,15 +2724,11 @@
     /* MODAL DE FALTAS REITERADAS */
     function openTripleFailModal(victim) {
       currentTripleVictim = victim;
-      const sorted = [...players].sort((a, b) => {
-        const scoreA = (a.stars * 10) + a.wins - (a.fails * 0.5);
-        const scoreB = (b.stars * 10) + b.wins - (b.fails * 0.5);
-        return scoreB - scoreA;
-      });
-
+      const sorted = sortPlayersRanked();
       currentTripleLeader = sorted.find(p => p.id !== victim.id) || sorted[0];
-      document.getElementById('tripleFailDesc').innerHTML = `<b>${victim.name}</b> ha incurrido en falta 3 veces seguidas. La asamblea no admite tal renuncia: debe satisfacer su pena.`;
-      document.getElementById('leaderNameTag').innerText = currentTripleLeader.name;
+
+      document.getElementById('tripleFailDesc').innerHTML = `<b>${escapeHtml(victim.name)}</b> ha incurrido en falta 3 veces seguidas. La asamblea no admite tal renuncia: debe satisfacer su pena.`;
+      document.getElementById('leaderNameTag').textContent = currentTripleLeader.name;
       document.getElementById('tripleFailModal').classList.add('active');
     }
 
@@ -2752,11 +2756,7 @@
         return;
       }
 
-      const sorted = [...players].sort((a, b) => {
-        const scoreA = (a.stars * 10) + a.wins - (a.fails * 0.5);
-        const scoreB = (b.stars * 10) + b.wins - (b.fails * 0.5);
-        return scoreB - scoreA;
-      });
+      const sorted = sortPlayersRanked();
 
       sorted.forEach((p, idx) => {
         const char = CHARACTERS.find(c => c.id === p.charId) || CHARACTERS[0];
@@ -2777,16 +2777,16 @@
             <div style="width:28px; height:28px; border-radius:50%; overflow:hidden; border:1px solid var(--gold-primary); background:#fff; flex-shrink:0;">${char.svg}</div>
             <div>
               <div style="font-weight:700; font-size:12px; display:flex; align-items:center; gap:4px;">
-                ${p.name} ${isCurrentTurn ? '<span style="font-family:\'Cinzel\',serif; font-size:7.5px; background:var(--gold-primary); color:#fff; padding:1px 4px; border-radius:4px; font-weight:800;">TURNO</span>' : ''}
+                ${escapeHtml(p.name)} ${isCurrentTurn ? '<span style="font-family:\'Cinzel\',serif; font-size:7.5px; background:var(--gold-primary); color:#fff; padding:1px 4px; border-radius:4px; font-weight:800;">TURNO</span>' : ''}
               </div>
-              <div style="font-size:9.5px; color:var(--text-muted);">${char.name}</div>
+              <div style="font-size:9.5px; color:var(--text-muted);">${escapeHtml(char.name)}</div>
             </div>
           </div>
           <div style="display:flex; gap:4px; align-items:center; font-size:9.5px; font-weight:700;">
-            <span style="background:#FFF9E6; color:var(--gold-dark); border:1px solid #F0D785; padding:2px 5px; border-radius:4px;" title="Laureles">Laureles: ${p.stars}</span>
-            <span style="background:var(--vert-light); color:var(--vert-celadon); border:1px solid var(--vert-border); padding:2px 5px; border-radius:4px;" title="Cumplidos">Aciertos: ${p.wins}</span>
-            <span style="background:var(--rose-light); color:var(--rose-pompadour); border:1px solid var(--rose-border); padding:2px 5px; border-radius:4px;" title="Faltas">Faltas: ${p.fails}</span>
-            <span style="background:var(--bleu-light); color:var(--bleu-celeste); border:1px solid var(--bleu-border); padding:2px 5px; border-radius:4px;" title="Deuda">Deuda: ${p.condonedStreak || 0}/3</span>
+            <span style="background:#FFF9E6; color:var(--gold-dark); border:1px solid #F0D785; padding:2px 5px; border-radius:4px;">Laureles: ${p.stars}</span>
+            <span style="background:var(--vert-light); color:var(--vert-celadon); border:1px solid var(--vert-border); padding:2px 5px; border-radius:4px;">Aciertos: ${p.wins}</span>
+            <span style="background:var(--rose-light); color:var(--rose-pompadour); border:1px solid var(--rose-border); padding:2px 5px; border-radius:4px;">Faltas: ${p.fails}</span>
+            <span style="background:var(--bleu-light); color:var(--bleu-celeste); border:1px solid var(--bleu-border); padding:2px 5px; border-radius:4px;">Deuda: ${p.condonedStreak || 0}/3</span>
           </div>
         `;
         list.appendChild(row);
@@ -2801,10 +2801,10 @@
         item.className = 'catalog-item';
         item.innerHTML = `
           <div class="catalog-item-header">
-            <span>${idx + 1}. ${c.title}</span>
+            <span>${idx + 1}. ${escapeHtml(c.title)}</span>
           </div>
-          <div class="catalog-item-desc">${c.text}</div>
-          <div style="font-size:10px; color:var(--rose-pompadour); font-weight:600;">Sanción: ${c.penalty}</div>
+          <div class="catalog-item-desc">${escapeHtml(c.text)}</div>
+          <div style="font-size:10px; color:var(--rose-pompadour); font-weight:600;">Sanción: ${escapeHtml(c.penalty)}</div>
         `;
         list.appendChild(item);
       });
@@ -2818,8 +2818,7 @@
       const victims = players.filter(p => p !== stealer && p.stars > 0);
 
       if (victims.length === 0) {
-        stealer.stars += 1;
-        showVisualNotification(`Reconocimiento: Al no haber laureles ajenos, ${stealer.name} recibe 1 Laurel adicional.`, 3800);
+        showVisualNotification('No hay laureles rivales disponibles para expropiar en este turno.', 3800);
         nextTurn();
         return;
       }
@@ -2831,7 +2830,7 @@
         btn.style.textAlign = 'left';
         btn.style.display = 'flex';
         btn.style.justifyContent = 'space-between';
-        btn.innerHTML = `<span><strong>${v.name}</strong></span> <span>${v.stars} Laureles</span>`;
+        btn.innerHTML = `<span><strong>${escapeHtml(v.name)}</strong></span> <span>${v.stars} Laureles</span>`;
         btn.onclick = () => {
           RococoAudio.playClick('do');
           v.stars -= 1;
@@ -2850,22 +2849,18 @@
     let crownedKing = null;
     function executeEndGame() {
       stopChallengeTimer();
+      if (pendingStealTimeout) clearTimeout(pendingStealTimeout);
       RococoAudio.playClick('do');
       closeConfirmEndModal();
       isGameActive = false;
 
-      const sorted = [...players].sort((a, b) => {
-        const scoreA = (a.stars * 10) + a.wins - (a.fails * 0.5);
-        const scoreB = (b.stars * 10) + b.wins - (b.fails * 0.5);
-        return scoreB - scoreA;
-      });
-
+      const sorted = sortPlayersRanked();
       crownedKing = sorted[0];
       const courtList = document.getElementById('courtJudgmentList');
       courtList.innerHTML = '';
       judgmentDecisions = {};
 
-      document.getElementById('monarchNameTitle').innerText = `${crownedKing.name} asciende al Trono`;
+      document.getElementById('monarchNameTitle').textContent = `${crownedKing.name} asciende al Trono`;
       const vassals = players.filter(p => p !== crownedKing);
 
       vassals.forEach(vas => {
@@ -2877,7 +2872,7 @@
           <div class="subject-info">
             <div class="subject-avatar">${char.svg}</div>
             <div>
-              <div>${vas.name}</div>
+              <div>${escapeHtml(vas.name)}</div>
               <div style="font-size:9.5px; color:var(--text-muted); font-weight:normal;">Laureles: ${vas.stars} | Faltas: ${vas.fails}</div>
             </div>
           </div>
@@ -2916,7 +2911,7 @@
         btnPardon.classList.remove('active');
         punishBox.style.display = 'block';
         judgmentDecisions[vassalId].type = 'punish';
-        triggerStorm(); // Tormenta al asignar castigo
+        triggerStorm();
       } else {
         btnPardon.classList.add('active');
         btnPunish.classList.remove('active');
@@ -2969,8 +2964,8 @@
         royalSummary = `Castigaste con medida y perdonaste con templanza, salvaguardando la concordia del reino.`;
       }
 
-      document.getElementById('proclaimedEpithet').innerText = royalTitle;
-      document.getElementById('proclamationSummaryText').innerText = royalSummary;
+      document.getElementById('proclaimedEpithet').textContent = royalTitle;
+      document.getElementById('proclamationSummaryText').textContent = royalSummary;
 
       const list = document.getElementById('finalDecreeList');
       list.innerHTML = '';
@@ -2987,9 +2982,9 @@
         row.style.alignItems = 'center';
 
         if (dec.type === 'pardon') {
-          row.innerHTML = `<span><strong>${vas.name}</strong></span> <span style="color:var(--vert-celadon); font-family:'Cinzel',serif; font-weight:700;">Indulto Real</span>`;
+          row.innerHTML = `<span><strong>${escapeHtml(vas.name)}</strong></span> <span style="color:var(--vert-celadon); font-family:'Cinzel',serif; font-weight:700;">Indulto Real</span>`;
         } else {
-          row.innerHTML = `<span><strong>${vas.name}</strong></span> <span style="color:var(--rose-pompadour); font-weight:700;">${dec.punishment}</span>`;
+          row.innerHTML = `<span><strong>${escapeHtml(vas.name)}</strong></span> <span style="color:var(--rose-pompadour); font-weight:700;">${escapeHtml(dec.punishment)}</span>`;
         }
         list.appendChild(row);
       });
@@ -3007,6 +3002,7 @@
 
     function resetGameToNewParty() {
       stopChallengeTimer();
+      if (pendingStealTimeout) clearTimeout(pendingStealTimeout);
       RococoAudio.playClick('do');
       document.getElementById('decreeModal').classList.remove('active');
       isGameActive = false;
@@ -3045,7 +3041,7 @@
 
         item.innerHTML = `
           <div class="char-avatar-mini">${c.svg}</div>
-          <span class="char-label">${c.name}</span>
+          <span class="char-label">${escapeHtml(c.name)}</span>
         `;
         container.appendChild(item);
       });
@@ -3082,7 +3078,7 @@
       selectedCharId = nextChar.id;
       setupCharacterPicker();
       document.querySelectorAll('.char-option').forEach(el => {
-        if (el.querySelector('.char-label').innerText === nextChar.name) {
+        if (el.querySelector('.char-label').textContent === nextChar.name) {
           el.classList.add('selected');
         } else {
           el.classList.remove('selected');
@@ -3102,8 +3098,8 @@
           <div class="badge-info">
             <div class="badge-thumb">${char.svg}</div>
             <div>
-              <strong>${p.name}</strong>
-              <div style="font-size:9px; color:var(--text-muted);">${char.name}</div>
+              <strong>${escapeHtml(p.name)}</strong>
+              <div style="font-size:9px; color:var(--text-muted);">${escapeHtml(char.name)}</div>
             </div>
           </div>
           <button class="btn-remove-player" onclick="removePlayer(${idx})">×</button>
@@ -3169,16 +3165,16 @@
       if (cardContainer) {
         cardContainer.addEventListener('dblclick', (e) => {
           e.preventDefault();
-          if (!isSpinning && players && players.length > 0) {
+          if (!isSpinning && players && players.length > 0 && document.getElementById('btnSpin').disabled === false) {
             triggerPirinolaSpin();
           }
         });
 
         let lastTouchTime = 0;
-        cardContainer.addEventListener('touchend', (e) => {
+        cardContainer.addEventListener('touchend', () => {
           const now = Date.now();
           if (now - lastTouchTime < 320 && now - lastTouchTime > 40) {
-            if (!isSpinning && players && players.length > 0) {
+            if (!isSpinning && players && players.length > 0 && document.getElementById('btnSpin').disabled === false) {
               triggerPirinolaSpin();
             }
             lastTouchTime = 0;
