@@ -87,7 +87,6 @@
       -moz-osx-font-smoothing: grayscale;
     }
 
-    /* CONTENEDOR GENERAL */
     .app-container {
       width: 100%;
       max-width: 1140px;
@@ -97,7 +96,6 @@
       transform: translateZ(0);
     }
 
-    /* ENCABEZADO */
     header {
       background: var(--panel-bg);
       border: 1.5px solid var(--border-gilded);
@@ -187,7 +185,6 @@
       background: #F0D5D8;
     }
 
-    /* BARRA DE TURNO */
     .turn-bar {
       background: var(--panel-bg);
       border: 1.5px solid var(--border-gilded);
@@ -269,7 +266,7 @@
     .stat-stars { color: var(--gold-dark); background: #FFF9E6; border: 1px solid #F0D785; }
     .stat-streak { color: #9A5B27; background: #FFF3E6; border: 1px solid #F3CCA6; }
 
-    /* ESCENARIO DEL RETO 3D (ESCRITORIO: ALTO Y ESCULTÓRICO) */
+    /* ESCENARIO DEL RETO 3D: PALETA PASTEL ROCOCÓ IDÉNTICA EN MÓVIL Y ESCRITORIO */
     .mystic-stage-card {
       background: linear-gradient(145deg, #FFFDF8 0%, #F5ECE0 100%);
       border: 1.5px solid var(--border-gilded);
@@ -286,8 +283,9 @@
     #challenge-3d-container {
       width: 100%;
       height: 480px;
+      min-height: 230px;
       border-radius: 10px;
-      background: #FAF6EE;
+      background: #F5EFEB;
       cursor: grab;
       position: relative;
       touch-action: none;
@@ -420,7 +418,6 @@
       background: #DCE7EB;
     }
 
-    /* PIE DE PÁGINA */
     .court-footer {
       background: var(--panel-bg);
       border: 1.5px solid var(--border-gilded);
@@ -448,7 +445,6 @@
       text-align: right;
     }
 
-    /* MENSAJE EMERGENTE DESCARTABLE AL TOCAR */
     .toast-banner {
       position: fixed;
       top: 14px;
@@ -480,9 +476,7 @@
       transform: translate3d(-50%, 0, 0);
     }
 
-    /* ========================================================
-       SISTEMA DE TORMENTA CON RELÁMPAGOS Y LLUVIA REALISTA
-       ======================================================== */
+    /* SISTEMA DE TORMENTA CON RELÁMPAGOS Y LLUVIA REALISTA */
     .storm-overlay {
       position: fixed;
       inset: 0;
@@ -519,9 +513,7 @@
       100% { background-color: rgba(10, 12, 20, 0); }
     }
 
-    /* ========================================================
-       ADAPTACIÓN MÓVIL EN PANTALLA ÚNICA (CERO SCROLL)
-       ======================================================== */
+    /* ADAPTACIÓN MÓVIL EN PANTALLA ÚNICA */
     @media (max-width: 768px) {
       body {
         padding: 4px;
@@ -1189,7 +1181,7 @@
   <!-- Reproductor de música de fondo (Flow Music) -->
   <audio id="bgMusic" src="musica.mp3" loop preload="auto"></audio>
 
-  <!-- Capa de Tormenta Realista al recibir Falta -->
+  <!-- Capa de Tormenta Realista al recibir Falta o Castigo -->
   <div class="storm-overlay" id="stormOverlay">
     <canvas id="rainCanvas"></canvas>
   </div>
@@ -1283,7 +1275,7 @@
       </div>
     </div>
 
-    <!-- ESCENARIO DEL RETO 3D: LÁMINA ROCOCÓ PASTEL CON LECTURA NÍTIDA -->
+    <!-- ESCENARIO PRINCIPAL: RETO 3D EN LÁMINA ROCOCÓ -->
     <div class="mystic-stage-card">
       <div id="challenge-3d-container"></div>
       
@@ -1640,7 +1632,7 @@
 
   <script>
     /* ========================================================
-       VARIABLES DE ESTADO GLOBALES
+       VARIABLES DE ESTADO GLOBALES (DECLARADAS UNA SOLA VEZ)
        ======================================================== */
     let players = [];
     let currentPlayerIndex = 0;
@@ -1753,7 +1745,7 @@
       { title: 'Baile Real', text: 'Ponte de pie e inventa un paso de baile prohibido durante 8 segundos sin mostrar vergüenza.', penalty: 'Si no te levantas: 2 tragos.', timer: 8 },
       { title: 'Cumplido con Veneno', text: 'Dile un cumplido honesto pero ñero a quien esté sentado frente a ti.', penalty: 'Si no se te ocurre nada: 1 trago.' },
       { title: 'Cinco Segundos', text: 'Tienes 5 segundos cronometrados por la mesa para nombrar 3 pretextos comunes para terminar una relación.', penalty: 'Si no logras decir las 3 a tiempo: 2 tragos.', timer: 5 },
-      { title: 'Melón y Melames', text: 'Di una frase ingeniosa en doble sentido de Melón y Melames. El de tu derecha tiene 4 segundos para responder con otra similar.', penalty: 'El primero que se quede mudo bebe 1 trago.' },
+      { title: 'Melón y Melames', text: 'Di una frase ingeniosa en doble sentido de Melón y Melames. El de tu derecha tiene 4 segundos para responder con otra similar.', penalty: 'El primero que se quede mudo bebe 1 trago.', timer: 4 },
       { title: 'Bailarín Inmóvil', text: 'Te paras y bailas cualquier ritmo; en el instante en que alguien de la mesa dé una palmada, debes congelarte 10 segundos.', penalty: 'Si pierdes el equilibrio o te ríes: 1 trago.', timer: 10 },
       { title: 'Cultura General: Marcas', text: 'Marcas de licor o cerveza en círculo. El que repita o tarde más de 3 segundos, pierde.', penalty: 'El perdedor de la ronda bebe 1 trago.' },
       { title: 'Agilidad Mental: Excusas', text: 'Excusas típicas para cancelar un plan a última hora. El que dude o repita, pierde.', penalty: 'El que se quede mudo bebe 1 trago.' },
@@ -1863,13 +1855,11 @@
         flourish.forEach(n => this.playClavichordTone(n.f, n.t, 0.40, 0.24));
       },
 
-      // Sonido de trueno profundo y estruendo de tormenta
       playThunder() {
         this.init();
         if (!this.ctx) return;
         const now = this.ctx.currentTime;
 
-        // Ruido blanco de descarga
         const bufferSize = this.ctx.sampleRate * 2.2;
         const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
         const data = buffer.getChannelData(0);
@@ -1888,7 +1878,6 @@
         gain.gain.linearRampToValueAtTime(0.5, now + 0.04);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 2.2);
 
-        // Subgraves de retumbe
         const subOsc = this.ctx.createOscillator();
         const subGain = this.ctx.createGain();
         subOsc.type = 'triangle';
@@ -2079,7 +2068,7 @@
       }
 
       overlay.classList.remove('active');
-      void overlay.offsetWidth; // Reinicia animación de relámpagos
+      void overlay.offsetWidth;
       overlay.classList.add('active');
 
       RococoAudio.playThunder();
@@ -2131,13 +2120,33 @@
     function promptEndGame() { if (players.length > 0) document.getElementById('confirmEndModal').classList.add('active'); }
     function closeConfirmEndModal() { document.getElementById('confirmEndModal').classList.remove('active'); }
 
-    /* MOTOR 3D MÍSTICO (LÁMINA DEL RETO ROCOCÓ) */
+    /* ANIMACIÓN DEL LAUREL EN RACHA */
+    let laurelAutoCloseTimeout = null;
+    function showLaurelStreak(title, subtitle) {
+      document.getElementById('laurelModalTitle').innerText = title;
+      document.getElementById('laurelModalSubtitle').innerText = subtitle;
+      document.getElementById('laurelStreakModal').classList.add('active');
+      confetti({ particleCount: 45, spread: 60, origin: { y: 0.5 } });
+      if (laurelAutoCloseTimeout) clearTimeout(laurelAutoCloseTimeout);
+      laurelAutoCloseTimeout = setTimeout(closeLaurelStreak, 2400);
+    }
+    function closeLaurelStreak() {
+      if (laurelAutoCloseTimeout) clearTimeout(laurelAutoCloseTimeout);
+      document.getElementById('laurelStreakModal').classList.remove('active');
+    }
+
+    /* ========================================================
+       MOTOR 3D DE LA CARTA (ROCOCÓ PASTEL CON INTERACCIÓN TOTAL)
+       ======================================================== */
     let scene, camera, renderer;
     let cardMesh, cardGroup, smokeParticles = [];
     let dynamicCanvas, dynamicCtx, dynamicTexture;
     let spinVelocity = 0;
     let wobbleAngle = 0;
     let mysticLight;
+    let isDragging = false;
+    let prevX = 0;
+    let prevY = 0;
     const clock = new THREE.Clock();
 
     function createSmokeParticleTexture() {
@@ -2283,7 +2292,7 @@
       const container = document.getElementById('challenge-3d-container');
       if (!container) return;
       const width = Math.max(container.clientWidth || 0, 320);
-      const height = Math.max(container.clientHeight || 0, window.innerWidth <= 768 ? 220 : 420);
+      const height = Math.max(container.clientHeight || 0, window.innerWidth <= 768 ? 220 : 480);
 
       scene = new THREE.Scene();
       scene.background = new THREE.Color(0xF5EFEB);
@@ -2305,12 +2314,11 @@
       const ambientLight = new THREE.AmbientLight(0xfff8ee, 1.6);
       scene.add(ambientLight);
 
-      // Luz puntual tenue
       mysticLight = new THREE.PointLight(0xE5C37A, 1.2, 14);
       mysticLight.position.set(0, 1.8, 3.8);
       scene.add(mysticLight);
 
-      // Humo místico
+      // Partículas de humo místico pastel
       const smokeTex = createSmokeParticleTexture();
       const smokeGeo = new THREE.PlaneGeometry(6.2, 6.2);
 
@@ -2352,7 +2360,7 @@
         roughness: 0.3
       });
 
-      // Material difuso sin reflejos para legibilidad perfecta
+      // Material mate difuso sin reflejos para legibilidad perfecta
       const frontFaceMat = new THREE.MeshBasicMaterial({
         map: dynamicTexture
       });
@@ -2389,22 +2397,23 @@
       cardMesh = new THREE.Mesh(cardGeo, materials);
       cardGroup.add(cardMesh);
 
-      // Arrastre con ratón o dedo
-      let isDragging = false;
-      let prevX = 0;
-
+      // Movimiento y rotación interactiva con ratón y dedo
       container.addEventListener('mousedown', (e) => {
         RococoAudio.init();
         if (isSpinning) return;
         isDragging = true;
         prevX = e.clientX;
+        prevY = e.clientY;
       });
 
       window.addEventListener('mousemove', (e) => {
-        if (!isDragging || isSpinning) return;
-        const delta = e.clientX - prevX;
-        cardGroup.rotation.y += delta * 0.02;
+        if (!isDragging || isSpinning || !cardGroup) return;
+        const deltaX = e.clientX - prevX;
+        const deltaY = e.clientY - prevY;
+        cardGroup.rotation.y += deltaX * 0.015;
+        cardGroup.rotation.x = Math.max(-0.6, Math.min(0.6, cardGroup.rotation.x + deltaY * 0.01));
         prevX = e.clientX;
+        prevY = e.clientY;
       });
 
       window.addEventListener('mouseup', () => { isDragging = false; });
@@ -2412,22 +2421,29 @@
       container.addEventListener('touchstart', (e) => {
         RococoAudio.init();
         if (isSpinning) return;
-        isDragging = true;
-        prevX = e.touches[0].clientX;
+        if (e.touches.length > 0) {
+          isDragging = true;
+          prevX = e.touches[0].clientX;
+          prevY = e.touches[0].clientY;
+        }
       }, { passive: true });
 
       container.addEventListener('touchmove', (e) => {
-        if (!isDragging || isSpinning) return;
-        const delta = e.touches[0].clientX - prevX;
-        cardGroup.rotation.y += delta * 0.025;
+        if (!isDragging || isSpinning || !cardGroup || e.touches.length === 0) return;
+        if (e.cancelable) e.preventDefault();
+        const deltaX = e.touches[0].clientX - prevX;
+        const deltaY = e.touches[0].clientY - prevY;
+        cardGroup.rotation.y += deltaX * 0.02;
+        cardGroup.rotation.x = Math.max(-0.6, Math.min(0.6, cardGroup.rotation.x + deltaY * 0.015));
         prevX = e.touches[0].clientX;
-      }, { passive: true });
+        prevY = e.touches[0].clientY;
+      }, { passive: false });
 
       window.addEventListener('touchend', () => { isDragging = false; });
 
       window.addEventListener('resize', () => {
         const w = Math.max(container.clientWidth || 0, 320);
-        const h = Math.max(container.clientHeight || 0, window.innerWidth <= 768 ? 220 : 420);
+        const h = Math.max(container.clientHeight || 0, window.innerWidth <= 768 ? 220 : 480);
         camera.aspect = w / h;
         camera.updateProjectionMatrix();
         renderer.setSize(w, h);
@@ -2457,30 +2473,36 @@
         if (p.position.x < -5) p.position.x = 5;
       });
 
-      if (spinVelocity > 0.005) {
-        const factor = delta * 60;
-        cardGroup.rotation.y += spinVelocity * factor;
-        spinVelocity *= Math.pow(0.962, factor);
+      if (cardGroup) {
+        if (spinVelocity > 0.005) {
+          const factor = delta * 60;
+          cardGroup.rotation.y += spinVelocity * factor;
+          spinVelocity *= Math.pow(0.962, factor);
 
-        wobbleAngle += 14 * delta;
-        cardGroup.rotation.x = Math.sin(wobbleAngle) * 0.12;
-        cardGroup.rotation.z = Math.cos(wobbleAngle) * 0.06;
+          wobbleAngle += 14 * delta;
+          cardGroup.rotation.x = Math.sin(wobbleAngle) * 0.12;
+          cardGroup.rotation.z = Math.cos(wobbleAngle) * 0.06;
 
-        RococoAudio.updateSpin(spinVelocity);
+          RococoAudio.updateSpin(spinVelocity);
 
-        if (spinVelocity <= 0.008) {
-          spinVelocity = 0;
-          cardGroup.rotation.x = 0;
-          cardGroup.rotation.z = 0;
-          cardGroup.rotation.y = 0;
-          finishSpin();
+          if (spinVelocity <= 0.008) {
+            spinVelocity = 0;
+            cardGroup.rotation.x = 0;
+            cardGroup.rotation.z = 0;
+            cardGroup.rotation.y = 0;
+            finishSpin();
+          }
+        } else if (!isDragging) {
+          cardGroup.position.y = Math.sin(time * 1.5) * 0.06;
+          cardGroup.rotation.x += (0 - cardGroup.rotation.x) * 0.05;
+          cardGroup.rotation.z += (0 - cardGroup.rotation.z) * 0.05;
+          cardGroup.rotation.y += (0 - cardGroup.rotation.y) * 0.05;
         }
-      } else {
-        cardGroup.position.y = Math.sin(time * 1.5) * 0.06;
-        cardGroup.rotation.y += (0 - cardGroup.rotation.y) * 0.05;
       }
 
-      renderer.render(scene, camera);
+      if (renderer && scene && camera) {
+        renderer.render(scene, camera);
+      }
     }
 
     /* GIRO Y EVALUACIÓN DE TURNOS */
@@ -2885,7 +2907,6 @@
     }
 
     function setJudgment(vassalId, type) {
-      RococoAudio.playClick('arpeggio');
       const btnPunish = document.getElementById(`btnPunish_${vassalId}`);
       const btnPardon = document.getElementById(`btnPardon_${vassalId}`);
       const punishBox = document.getElementById(`punishOptions_${vassalId}`);
@@ -2895,11 +2916,16 @@
         btnPardon.classList.remove('active');
         punishBox.style.display = 'block';
         judgmentDecisions[vassalId].type = 'punish';
+        triggerStorm(); // Tormenta al asignar castigo
       } else {
         btnPardon.classList.add('active');
         btnPunish.classList.remove('active');
         punishBox.style.display = 'none';
         judgmentDecisions[vassalId].type = 'pardon';
+        RococoAudio.playSuccess();
+        const vas = players.find(p => p.id === vassalId);
+        const vasName = vas ? vas.name : 'El vasallo';
+        showLaurelStreak('Indulto Real', `${vasName} ha sido indultado con laureles de honor.`);
       }
     }
 
@@ -2910,7 +2936,6 @@
     }
 
     function proclaimRoyalDecree() {
-      RococoAudio.playSuccess();
       document.getElementById('coronationModal').classList.remove('active');
       const vassals = players.filter(p => p !== crownedKing);
       let punishCount = 0;
@@ -2970,7 +2995,14 @@
       });
 
       document.getElementById('decreeModal').classList.add('active');
-      confetti({ particleCount: 90, spread: 80, origin: { y: 0.6 } });
+
+      if (punishCount > 0) {
+        triggerStorm();
+      } else {
+        RococoAudio.playSuccess();
+        showLaurelStreak('Corte Indultada', 'Toda la corte celebra con laureles y júbilo real.');
+        confetti({ particleCount: 90, spread: 80, origin: { y: 0.6 } });
+      }
     }
 
     function resetGameToNewParty() {
