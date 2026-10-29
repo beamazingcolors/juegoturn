@@ -1238,6 +1238,8 @@
        transcripción real de cada desafío con tipografía nítida.
        =========================================================== */
     .mobile-challenge-details { display: none; }
+    .mobile-header-controls, .mobile-menu-extra, .mobile-3d-toggle { display: none; }
+
 
     @media (max-width: 768px) {
       html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
@@ -1486,6 +1488,162 @@
       .stat-pill { font-size: 11px; }
     }
 
+
+    /* ============================================================
+       TURN COMPACTO · NAVEGACIÓN Y PARTIDA EN TELÉFONOS
+       Mantiene la lectura y permite expandir la vista 3D a voluntad.
+       ============================================================ */
+    @media (max-width: 768px) {
+      body { padding: 5px; line-height: 1.42; }
+      .app-container { gap: 6px; }
+      header {
+        position: relative;
+        z-index: 15;
+        flex-wrap: nowrap;
+        min-height: 51px;
+        padding: 6px 10px;
+        gap: 8px;
+      }
+      .brand { flex: 1; min-width: 0; }
+      .brand-logo { height: 32px; max-width: 115px; }
+      .brand-title-fallback { font-size: 21px; }
+      .mobile-header-controls { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+      .mobile-header-controls button {
+        min-height: 38px;
+        padding: 7px 10px;
+        border-radius: 7px;
+        background: var(--bg-cream);
+        border: 1px solid var(--border-gilded);
+        color: var(--text-dark);
+        font: 700 12px/1.2 'Plus Jakarta Sans', sans-serif;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      #mobileNavToggle[aria-expanded="true"] { background: var(--gold-light); border-color: var(--gold-primary); }
+      .header-actions {
+        display: none;
+        position: absolute;
+        top: calc(100% + 4px);
+        right: 0;
+        width: min(325px, calc(100vw - 10px));
+        padding: 9px;
+        border: 1px solid var(--border-gilded);
+        background: #fffdf9;
+        border-radius: 10px;
+        box-shadow: 0 12px 26px rgba(38,26,18,.2);
+        grid-template-columns: repeat(2,minmax(0,1fr));
+        gap: 6px;
+        z-index: 25;
+      }
+      .header-actions.menu-open { display: grid; }
+      .header-actions .mobile-menu-extra { display: inline-flex; }
+      .header-actions .btn-rococo-nav, .header-actions .btn-rococo-danger {
+        font-size: 12px;
+        min-height: 43px;
+        padding: 8px;
+        letter-spacing: 0;
+      }
+      .turn-bar { padding: 7px 9px; gap: 6px; }
+      .active-player-info { gap: 7px; }
+      .player-avatar-frame { width: 34px; height: 34px; }
+      .player-details h3 { font-size: 15px; }
+      .player-role-tag { font-size: 10px; }
+      .stats-pills, .stats-pills { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 4px; }
+      .stat-pill {
+        min-height: 28px;
+        font-size: 10.5px;
+        padding: 4px 3px;
+        gap: 3px;
+        line-height: 1.18;
+      }
+      .stat-pill b { font-size: 11px; }
+      .mystic-stage-card { gap: 6px; padding: 7px; border-radius: 11px; }
+      #challenge-3d-container {
+        height: clamp(172px, 30dvh, 225px) !important;
+        min-height: 0 !important;
+        border-radius: 9px;
+      }
+      #challenge-3d-container.fallback-active {
+        height: auto !important;
+        min-height: 0 !important;
+        padding: 5px;
+      }
+      .fallback-card-2d { padding: 14px 12px; border-width: 3px; }
+      .fallback-card-title { font-size: clamp(17px, 4.6vw, 21px); margin-bottom: 7px; line-height: 1.3; }
+      .fallback-card-text { font-size: 15px; line-height: 1.42; margin-bottom: 8px; }
+      .fallback-card-penalty { font-size: 13px; line-height: 1.38; padding: 7px 9px; }
+      .mystic-stage-card.has-three .mobile-challenge-details {
+        gap: 5px;
+        padding: 11px 12px;
+        border-radius: 9px;
+        box-shadow: none;
+      }
+      .mobile-challenge-eyebrow { font-size: 10px; }
+      .mobile-challenge-title { font-size: clamp(17px, 4.5vw, 21px); line-height: 1.3; }
+      .mobile-challenge-text { font-size: 15px; line-height: 1.45; }
+      .mobile-challenge-penalty { font-size: 13px; line-height: 1.4; padding: 8px 9px; }
+      /* Ocultar la textura 3D repetida evita 200 px de desplazamiento.
+         El usuario puede mostrarla con un botón, sin perder la función 3D. */
+      .mystic-stage-card.has-three.is-compact-challenge:not(.mobile-3d-expanded) #challenge-3d-container {
+        display: none;
+      }
+      .mystic-stage-card.has-three.is-compact-challenge .mobile-3d-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 32px;
+        align-self: flex-start;
+        padding: 4px 10px;
+        background: var(--gold-light);
+        border: 1px solid var(--border-gilded);
+        border-radius: 7px;
+        font: 700 11.5px/1.3 'Plus Jakarta Sans', sans-serif;
+        color: var(--gold-dark);
+        cursor: pointer;
+      }
+      .controls-panel { gap: 6px; }
+      .spin-button { min-height: 44px; font-size: 13px; padding: 9px; }
+      .decision-actions { gap: 6px; }
+      .btn-resolve { min-height: 45px; padding: 8px 6px; font-size: 12px; }
+      .btn-condone { min-height: 41px; padding: 7px 8px; font-size: 12px; }
+      .btn-timer { min-height: 41px; padding: 7px 10px; font-size: 12px; }
+      .timer-display { padding: 6px 10px; font-size: 14px; }
+      /* Accesos secundarios preservados dentro de Menú. */
+      .court-footer { display: none; }
+      /* Registro: 3 personajes por fila, sin sacrificar sus nombres. */
+      .character-picker { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 5px; }
+      .char-option { min-height: 71px; padding: 5px 3px; gap: 2px; }
+      .char-avatar-mini { width: 34px; height: 34px; margin-bottom: 1px; }
+      .char-label { font-size: 11.5px; line-height: 1.16; }
+      .modal-box { padding: 14px 13px; }
+      .modal-title { font-size: 18px; }
+      .modal-desc { margin-bottom: 8px; }
+      .round-option-btn { min-height: 39px; font-size: 14px; }
+      .registered-players-list { max-height: 115px; }
+      .player-badge { padding: 6px 8px; }
+    }
+    @media (max-width: 340px) {
+      .header-actions, .header-actions.menu-open { grid-template-columns: repeat(2,minmax(0,1fr)); }
+      .stats-pills { grid-template-columns: repeat(3,minmax(0,1fr)); }
+      .stat-pill { font-size: 9.5px; }
+      .stat-pill b { font-size: 10px; }
+      .mobile-header-controls button { font-size: 11px; padding: 7px 7px; }
+      .player-input-row { grid-template-columns: minmax(0,1fr) auto; }
+      .player-input-row .btn-rococo-nav { width: auto; }
+    }
+    @media (max-width: 768px) and (max-height: 660px) {
+      body { padding: 3px; }
+      .app-container { gap: 4px; }
+      header { min-height: 46px; }
+      .turn-bar { padding: 5px 8px; }
+      #challenge-3d-container { height: 150px !important; }
+    }
+    @media (min-width: 769px) and (max-height: 590px) {
+      #challenge-3d-container { height: 240px; min-height: 0; }
+      header { padding-block: 5px; }
+      .app-container { gap: 6px; }
+    }
+
   </style>
 </head>
 <body>
@@ -1546,12 +1704,18 @@
         >
         <span id="brandFallback" class="brand-title-fallback" style="display:none;">Turn</span>
       </div>
-      <div class="header-actions">
+      <div class="mobile-header-controls">
+        <button type="button" onclick="RococoAudio.playClick('do'); openScoresModal()" aria-label="Abrir marcador">Marcador</button>
+        <button type="button" id="mobileNavToggle" aria-expanded="false" aria-controls="mobileNavActions" onclick="toggleMobileMenu()">☰ Menú</button>
+      </div>
+      <div class="header-actions" id="mobileNavActions">
         <button class="btn-rococo-nav" id="btnToggleMusic" onclick="toggleBackgroundMusic()">Música</button>
         <button class="btn-rococo-nav" onclick="RococoAudio.playClick('do'); openScoresModal()">Marcador</button>
         <button class="btn-rococo-nav" onclick="RococoAudio.playClick('mi'); openRulesModal()">Reglamento</button>
         <button class="btn-rococo-nav" onclick="RococoAudio.playClick('re'); openCatalogModal()">Retos</button>
         <button class="btn-rococo-danger" onclick="RococoAudio.playClick('re'); promptEndGame()">Terminar</button>
+        <button class="btn-rococo-nav mobile-menu-extra" onclick="RococoAudio.playClick('do'); openCreditsModal()">Créditos</button>
+        <button class="btn-rococo-nav mobile-menu-extra" onclick="RococoAudio.playClick('mi'); openPoliciesModal()">Políticas y restricciones</button>
       </div>
     </header>
 
@@ -1589,6 +1753,7 @@
     <!-- ESCENARIO DEL RETO 3D CON TOLERANCIA A FALLOS -->
     <div class="mystic-stage-card">
       <div id="challenge-3d-container" aria-label="Carta interactiva del reto"></div>
+      <button type="button" class="mobile-3d-toggle" id="mobile3DToggle" aria-expanded="false" aria-controls="challenge-3d-container" onclick="toggleMobile3DPreview()">Ver carta 3D</button>
       <!-- Copia legible y accesible del reto en teléfonos. No altera el motor 3D. -->
       <section id="mobileChallengeDetails" class="mobile-challenge-details" aria-label="Texto completo del reto">
         <span class="mobile-challenge-eyebrow">TU RETO · LECTURA CLARA</span>
@@ -1978,6 +2143,50 @@
     let isDragging = false;
     let prevX = 0;
     let prevY = 0;
+
+    /* Navegación móvil compacta y visualización 3D opcional. */
+    function toggleMobileMenu(force) {
+      const menu = document.getElementById('mobileNavActions');
+      const toggle = document.getElementById('mobileNavToggle');
+      if (!menu || !toggle) return;
+      const expanded = typeof force === 'boolean' ? force : !menu.classList.contains('menu-open');
+      menu.classList.toggle('menu-open', expanded);
+      toggle.setAttribute('aria-expanded', String(expanded));
+    }
+
+    function syncMobileStage() {
+      const stage = document.querySelector('.mystic-stage-card');
+      const toggle = document.getElementById('mobile3DToggle');
+      if (!stage || !toggle) return;
+      const active = Boolean(isGameActive && currentState === GameState.CHALLENGE_ACTIVE && currentChallenge);
+      stage.classList.toggle('is-compact-challenge', active);
+      if (!active) stage.classList.remove('mobile-3d-expanded');
+      const expanded = stage.classList.contains('mobile-3d-expanded');
+      toggle.setAttribute('aria-expanded', String(expanded));
+      toggle.textContent = expanded ? 'Ocultar carta 3D' : 'Ver carta 3D';
+    }
+
+    function toggleMobile3DPreview() {
+      const stage = document.querySelector('.mystic-stage-card');
+      if (!stage || !isThreeSupported || !stage.classList.contains('is-compact-challenge')) return;
+      stage.classList.toggle('mobile-3d-expanded');
+      syncMobileStage();
+      requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
+    }
+
+    document.addEventListener('click', event => {
+      const nav = document.getElementById('mobileNavActions');
+      const toggle = document.getElementById('mobileNavToggle');
+      if (!nav || !toggle) return;
+      if (nav.classList.contains('menu-open') && !nav.contains(event.target) && !toggle.contains(event.target)) {
+        toggleMobileMenu(false);
+      } else if (nav.contains(event.target) && event.target.closest('button')) {
+        toggleMobileMenu(false);
+      }
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') toggleMobileMenu(false);
+    });
 
     const STORAGE_KEY = 'TURN_SAVED_SESSION';
 
@@ -2632,6 +2841,7 @@
         document.getElementById('mobileChallengePenalty').textContent = 'Sanción: ' + (penalty || '');
         const stage = details.closest('.mystic-stage-card');
         if (stage) stage.classList.toggle('has-three', isThreeSupported);
+        syncMobileStage();
       }
       const visualContainer = document.getElementById('challenge-3d-container');
       if (visualContainer) visualContainer.classList.toggle('fallback-active', !isThreeSupported);
@@ -3014,6 +3224,7 @@
       stopChallengeTimer();
       currentState = GameState.SPINNING;
       currentChallenge = null;
+      syncMobileStage();
       isSpinning = true;
       spinSessionId++;
       const currentSpin = spinSessionId;
@@ -3121,6 +3332,7 @@
       document.getElementById('btnSpin').disabled = true;
       currentState = GameState.RESOLVING;
       currentChallenge = null;
+      syncMobileStage();
       stopChallengeTimer();
     }
 
@@ -3220,6 +3432,7 @@
       currentPlayerIndex = nextIndex;
       currentChallenge = null;
       currentState = GameState.IDLE;
+      syncMobileStage();
       updateTurnUI();
       document.getElementById('decisionActions').style.display = 'none';
       document.getElementById('timerBox').style.display = 'none';
